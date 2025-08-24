@@ -63,7 +63,6 @@ Welcome to **LogiSync**, a robust and scalable logistics management platform des
 | ----------------- | --------------------------- |
 | **Django**        | Backend framework           |
 | **PostgreSQL**    | Relational database         |
-| **HTML/CSS**      | Frontend styling            |
 | **Bootstrap**     | UI Framework                |
 | **JWT**           | Authentication & Security   |
 | **Trello**        | Task & Project Management   |
