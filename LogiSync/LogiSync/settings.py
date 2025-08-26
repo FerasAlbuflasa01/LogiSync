@@ -77,8 +77,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'logisync',
-        'USER': 'abdulazizalabdulla',
-        'PASSWORD': '12345678',
+        'USER': 'fawaz',
+        'PASSWORD': '',
         'PORT': '5432'
     }
 }

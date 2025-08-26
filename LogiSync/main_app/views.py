@@ -1,6 +1,7 @@
 
+
 from django.shortcuts import render,redirect
-from .models import Package,Transport,Destination,Source, TransportType
+from .models import Package,Transport,Destination,Source, TransportType, Container
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth.decorators import login_required
@@ -57,8 +58,34 @@ listOfPackags = [
         "receivedDate": "2023-08-20"
     }
 ]
+
 def home(request):
-    return render(request,'home.html')
+    return render(request, 'home.html')
+
+def about(request):
+    return render(request, 'about.html')
+
+class ContainerCreate(CreateView):
+    model = Container
+    fields = ['container_id', 'tracking_location', 'description', 'weight' ]
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+class ContainerUpdate(UpdateView):
+    model = Container
+    fields = [ 'tracking_location', 'description', 'weight',]
+    
+class ContainerDelete(DeleteView):
+    model = Container
+    success_url = '/'
+    
+class ContainerDetail(DetailView):
+    model = Container
+    
+class ContainerList(ListView):
+    model = Container
 
 # package
 class PackageList(ListView):
