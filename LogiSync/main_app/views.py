@@ -3,13 +3,16 @@ from .models import TransportType
 from django.views.generic.edit import CreateView, UpdateView
 
 # Create your views here.
-class TransportCreate(CreateView):
+class TransportTypeCreate(CreateView):
     model = TransportType
     fields = '__all__'
 
-class TransportUpdate(UpdateView):
-    models = TransportType
-    fields = code
+class TransportTypeUpdate(UpdateView):
+    model = TransportType
+    fields = 'code'
 
+class TransportTypeDelete(DeleteView):
+    model = TransportType
+    succes_url = '/transports/'
 
 
