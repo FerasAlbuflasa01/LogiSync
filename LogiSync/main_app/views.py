@@ -1,10 +1,17 @@
 from django.shortcuts import render
 from .models import Transport,Destination,Source
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+class TransportList(LoginRequiredMixin,ListView):
+    model = Transport
+
+class TransportDetails(LoginRequiredMixin,DetailView):
+    model = Transport
+    fields = '__all__'
 
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
@@ -24,15 +31,15 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     success_url = '/transports/'
 
 
-@login_required
-def transports_index(request):
-    transports = Transport.objects.get() # I think we need to filter by sorce and destination
-    return render(request, 'transports/index.html', {'transports':transports})
+# @login_required
+# def transports_index(request):
+#     transports = Transport.objects.get() # I think we need to filter by sorce and destination
+#     return render(request, 'transports/index.html', {'transports':transports})
 
-@login_required
-def transports_detail(request, transport_id):
-    transport = Transport.objects.get(id=transport_id)
+# @login_required
+# def transports_detail(request, transport_id):
+#     transport = Transport.objects.get(id=transport_id)
 
-    return render(request, 'transports/details.html', {
-        'transport':transport,
-    })
+#     return render(request, 'transports/details.html', {
+#         'transport':transport,
+#     })
