@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import TransportType
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # Create your views here.
 class TransportTypeCreate(CreateView):
@@ -14,5 +14,6 @@ class TransportTypeUpdate(UpdateView):
 class TransportTypeDelete(DeleteView):
     model = TransportType
     succes_url = '/transports/'
+
 
 
