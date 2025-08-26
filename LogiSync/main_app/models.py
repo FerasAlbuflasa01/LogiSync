@@ -26,6 +26,8 @@ class Package(models.Model):
     price=models.IntegerField()
     weight=models.FloatField()
     receivedDate=models.DateField()
+    
+    
 
     def __str__(self):
         return self.code
