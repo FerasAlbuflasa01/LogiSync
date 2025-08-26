@@ -73,6 +73,7 @@ def package_create(request):
 
 class PackageUpdate(UpdateView):
     model=Package
+    fields = ['description','price','weight']
 
 class PackageDelete(DeleteView):
     model =Package

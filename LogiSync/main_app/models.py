@@ -13,4 +13,4 @@ class Package(models.Model):
     def __str__(self):
         return self.code
     def get_absolute_url(self):
-        return reverse('package_detail', kwargs={'pk': self.id})
+        return reverse('packages_detail', kwargs={'pk': self.id})
