@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Package,Transport,Destination,Source
+from .models import Package,Transport,Destination,Source, TransportType
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth.decorators import login_required
@@ -81,8 +81,25 @@ class PackageUpdate(UpdateView):
 class PackageDelete(DeleteView):
     model =Package
     success_url='/'
+ 
+################## TRANSPORT TYPE ######################
 
+class TransportTypeCreate(CreateView):
+    model = TransportType
+    fields = '__all__'
 
+class TransportTypeUpdate(UpdateView):
+    model = TransportType
+    fields = 'code'
+
+class TransportTypeDelete(DeleteView):
+    model = TransportType
+    succes_url = '/transports/'
+    
+#################### TRANSPORT  ###########################
+
+    
+   
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
     fields = ['name','capacity','image','description','destination','source']
@@ -113,4 +130,5 @@ def transports_detail(request, transport_id):
     return render(request, 'transports/details.html', {
         'transport':transport,
     })
+
 
