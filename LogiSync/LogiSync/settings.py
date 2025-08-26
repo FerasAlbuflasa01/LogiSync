@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'LogiSync.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'LogiSync',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
+        'NAME': 'logisync',
+        'USER': 'fawaz',
+        'PASSWORD': '',
         'PORT': '5432'
     }
 }
