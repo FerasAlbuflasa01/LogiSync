@@ -12,6 +12,7 @@ urlpatterns = [
     path('',views.home,name='home'),
     path('about/', views.about, name='about'),
     
+    #Containers
     path('containers/', views.ContainerList.as_view(), name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
     path('containers/<str:pk>/', views.ContainerDetail.as_view(), name='container_detail' ),
@@ -41,5 +42,9 @@ urlpatterns = [
     path('transport/type/', views.TransportTypeCreate.as_view(), name='transport_type_create'),
     path('transport/type/<int:pk>/update/', views.TransportTypeUpdate.as_view(), name='transport_type_update'),
     path('transport/type/<int:pk>/delete/', views.TransportTypeDelete.as_view(), name='transport_type_delete'),
+    
+    #auth
+    path('accounts/signup/', views.signup, name='signup'),
+
 
 ]
