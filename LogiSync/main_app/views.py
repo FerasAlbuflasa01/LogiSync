@@ -25,7 +25,7 @@ class ContainerUpdate(UpdateView):
     
 class ContainerDelete(DeleteView):
     model = Container
-    success_url = 'home'
+    success_url = '/'
     
 class ContainerDetail(DetailView):
     model = Container

@@ -7,7 +7,7 @@ class Container(models.Model):
     container_id = models.CharField(max_length=50, primary_key=True)
     tracking_location = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
-    weight = models.TextField(max_length=10)
+    weight = models.CharField(max_length=10)
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
