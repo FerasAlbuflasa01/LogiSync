@@ -24,9 +24,8 @@ class Transport(models.Model):
 
 class TransportType(models.Model):
     name = models.CharField(max_length=100)
-    code = models.CharField(max_length=100)
+    code = models.CharField(max_length=50)
     image = models.ImageField(upload_to='main_app/static/uploads/', default='')
-
 
     def get_absolute_url(self):
         return reverse("detail", kwargs={'transport_id': self.id})
