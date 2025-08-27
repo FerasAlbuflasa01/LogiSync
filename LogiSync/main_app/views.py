@@ -1,7 +1,7 @@
 
 
 from django.shortcuts import render,redirect
-from .models import Package,Transport,Destination,Source, TransportType, Container
+from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
@@ -9,6 +9,8 @@ from django.contrib.auth.forms import UserCreationForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import ProfileForm
+
 
 
 listOfPackags = [
@@ -195,18 +197,35 @@ def transports_detail(request, transport_id):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
+
         form = UserCreationForm(request.POST)
         if form.is_valid():
-        # This will add the user to the database
             user = form.save()
-            # This is how we log a user in via code
+            Profile.objects.create(user=user)
+            
             login(request, user)
-            return redirect('index')
+            return redirect('/')
         else:
             error_message = 'Invalid sign up - try again'
-    # A bad POST or a GET request, so render signup.html with an empty form
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+@login_required
+def profile_detail(request):
+    profile = request.user.profile
+    return render(request, 'profile_detail.html', {'profile': profile})
+
+    
+
+@login_required
+def edit_profile(request):
+    profile, created =Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_detail')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile_edit.html' , {'form': form})

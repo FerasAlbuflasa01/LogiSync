@@ -39,6 +39,9 @@ urlpatterns = [
     
     #auth
     path('accounts/signup/', views.signup, name='signup'),
+    path('profile/', views.profile_detail, name='profile_detail'),
+    path('profile/edit/', views.edit_profile, name='edit_profile')
+    
 
 
 ]
