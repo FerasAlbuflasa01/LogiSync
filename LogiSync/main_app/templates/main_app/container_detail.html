@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+  <h2>Container Details</h2>
+</div>
+
+<div class="container-detail">
+  <div class="detail-section">
+    <label>Tracking location</label>
+    <p>{{ container.tracking_location}}</p>
+  </div>
+  <div class="detail-section">
+    <label>Weight</label>
+    <p>{{ container.weight}}</p>
+  </div>
+  <div class="detail-section">
+    <label>Description</label>
+    <p>{{ container.description}}</p>
+  </div>
+</div>
+  
+{% endblock  %}
+  
