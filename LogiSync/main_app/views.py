@@ -6,7 +6,6 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse 
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -60,13 +59,17 @@ listOfPackags = [
 # home / about 
 def home(request):
     return render(request, 'home.html')
-
 def about(request):
     return render(request, 'about.html')
 
+
+
+
+#Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = ['container_id', 'tracking_location', 'description', 'weight' ]
+
+    fields = [ 'tracking_location', 'description', 'weight' ]
     
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -74,8 +77,10 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight',]
+
+    fields = ['tracking_location', 'description', 'weight',]
     
+
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
@@ -85,17 +90,15 @@ class ContainerDetail(LoginRequiredMixin, DetailView):
     
 class ContainerList(LoginRequiredMixin, ListView):
     model = Container
-    
     def get_queryset(self):
         return Container.objects.filter(user=self.request.user)
 
-def about(request):
-    return render(request, 'about.html')
+
+
 
 # package
 class PackageList(LoginRequiredMixin, ListView):
     model=Package
-    
     def get_queryset(self):
         return Package.objects.filter(user=self.request.user)
 
@@ -112,10 +115,10 @@ def package_create(request):
                 description=package['description'],
                 price=package['price'],
                 weight=package['weight'],
-                receivedDate=package['receivedDate']
+                receivedDate=package['receivedDate'],
+                user=request.user
             )
         newPackage.save()
-
     return redirect('home')
 
 class PackageUpdate(LoginRequiredMixin, UpdateView):
@@ -125,7 +128,10 @@ class PackageUpdate(LoginRequiredMixin, UpdateView):
 class PackageDelete(LoginRequiredMixin, DeleteView):
     model =Package
     success_url='/'
- 
+
+
+
+
 ################## TRANSPORT TYPE ######################
 
 class TransportList(LoginRequiredMixin,ListView):
@@ -146,7 +152,7 @@ class TransportTypeCreate(LoginRequiredMixin, CreateView):
 
 class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
     model = TransportType
-    fields = 'code'
+    fields = ['code']
 
 class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     model = TransportType
@@ -172,17 +178,17 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     success_url = '/transports/'
 
 
-# @login_required
-# def transports_index(request):
-#     transports = Transport.objects.get() # I think we need to filter by sorce and destination
-#     return render(request, 'transports/index.html', {'transports':transports})
+@login_required
+def transports_index(request):
+    transports = Transport.objects.get() # I think we need to filter by sorce and destination
+    return render(request, 'transports/index.html', {'transports':transports})
 
-# @login_required
-# def transports_detail(request, transport_id):
-#     transport = Transport.objects.get(id=transport_id)
-#     return render(request, 'transports/details.html', {
-#         'transport':transport,
-#     })
+@login_required
+def transports_detail(request, transport_id):
+    transport = Transport.objects.get(id=transport_id)
+    return render(request, 'transports/details.html', {
+        'transport':transport,
+    })
 
 
 

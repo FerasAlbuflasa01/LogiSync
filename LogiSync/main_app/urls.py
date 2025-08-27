@@ -4,21 +4,21 @@ from . import views
 
 urlpatterns = [
 
-    # home / about 
-
+    #home / about 
     path('',views.home,name='home'),
     path('about/', views.about, name='about'),
     
     #Containers
     path('containers/', views.ContainerList.as_view(), name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
-    path('containers/<str:pk>/', views.ContainerDetail.as_view(), name='container_detail' ),
-    path('containers/<str:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
-    path('containers/<str:pk>/delete/', views.ContainerDelete.as_view(), name='container_delete' ),
+    path('containers/<int:pk>/', views.ContainerDetail.as_view(), name='container_detail' ),
+
+    path('containers/<int:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
+    path('containers/<int:pk>/delete/', views.ContainerDelete.as_view(), name='container_delete' ),
     
 
     # transport
-    path('transports/',views.TransportList.as_view(), name='index' ),
+    path('transports/',views.TransportList.as_view(), name='transport_index' ),
     path('transports/show/<int:cat_id>/', views.TransportDetails.as_view, name='detail'),
     path('transports/create/', views.TransportCreate.as_view(), name='transport_create'),
     path('transports/<int:pk>/update/', views.TransportUpdate.as_view(), name='transports_update'),
@@ -27,13 +27,9 @@ urlpatterns = [
 
     #package
     path('packages/',views.PackageList.as_view(),name='packages_index'),
-
     path('packages/<int:pk>',views.PackageDetails.as_view(),name='packages_detail'),
-
     path('packages/create',views.package_create,name='packages_create'),
-
     path('packages/<int:pk>/delete',views.PackageDelete.as_view(),name='packages_delete'),
-
     path('packages/<int:pk>/update',views.PackageUpdate.as_view(),name='packages_update'),
   
     # transportType

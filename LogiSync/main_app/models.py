@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Container(models.Model):
-    container_id = models.CharField(max_length=50, primary_key=True)
     tracking_location = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
     weight = models.CharField(max_length=10)
@@ -14,7 +13,7 @@ class Container(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_absolute_url(self):
-        return reverse('container_detail', kwargs={'pk': self.pk})
+        return reverse('container_detail', kwargs={'pk': self.id})
     
     def __str__(self):
         return f"Container {self.container_id} - {self.tracking_location}"
@@ -27,10 +26,18 @@ class Package(models.Model):
     weight=models.FloatField()
     receivedDate=models.DateField()
     
+class TransportType(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='main_app/static/uploads/', default='')
+
+    def get_absolute_url(self):
+        return reverse("detail", kwargs={'transport_id': self.id})
+    
+    def __str__(self):
+        return self.name
     
 
-    def __str__(self):
-        return self.code
     def get_absolute_url(self):
         return reverse('packages_detail', kwargs={'pk': self.id})
 
@@ -52,6 +59,7 @@ class Source(models.Model):
 
 class Transport(models.Model):
     name = models.CharField(max_length=100)
+    type = models.ForeignKey(TransportType, on_delete=models.CASCADE)
     capacity = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
     description = models.TextField(max_length=250)
@@ -66,3 +74,4 @@ class TransportType(models.Model):
 
     def __str__(self):
         return self.name
+

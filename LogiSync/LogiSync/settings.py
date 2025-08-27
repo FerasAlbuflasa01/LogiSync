@@ -82,7 +82,9 @@ DATABASES = {
         'NAME': os.getenv('DATABASENAME'),
         'USER': os.getenv('DATABASEUSER'),
         'PASSWORD': os.getenv('DATABASEPASSWORD'),
-        'PORT': os.getenv('DATABASEPORT'),
+        'PORT': os.getenv('DATABASEPORT')
+
+
     }
 }
 
@@ -123,7 +125,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_REDIRECT_URL = '/containers/'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
