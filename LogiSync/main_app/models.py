@@ -65,7 +65,7 @@ class TransportType(models.Model):
     image = models.ImageField(upload_to='main_app/static/uploads/', default='')
 
     def get_absolute_url(self):
-        return reverse("detail", kwargs={'transport_id': self.id})
+        return reverse("type_form", kwargs={'transport_id': self.id})
     
     def __str__(self):
         return self.name
