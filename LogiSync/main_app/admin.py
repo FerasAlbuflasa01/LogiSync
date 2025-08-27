@@ -5,7 +5,6 @@ from .models import Transport,Source,Destination,Package,TransportType,Container
 
 admin.site.register(Container)
 admin.site.register(Transport)
-admin.site.register(Container)
 admin.site.register(Source)
 admin.site.register(Destination)
 admin.site.register(Package)
