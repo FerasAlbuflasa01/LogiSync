@@ -1,14 +1,17 @@
 
 
 from django.shortcuts import render,redirect
-from .models import Package,Transport,Destination,Source, TransportType, Container
+from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import ProfileForm, CreationForm
+
 
 
 listOfPackags = [
@@ -59,6 +62,7 @@ listOfPackags = [
 # home / about 
 def home(request):
     return render(request, 'home.html')
+
 def about(request):
     return render(request, 'about.html')
 
@@ -126,13 +130,18 @@ class PackageDelete(LoginRequiredMixin, DeleteView):
 
 
 ################## TRANSPORT TYPE ######################
+class TransportTypeList(LoginRequiredMixin, ListView):
+    models = TransportType
+    fields = '__all__'
 
-    
-class TransportTypeCreate(LoginRequiredMixin, CreateView):
+class TransportTypeCreate(CreateView):
     model = TransportType
     fields = '__all__'
     template_name = 'main_app/type_form.html'
-    success_url = '/transporttype/' 
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('transport_type_create') 
 
 class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
     model = TransportType
@@ -141,7 +150,7 @@ class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
 class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     model = TransportType
     succes_url = '/transports/'
-    
+
 #################### TRANSPORT  ###########################
 
 class TransportList(LoginRequiredMixin,ListView):
@@ -152,7 +161,6 @@ class TransportList(LoginRequiredMixin,ListView):
 
 class TransportDetails(LoginRequiredMixin,DetailView):
     model = Transport
-
 
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
@@ -170,6 +178,41 @@ class TransportUpdate(LoginRequiredMixin,UpdateView):
 class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
+
+####################  SOURCE  ###########################
+
+class SourceList(LoginRequiredMixin, ListView):
+    model = Source
+
+class SourceCreate(LoginRequiredMixin, CreateView):
+    model = Source
+    fields = '__all__'
+
+class SourceUpdate(LoginRequiredMixin, UpdateView):
+    model = Source
+    fields = '__all__'
+
+class SourceDelete(LoginRequiredMixin, DeleteView):
+    model = Source
+    succes_url = '/transports/'
+
+
+####################  DESTINATION  ###########################
+
+class DestinationList(LoginRequiredMixin, ListView):
+    model = Destination
+
+class DestinationCreate(LoginRequiredMixin, CreateView):
+    model = Destination
+    fields = '__all__'
+
+class DestinationUpdate(LoginRequiredMixin, UpdateView):
+    model = Destination
+    fields = '__all__'
+
+class DestinationDelete(LoginRequiredMixin, DeleteView):
+    model = Destination
+    succes_url = '/transports/'
 
 
 # @login_required
@@ -189,18 +232,36 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
-        form = UserCreationForm(request.POST)
+
+        form = CreationForm(request.POST)
         if form.is_valid():
-        # This will add the user to the database
             user = form.save()
-            # This is how we log a user in via code
+            role = form.cleaned_data['role']
+            Profile.objects.create(user=user, role=role)
+            
             login(request, user)
-            return redirect('index')
+            return redirect('/')
         else:
             error_message = 'Invalid sign up - try again'
-    # A bad POST or a GET request, so render signup.html with an empty form
-    form = UserCreationForm()
+    form = CreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+@login_required
+def profile_detail(request):
+    profile = request.user.profile
+    return render(request, 'profile_detail.html', {'profile': profile})
+
+    
+
+@login_required
+def edit_profile(request):
+    profile, created =Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_detail')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile_edit.html' , {'form': form})
