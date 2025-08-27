@@ -37,9 +37,9 @@ urlpatterns = [
     path('packages/<int:pk>/update',views.PackageUpdate.as_view(),name='packages_update'),
   
     # transportType
-    path('transport/type/', views.TransportTypeCreate.as_view(), name='transport_type_create'),
-    path('transport/type/<int:pk>/update/', views.TransportTypeUpdate.as_view(), name='transport_type_update'),
-    path('transport/type/<int:pk>/delete/', views.TransportTypeDelete.as_view(), name='transport_type_delete'),
+    path('transporttype/create/', views.TransportTypeCreate.as_view(), name='transport_type_create'),
+    path('transporttype/<int:pk>/update/', views.TransportTypeUpdate.as_view(), name='transport_type_update'),
+    path('transporttype/<int:pk>/delete/', views.TransportTypeDelete.as_view(), name='transport_type_delete'),
     
     #auth
     path('accounts/signup/', views.signup, name='signup'),

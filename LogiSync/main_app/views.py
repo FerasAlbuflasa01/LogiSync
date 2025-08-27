@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse 
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -140,6 +141,8 @@ class TransportDetails(LoginRequiredMixin,DetailView):
 class TransportTypeCreate(LoginRequiredMixin, CreateView):
     model = TransportType
     fields = '__all__'
+    template_name = 'main_app/type_form.html'
+    success_url = '/transporttype/' 
 
 class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
     model = TransportType

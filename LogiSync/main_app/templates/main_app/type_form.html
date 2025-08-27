@@ -1,33 +1,15 @@
-{% extends 'base.html %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<h1>Transport Type</h1>
+<h1>Add Transport Type</h1>
 
-<div class="type-form" enctype="multipart/form-data">
-  {% csrf_token %}
-  <form action="">
-      <label>Type Name</label>
-      <select
-                id="transport-type"
-                className="transport-type"
-              >
-                <option value="Airplane">Airplanes</option>
-                <option value="Ships">Ships</option>
-                <option value="Track">Track</option>
-                <option value="Bas">Bas</option>
-              </select>
-      <br>
-      <label>Code</label>
-      <input type="text">
-      <br>
-      <label class="transport-type-image">Image</label>
-      {% load static %}
-      <input type="image">
-      <ul>
-        <a href=""><button class="transport-type-btn">Next</button></a>
-      </ul>
+<div class="type-form">
+
+  <form method="post" action="{% url 'transport_type_create'%}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="transport-type-btn">Next</button>
   </form>
 </div>
-
 {% endblock %}
