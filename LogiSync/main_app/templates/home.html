@@ -1,9 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<h1>Welcome to LogiSync</h1>
+<p>
+  LogiSync is your all-in-one logistics management platform. Whether you're
+  tracking containers, managing packages, or coordinating transport routes,
+  we've got the tools to keep your operations running smoothly.
+</p>
 
-{% block content %}
-  <h5>Home Page</h5>
-  <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-{% endblock content %}
-  
+{% if user.is_authenticated %}
+<p>You're logged in as <strong>{{ user.username }}</strong></p>
+{% else %}
+<p>
+  New here?
+  <a href="{% url 'signup' %}">Sign up</a> to create your account, or
+  <a href="{% url 'login' %}">log in</a> to access your logistics dashboard.
+</p>
+
+{% endif %} {% endblock content %}

@@ -26,6 +26,9 @@ class Package(models.Model):
     weight=models.FloatField()
     receivedDate=models.DateField()
     
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    
     
 
     def __str__(self):
@@ -57,6 +60,9 @@ class Transport(models.Model):
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     # CODE = models.CharField(max_length=20)    
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
 class TransportType(models.Model):
     name = models.CharField(max_length=100)
