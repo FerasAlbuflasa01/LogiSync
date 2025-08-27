@@ -77,4 +77,3 @@ class Transport(models.Model):
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     # CODE = models.CharField(max_length=20)    
 
-

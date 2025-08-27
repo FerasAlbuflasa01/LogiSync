@@ -62,6 +62,7 @@ listOfPackags = [
 # home / about 
 def home(request):
     return render(request, 'home.html')
+
 def about(request):
     return render(request, 'about.html')
 
@@ -137,6 +138,29 @@ class PackageDelete(LoginRequiredMixin, DeleteView):
 
 ################## TRANSPORT TYPE ######################
 
+class TransportTypeList(LoginRequiredMixin, ListView):
+    models = TransportType
+    fields = '__all__'
+
+class TransportTypeCreate(CreateView):
+    model = TransportType
+    fields = '__all__'
+    template_name = 'main_app/type_form.html'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('transport_type_create') 
+
+class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
+    model = TransportType
+    fields = ['code']
+
+class TransportTypeDelete(LoginRequiredMixin, DeleteView):
+    model = TransportType
+    succes_url = '/transports/'
+
+#################### TRANSPORT  ###########################
+
 class TransportList(LoginRequiredMixin,ListView):
     model = Transport
     
@@ -146,22 +170,6 @@ class TransportList(LoginRequiredMixin,ListView):
 class TransportDetails(LoginRequiredMixin,DetailView):
     model = Transport
     fields = '__all__'
-    
-class TransportTypeCreate(LoginRequiredMixin, CreateView):
-    model = TransportType
-    fields = '__all__'
-    template_name = 'main_app/type_form.html'
-    success_url = '/transporttype/' 
-
-class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
-    model = TransportType
-    fields = ['code']
-
-class TransportTypeDelete(LoginRequiredMixin, DeleteView):
-    model = TransportType
-    succes_url = '/transports/'
-    
-#################### TRANSPORT  ###########################
 
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
@@ -179,6 +187,41 @@ class TransportUpdate(LoginRequiredMixin,UpdateView):
 class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
+
+####################  SOURCE  ###########################
+
+class SourceList(LoginRequiredMixin, ListView):
+    model = Source
+
+class SourceCreate(LoginRequiredMixin, CreateView):
+    model = Source
+    fields = '__all__'
+
+class SourceUpdate(LoginRequiredMixin, UpdateView):
+    model = Source
+    fields = '__all__'
+
+class SourceDelete(LoginRequiredMixin, DeleteView):
+    model = Source
+    succes_url = '/transports/'
+
+
+####################  DESTINATION  ###########################
+
+class DestinationList(LoginRequiredMixin, ListView):
+    model = Destination
+
+class DestinationCreate(LoginRequiredMixin, CreateView):
+    model = Destination
+    fields = '__all__'
+
+class DestinationUpdate(LoginRequiredMixin, UpdateView):
+    model = Destination
+    fields = '__all__'
+
+class DestinationDelete(LoginRequiredMixin, DeleteView):
+    model = Destination
+    succes_url = '/transports/'
 
 
 @login_required
