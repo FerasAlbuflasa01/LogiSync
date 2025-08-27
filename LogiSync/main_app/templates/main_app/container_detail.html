@@ -43,7 +43,7 @@
        <h2>package weight: {{package.weight}}</h2>
     </a>
   
-        <form action="{% url 'unassoc_package' package.id package.id %}" method="post">
+        <form action="{% url 'unassoc_package' container.id package.id %}" method="post">
           {% csrf_token %}
       <button type="submit"> remove</button>
     </form>
