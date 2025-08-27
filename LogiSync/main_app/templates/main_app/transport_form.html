@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="create-container">
+  <h2>Create transport</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-grid">
+      <div class="form-field">
+        <div class="field">
+          <label for="transport-name">name</label>
+          {{ form.name}}
+        </div>
+        <div class="field">
+          <label for="transport-type">type</label>
+          {{ form.type}}
+        </div>
+
+        <div class="field">
+          <label for="transport-capacity">capacity</label>
+          {{ form.capacity}}
+        </div>
+        <div class="field">
+          <label for="transport-image">image</label>
+          {{ form.image}}
+        </div>
+        <div class="field">
+          <label for="transport-description">description</label>
+          {{ form.description}}
+        </div>
+        <div class="field">
+          <label for="transport-destination">destination</label>
+          {{ form.destination}}
+        </div>
+        <div class="field">
+          <label for="transport-source">source</label>
+          {{ form.source}}
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button type="submit" class="btn">Create</button>
+      </div>
+
+      <!-- <div class="container-list">
+        {% include 'main_app/container_list.html' %}
+      </div> -->
+    </div>
+  </form>
+</div>
+
+{% endblock %}

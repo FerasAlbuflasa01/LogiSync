@@ -26,13 +26,18 @@ class Package(models.Model):
     weight=models.FloatField()
     receivedDate=models.DateField()
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class TransportType(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='main_app/static/uploads/', default='')
 
+    def get_absolute_url(self):
+        return reverse("detail", kwargs={'transport_id': self.id})
     
-    
-
     def __str__(self):
-        return self.code
+        return self.name
+    
+
     def get_absolute_url(self):
         return reverse('packages_detail', kwargs={'pk': self.id})
 
@@ -54,23 +59,11 @@ class Source(models.Model):
 
 class Transport(models.Model):
     name = models.CharField(max_length=100)
+    type = models.ForeignKey(TransportType, on_delete=models.CASCADE)
     capacity = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
     description = models.TextField(max_length=250)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     # CODE = models.CharField(max_length=20)    
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-
-class TransportType(models.Model):
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='main_app/static/uploads/', default='')
-
-    def get_absolute_url(self):
-        return reverse("detail", kwargs={'transport_id': self.id})
-    
-    def __str__(self):
-        return self.name
