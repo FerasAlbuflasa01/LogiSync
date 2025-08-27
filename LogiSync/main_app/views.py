@@ -55,7 +55,13 @@ listOfPackags = [
 ]
 
 
+    
+
+
+
 # Create your views here.
+
+# home / about 
 def home(request):
     return render(request, 'home.html')
 
@@ -90,6 +96,9 @@ class ContainerList(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         return Container.objects.filter(user=self.request.user)
+
+def about(request):
+    return render(request, 'about.html')
 
 # package
 class PackageList(LoginRequiredMixin, ListView):
