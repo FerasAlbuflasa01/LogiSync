@@ -152,9 +152,8 @@ class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
 class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     model = TransportType
     succes_url = '/transports/'
-    
-#################### TRANSPORT  ###########################
 
+#################### TRANSPORT  ###########################
 
 class TransportList(LoginRequiredMixin,ListView):
     model = Transport
@@ -201,12 +200,23 @@ class SourceDelete(LoginRequiredMixin, DeleteView):
     succes_url = '/transports/'
 
 
+####################  DESTINATION  ###########################
 
+class DestinationList(LoginRequiredMixin, ListView):
+    model = Destination
 
+class DestinationCreate(LoginRequiredMixin, CreateView):
+    model = Source
+    fields = '__all__'
 
+class DestinationUpdate(LoginRequiredMixin, UpdateView):
+    model = Destination
+    fields = '__all__'
 
+class DestinationDelete(LoginRequiredMixin, DeleteView):
+    model = Destination
+    succes_url = '/transports/'
 
-####################  DESTINTION  ###########################
 
 
 @login_required
