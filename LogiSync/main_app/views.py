@@ -59,14 +59,16 @@ listOfPackags = [
 # home / about 
 def home(request):
     return render(request, 'home.html')
-
 def about(request):
     return render(request, 'about.html')
 
+
+
+
+#Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
     fields = ['container_id', 'tracking_location', 'description', 'weight' ]
-    
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -74,7 +76,9 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
     fields = [ 'tracking_location', 'description', 'weight',]
-    
+    def get_queryset(self):
+        return Container.objects.filter(user=self.request.user)
+
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
@@ -84,17 +88,15 @@ class ContainerDetail(LoginRequiredMixin, DetailView):
     
 class ContainerList(LoginRequiredMixin, ListView):
     model = Container
-    
     def get_queryset(self):
         return Container.objects.filter(user=self.request.user)
 
-def about(request):
-    return render(request, 'about.html')
+
+
 
 # package
 class PackageList(LoginRequiredMixin, ListView):
     model=Package
-    
     def get_queryset(self):
         return Package.objects.filter(user=self.request.user)
 
@@ -111,10 +113,10 @@ def package_create(request):
                 description=package['description'],
                 price=package['price'],
                 weight=package['weight'],
-                receivedDate=package['receivedDate']
+                receivedDate=package['receivedDate'],
+                user=request.user
             )
         newPackage.save()
-
     return redirect('home')
 
 class PackageUpdate(LoginRequiredMixin, UpdateView):
@@ -124,7 +126,10 @@ class PackageUpdate(LoginRequiredMixin, UpdateView):
 class PackageDelete(LoginRequiredMixin, DeleteView):
     model =Package
     success_url='/'
- 
+
+
+
+
 ################## TRANSPORT TYPE ######################
 
 class TransportList(LoginRequiredMixin,ListView):
@@ -143,7 +148,7 @@ class TransportTypeCreate(LoginRequiredMixin, CreateView):
 
 class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
     model = TransportType
-    fields = 'code'
+    fields = ['code']
 
 class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     model = TransportType
