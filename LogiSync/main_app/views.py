@@ -69,8 +69,8 @@ def about(request):
 #Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
+    fields = [ 'tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
 
-    fields = [ 'tracking_location', 'description', 'weight' ]
     
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -78,17 +78,51 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
+    fields = ['tracking_location', 'description', 'weight_capacity','currnt_weight_capacity']
 
-    fields = ['tracking_location', 'description', 'weight',]
     
 
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
-    
-class ContainerDetail(LoginRequiredMixin, DetailView):
-    model = Container
-    
+
+@login_required  
+def ContainerDetail(request,container_id):
+    container = Container.objects.get(id=container_id)
+    packages_doesnt_contain = Package.objects.exclude(inContainer=True)
+    packages_exsist =Package.objects.filter(container=container_id) 
+    print(packages_doesnt_contain)
+    return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist})
+
+@login_required
+def assoc_package(request,container_id,package_id):
+    container=Container.objects.get(id=container_id)
+    package=Package.objects.get(id=package_id)
+    last_weight=container.weight_capacity
+    new_weight=container.currnt_weight_capacity + package.weight
+    print(new_weight)
+    if new_weight>last_weight:
+        packages_doesnt_contain = Package.objects.exclude(inContainer=True)
+        packages_exsist =Package.objects.filter(container=container_id) 
+        return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist,'msg':'package weigth exceeds limit container weigth!!!'})
+    container.currnt_weight_capacity=new_weight
+    container.save() 
+    package.container=container
+    package.inContainer=True
+    package.save()
+    return redirect('container_detail',container_id=container_id)
+
+@login_required
+def unassoc_package(request,container_id,package_id):
+    container=Container.objects.get(id=container_id)
+    package=Package.objects.get(id=package_id)
+    container.currnt_weight_capacity-=package.weight
+    package.inContainer=False
+    package.container=None
+    package.save()
+    container.save()
+    return redirect('container_detail',container_id=container_id)
+
 class ContainerList(LoginRequiredMixin, ListView):
     model = Container
     def get_queryset(self):

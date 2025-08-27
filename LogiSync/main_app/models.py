@@ -18,18 +18,16 @@ class Profile(models.Model):
 class Container(models.Model):
     tracking_location = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
-    weight = models.CharField(max_length=10)
-    
+    weight_capacity = models.FloatField()
+    currnt_weight_capacity = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_absolute_url(self):
-        return reverse('container_detail', kwargs={'pk': self.id})
+        return reverse('container_detail', kwargs={'container_id': self.id})
     
     def __str__(self):
-        return f"Container {self.container_id} - {self.tracking_location}"
+        return f"Container {self.id} - {self.tracking_location}"
 
-
-# -------------------------------------------------------------- Package --------------------------------------------------------------
 class Package(models.Model):
     code=models.CharField(max_length=20)
     owner=models.CharField(max_length=50)
@@ -37,6 +35,11 @@ class Package(models.Model):
     price=models.IntegerField()
     weight=models.FloatField()
     receivedDate=models.DateField()
+    container = models.ForeignKey(Container, on_delete=models.SET_NULL, null=True, blank=True)
+    inContainer=models.BooleanField(default=False)
+    
+    
+
 
 
 # -------------------------------------------------------------- TransportType --------------------------------------------------------------
@@ -47,13 +50,10 @@ class TransportType(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('packages_detail', kwargs={'pk': self.id})  
 
-    def get_absolute_url(self):
-        return reverse("detail", kwargs={'transport_id': self.id})
-    
-    def get_absolute_url(self):
-        return reverse('packages_detail', kwargs={'pk': self.id})
-    
 
 # -------------------------------------------------------------- Destination --------------------------------------------------------------
 class Destination(models.Model):
