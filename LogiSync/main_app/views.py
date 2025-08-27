@@ -68,16 +68,18 @@ def about(request):
 #Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = ['container_id', 'tracking_location', 'description', 'weight' ]
+
+    fields = [ 'tracking_location', 'description', 'weight' ]
+    
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight',]
-    def get_queryset(self):
-        return Container.objects.filter(user=self.request.user)
+
+    fields = ['tracking_location', 'description', 'weight',]
+    
 
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
