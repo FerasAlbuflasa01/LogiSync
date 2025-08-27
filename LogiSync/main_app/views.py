@@ -57,8 +57,14 @@ listOfPackags = [
         "receivedDate": "2023-08-20"
     }
 ]
+
+    # home / about 
+
 def home(request):
     return render(request,'home.html')
+
+def about(request):
+    return render(request, 'about.html')
 
 # package
 class PackageList(ListView):

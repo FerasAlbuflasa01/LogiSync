@@ -2,14 +2,17 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
+    # home / about 
+    path('',views.home,name='home'),
+    path('about/',views.about, name='about' ),
+
     # transport
     path('transports/',views.TransportList.as_view(), name='index' ),
     path('transports/show/<int:cat_id>/', views.TransportDetails.as_view, name='detail'),
-    path('transports/create/', views.TransportCreate.as_view(), name='cat_create'),
-    path('transports/<int:pk>/update/', views.TransportUpdate.as_view(), name='cats_update'),
-    path('transports/<int:pk>/delete/', views.TransportDelete.as_view(), name='cats_delete'),
+    path('transports/create/', views.TransportCreate.as_view(), name='transport_create'),
+    path('transports/<int:pk>/update/', views.TransportUpdate.as_view(), name='transports_update'),
+    path('transports/<int:pk>/delete/', views.TransportDelete.as_view(), name='transports_delete'),
 
-    path('',views.home,name='home'),
 
     #package
     path('packages/',views.ListView.as_view(),name='packages_index'),

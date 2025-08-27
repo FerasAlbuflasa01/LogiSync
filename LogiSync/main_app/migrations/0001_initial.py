@@ -24,12 +24,7 @@ class Migration(migrations.Migration):
                 ('price', models.IntegerField()),
                 ('wigth', models.FloatField()),
                 ('receivedDate', models.DateField()),
-            name='Destination',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('location', models.CharField(max_length=100)),
-            ],
+            ]
         ),
         migrations.CreateModel(
             name='Source',
