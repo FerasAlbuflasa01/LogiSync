@@ -84,6 +84,7 @@ DATABASES = {
         'PASSWORD': os.getenv('DATABASEPASSWORD'),
         'PORT': os.getenv('DATABASEPORT')
 
+
     }
 }
 

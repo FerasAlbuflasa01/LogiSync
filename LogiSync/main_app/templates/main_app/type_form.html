@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Add Transport Type</h1>
+
+<div class="type-form">
+
+  <form method="post" action="{% url 'transport_type_create'%}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="transport-type-btn">Next</button>
+  </form>
+</div>
+{% endblock %}
