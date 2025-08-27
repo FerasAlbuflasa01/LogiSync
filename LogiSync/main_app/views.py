@@ -59,6 +59,7 @@ listOfPackags = [
 # home / about 
 def home(request):
     return render(request, 'home.html')
+
 def about(request):
     return render(request, 'about.html')
 
@@ -134,16 +135,10 @@ class PackageDelete(LoginRequiredMixin, DeleteView):
 
 ################## TRANSPORT TYPE ######################
 
-class TransportList(LoginRequiredMixin,ListView):
-    model = Transport
-    
-    def get_queryset(self):
-        return Transport.objects.filter(user=self.request.user)
-
-class TransportDetails(LoginRequiredMixin,DetailView):
-    model = Transport
+class TransportTypeList(LoginRequiredMixin, ListView):
+    models = TransportType
     fields = '__all__'
-    
+
 class TransportTypeCreate(LoginRequiredMixin, CreateView):
     model = TransportType
     fields = '__all__'
@@ -159,6 +154,17 @@ class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     succes_url = '/transports/'
     
 #################### TRANSPORT  ###########################
+
+
+class TransportList(LoginRequiredMixin,ListView):
+    model = Transport
+    
+    def get_queryset(self):
+        return Transport.objects.filter(user=self.request.user)
+
+class TransportDetails(LoginRequiredMixin,DetailView):
+    model = Transport
+    fields = '__all__'
 
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
@@ -176,6 +182,8 @@ class TransportUpdate(LoginRequiredMixin,UpdateView):
 class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
+
+
 
 
 @login_required
