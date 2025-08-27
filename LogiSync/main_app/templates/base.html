@@ -13,7 +13,9 @@
         {% if user.is_authenticated %}
         <a href="{% url 'container_create' %}">Containers</a>
         <a href="{% url 'packages_index' %}">Packages</a>
-        <a href="{% url 'transport_index' %}">Transports</a>
+        <a href="{% url 'transport_list' %}">Transports</a>
+        <a href="{% url 'transport_create' %}">Create Transports</a>
+
         <a href="{% url 'profile_detail' %}">My Profile</a>
 
         <form action="{% url 'logout' %}" method="post">

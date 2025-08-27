@@ -5,48 +5,56 @@
 
   <form method="POST">
     {% csrf_token %}
-    <div class="form-grid">
-      <div class="form-field">
-        <div class="field">
-          <label for="transport-name">name</label>
-          {{ form.name}}
-        </div>
-        <div class="field">
-          <label for="transport-type">type</label>
-          {{ form.type}}
+      {% if object %}
+    <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
+  {% else %}
+    <h1>Add transport</h1>
+  {% endif %}
+  <form action="{% url 'transport_create' %}" method="post">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit!" class="btn">
+
+
+      <div class="container-list">
+        <div class="page-header">
+          <h2>transport List</h2>
         </div>
 
-        <div class="field">
-          <label for="transport-capacity">capacity</label>
-          {{ form.capacity}}
-        </div>
-        <div class="field">
-          <label for="transport-image">image</label>
-          {{ form.image}}
-        </div>
-        <div class="field">
-          <label for="transport-description">description</label>
-          {{ form.description}}
-        </div>
-        <div class="field">
-          <label for="transport-destination">destination</label>
-          {{ form.destination}}
-        </div>
-        <div class="field">
-          <label for="transport-source">source</label>
-          {{ form.source}}
+        <div class="container-list">
+          {% for transport in transports %}
+          <div class="container-card">
+            <div class="container-info">
+              <div class="field">
+                <label>transport name</label>
+                <p>{{ transport.name }}</p>
+              </div>
+              <div class="field">
+                <label>transport type</label>
+                <p>{{ transport.type }}</p>
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <p>{{ transport.description }}</p>
+              </div>
+              <div class="field">
+                <a href="{% url 'transport_detail' transport.pk %}"
+                  >More Details</a
+                >
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p>No transport Available</p>
+          {% endfor %}
         </div>
       </div>
-
-      <div class="form-action">
-        <button type="submit" class="btn">Create</button>
-      </div>
-
-      <!-- <div class="container-list">
-        {% include 'main_app/container_list.html' %}
-      </div> -->
     </div>
+
   </form>
+    </div>
 </div>
 
 {% endblock %}
