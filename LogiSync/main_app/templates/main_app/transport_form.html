@@ -3,58 +3,18 @@
 <div class="create-container">
   <h2>Create transport</h2>
 
-  <form method="POST">
-    {% csrf_token %}
-      {% if object %}
+  <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %} {% if object %}
     <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
-  {% else %}
+    {% else %}
     <h1>Add transport</h1>
-  {% endif %}
-  <form action="{% url 'transport_create' %}" method="post">
-    {% csrf_token %}
+    {% endif %}
+      {% csrf_token %}
     <table>
       {{ form.as_table }}
     </table>
-    <input type="submit" value="Submit!" class="btn">
+      <input type="submit" value="Submit!" class="btn" />
 
-
-      <div class="container-list">
-        <div class="page-header">
-          <h2>transport List</h2>
-        </div>
-
-        <div class="container-list">
-          {% for transport in transports %}
-          <div class="container-card">
-            <div class="container-info">
-              <div class="field">
-                <label>transport name</label>
-                <p>{{ transport.name }}</p>
-              </div>
-              <div class="field">
-                <label>transport type</label>
-                <p>{{ transport.type }}</p>
-              </div>
-              <div class="field">
-                <label>Description</label>
-                <p>{{ transport.description }}</p>
-              </div>
-              <div class="field">
-                <a href="{% url 'transport_detail' transport.pk %}"
-                  >More Details</a
-                >
-              </div>
-            </div>
-          </div>
-          {% empty %}
-          <p>No transport Available</p>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
+      {% endblock %}
   </form>
-    </div>
 </div>
-
-{% endblock %}

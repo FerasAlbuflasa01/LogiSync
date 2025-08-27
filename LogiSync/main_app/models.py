@@ -86,3 +86,9 @@ class Transport(models.Model):
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('transport_detail', kwargs={'pk': self.id})
+

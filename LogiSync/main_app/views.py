@@ -164,11 +164,9 @@ class TransportDetails(LoginRequiredMixin,DetailView):
 
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
-    fields = ['name','type','capacity','image','description','destination','source']
+    # fields = ['name','type','capacity','image','description','destination','source']
+    fields = '__all__'
 
-    def form_valid(self,form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
     
 class TransportUpdate(LoginRequiredMixin,UpdateView):
     model = Transport
