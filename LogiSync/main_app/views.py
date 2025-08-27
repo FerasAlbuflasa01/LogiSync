@@ -65,7 +65,7 @@ def about(request):
 
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight' ]
+    fields = [ 'tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
     
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -78,7 +78,8 @@ class ContainerUpdate(LoginRequiredMixin, UpdateView):
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
-    
+
+@login_required  
 def ContainerDetail(request,container_id):
     container = Container.objects.get(id=container_id)
     packages_doesnt_contain = Package.objects.exclude(inContainer=True)
@@ -86,6 +87,7 @@ def ContainerDetail(request,container_id):
     print(packages_doesnt_contain)
     return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist})
 
+@login_required
 def assoc_package(request,container_id,package_id):
   container=Container.objects.get(id=container_id)
   package=Package.objects.get(id=package_id)
@@ -94,6 +96,7 @@ def assoc_package(request,container_id,package_id):
   package.save()
   return redirect('container_detail',container_id=container_id)
 
+@login_required
 def unassoc_package(request,container_id,package_id):
   container=Container.objects.get(id=container_id)
   package=Package.objects.get(id=package_id)

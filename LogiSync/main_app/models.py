@@ -9,14 +9,15 @@ from django.contrib.auth.models import User
 class Container(models.Model):
     tracking_location = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
-    weight = models.CharField(max_length=10)
+    weight_capacity = models.FloatField()
+    currnt_weight_capacity = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_absolute_url(self):
-        return reverse('container_detail', kwargs={'container_id': self.id})
+        return reverse('container_detail', kwargs={'pk': self.id})
     
     def __str__(self):
-        return f"Container {self.container_id} - {self.tracking_location}"
+        return f"Container {self.id} - {self.tracking_location}"
 
 class Package(models.Model):
     code=models.CharField(max_length=20)
@@ -32,7 +33,7 @@ class Package(models.Model):
     def __str__(self):
         return self.code
     def get_absolute_url(self):
-        return reverse('packages_detail', kwargs={'package_id': self.id})  
+        return reverse('packages_detail', kwargs={'pk': self.id})  
 
 class Destination(models.Model):
     name = models.CharField(max_length=100)
