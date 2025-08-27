@@ -1,11 +1,55 @@
+{% extends 'base.html' %} {% block content %}
 
-
-{% extends 'base.html'  %}
-
-{% block content %}
-
-<h1>Hello, this is the about page</h1>
 <h1>About LogiSync</h1>
-  
-{% endblock content %}
 
+<p>
+  <strong>LogiSync</strong> is a logistics management platform designed to
+  streamline the tracking, coordination, and delivery of goods across complex
+  supply chains. Whether you're managing containers, packages, or transport
+  routes, LogiSync helps you stay organized, efficient, and in control.
+</p>
+
+<h2>What We Offer</h2>
+<ul>
+  <li>
+    <strong>Container Tracking:</strong> Monitor container locations, weights,
+    and descriptions in real time.
+  </li>
+  <li>
+    <strong>Package Management:</strong> Create, update, and view packages with
+    detailed metadata including owner, weight, and received date.
+  </li>
+  <li>
+    <strong>Transport Coordination:</strong> Assign transports to destinations
+    and sources, manage capacity, and upload transport images for reference.
+  </li>
+  <li>
+    <strong>User-Specific Views:</strong> Each user sees only their own data,
+    ensuring privacy and clarity across teams.
+  </li>
+</ul>
+
+<h2>Why LogiSync?</h2>
+<p>
+  We built LogiSync to solve the everyday pain points of logistics professionals
+  — from scattered spreadsheets to unclear responsibilities. With secure
+  authentication, per-user data filtering, and a clean interface, LogiSync
+  empowers teams to collaborate without confusion.
+</p>
+
+<h2>Built for Developers, Too</h2>
+<p>
+  LogiSync is also a developer-friendly platform. Built with Django and
+  PostgreSQL, it features scalable architecture, clean models, and maintainable
+  CRUD flows. Whether you're customizing the backend or extending the frontend,
+  LogiSync is designed to grow with your needs.
+</p>
+
+<h2>Get Started</h2>
+<p>
+  If you're new here, feel free to <a href="{% url 'signup' %}">sign up</a> or
+  <a href="{% url 'login' %}">log in</a> to explore your dashboard. If you're
+  already part of the team, welcome back — your logistics universe awaits.
+</p>
+
+{% endblock content %}
