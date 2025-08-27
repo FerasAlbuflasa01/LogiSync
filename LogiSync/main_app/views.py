@@ -7,9 +7,10 @@ from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ProfileForm
+from .forms import ProfileForm, CreationForm
 
 
 
@@ -198,16 +199,17 @@ def signup(request):
     error_message = ''
     if request.method == 'POST':
 
-        form = UserCreationForm(request.POST)
+        form = CreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)
+            role = form.cleaned_data['role']
+            Profile.objects.create(user=user, role=role)
             
             login(request, user)
             return redirect('/')
         else:
             error_message = 'Invalid sign up - try again'
-    form = UserCreationForm()
+    form = CreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 

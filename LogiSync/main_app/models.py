@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Profile(models.Model):
+    ROLE=[('supervisor', 'Supervisor'),('driver', 'Driver')]
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50, blank=True)
+    role = models.CharField(max_length=50, choices=ROLE, blank=True)
     phone = models.CharField(max_length=10, blank=True)
     
     def __str__(self):
