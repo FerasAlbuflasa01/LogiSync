@@ -183,7 +183,30 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
 
+####################  SOURCE  ###########################
 
+class SourceList(LoginRequiredMixin, ListView):
+    model = Source
+
+class SourceCreate(LoginRequiredMixin, CreateView):
+    model = Source
+    fields = '__all__'
+
+class SourceUpdate(LoginRequiredMixin, UpdateView):
+    model = Source
+    fields = '__all__'
+
+class SourceDelete(LoginRequiredMixin, DeleteView):
+    model = Source
+    succes_url = '/transports/'
+
+
+
+
+
+
+
+####################  DESTINTION  ###########################
 
 
 @login_required
