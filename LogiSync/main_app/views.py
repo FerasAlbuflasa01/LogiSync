@@ -62,9 +62,6 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-
-
-
 #Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
@@ -92,8 +89,6 @@ class ContainerList(LoginRequiredMixin, ListView):
     model = Container
     def get_queryset(self):
         return Container.objects.filter(user=self.request.user)
-
-
 
 
 # package
@@ -130,19 +125,8 @@ class PackageDelete(LoginRequiredMixin, DeleteView):
     success_url='/'
 
 
-
-
 ################## TRANSPORT TYPE ######################
 
-class TransportList(LoginRequiredMixin,ListView):
-    model = Transport
-    
-    def get_queryset(self):
-        return Transport.objects.filter(user=self.request.user)
-
-class TransportDetails(LoginRequiredMixin,DetailView):
-    model = Transport
-    fields = '__all__'
     
 class TransportTypeCreate(LoginRequiredMixin, CreateView):
     model = TransportType
@@ -160,9 +144,19 @@ class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     
 #################### TRANSPORT  ###########################
 
+class TransportList(LoginRequiredMixin,ListView):
+    model = Transport
+    def get_queryset(self):
+        return Transport.objects.all()
+    
+
+class TransportDetails(LoginRequiredMixin,DetailView):
+    model = Transport
+
+
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
-    fields = ['name','capacity','image','description','destination','source']
+    fields = ['name','type','capacity','image','description','destination','source']
 
     def form_valid(self,form):
         form.instance.user = self.request.user
@@ -178,17 +172,17 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     success_url = '/transports/'
 
 
-@login_required
-def transports_index(request):
-    transports = Transport.objects.get() # I think we need to filter by sorce and destination
-    return render(request, 'transports/index.html', {'transports':transports})
+# @login_required
+# def transports_index(request):
+#     transports = Transport.objects.get() # I think we need to filter by sorce and destination
+#     return render(request, 'transports/index.html', {'transports':transports})
 
-@login_required
-def transports_detail(request, transport_id):
-    transport = Transport.objects.get(id=transport_id)
-    return render(request, 'transports/details.html', {
-        'transport':transport,
-    })
+# @login_required
+# def transports_detail(request, transport_id):
+#     transport = Transport.objects.get(id=transport_id)
+#     return render(request, 'transports/details.html', {
+#         'transport':transport,
+#     })
 
 
 
