@@ -1,5 +1,4 @@
 
-
 from django.shortcuts import render,redirect
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
@@ -116,7 +115,8 @@ def assoc_package(request,container_id,package_id):
 def unassoc_package(request,container_id,package_id):
     container=Container.objects.get(id=container_id)
     package=Package.objects.get(id=package_id)
-    container.currnt_weight_capacity-=package.weight
+    new_weight=container.currnt_weight_capacity - package.weight
+    container.currnt_weight_capacity=round(new_weight, 3)
     package.inContainer=False
     package.container=None
     package.save()
