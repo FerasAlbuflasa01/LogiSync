@@ -19,7 +19,40 @@
     <label>Description</label>
     <p>{{ container.description}}</p>
   </div>
-</div>
+
+</div class="continer-packages">
+<h2>packages that are in continer</h2>
+{% if packages_exsist.count %}
+
+{% for package in packages_exsist %}
+
+    <a href="{% url 'packages_detail' package.id %} ">
+       <h2>{{package.code}}</h2>
+    </a>
   
+        <form action="{% url 'unassoc_package' package.id package.id %}" method="post">
+          {% csrf_token %}
+      <button type="submit"> remove</button>
+    </form>
+{% endfor %}
+  
+{% endif %}
+</div>
+
+<div class="packages">
+<h2>packages that are not in continer</h2>
+  {% for package in packages %}
+    <a href="{% url 'packages_detail' container.id %} ">
+       <h2>{{package.code}}</h2>
+    </a>
+   
+        <form action="{% url 'assoc_package' container.id package.id %}" method="post">
+          {% csrf_token %}
+      <button type="submit"> add</button>
+    </form>
+  {% endfor %}
+    
+</div>
+
 {% endblock  %}
   

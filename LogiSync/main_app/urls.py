@@ -12,15 +12,18 @@ urlpatterns = [
     #Containers
     path('containers/', views.ContainerList.as_view(), name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
-    path('containers/<int:pk>/', views.ContainerDetail.as_view(), name='container_detail' ),
+    path('containers/<int:pk>/', views.ContainerDetail, name='container_detail' ),
 
     path('containers/<int:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
     path('containers/<int:pk>/delete/', views.ContainerDelete.as_view(), name='container_delete' ),
+
+    path('containers/<int:container_id>/assoc_package/<int:package_id>',views.assoc_package,name='assoc_package'),
+    path('containers/<int:container_id>/unassoc_package/<int:package_id>',views.unassoc_package,name='unassoc_package'),
     
 
     # transport
     path('transports/',views.TransportList.as_view(), name='index' ),
-    path('transports/show/<int:cat_id>/', views.TransportDetails.as_view, name='detail'),
+    path('transports/<int:pk>/', views.TransportDetails.as_view, name='detail'),
     path('transports/create/', views.TransportCreate.as_view(), name='transport_create'),
     path('transports/<int:pk>/update/', views.TransportUpdate.as_view(), name='transports_update'),
     path('transports/<int:pk>/delete/', views.TransportDelete.as_view(), name='transports_delete'),

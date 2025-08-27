@@ -79,9 +79,30 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
     
-class ContainerDetail(LoginRequiredMixin, DetailView):
-    model = Container
-    
+def ContainerDetail(request,container_id):
+    container = Container.objects.get(id=container_id)
+    packages_doesnt_contain = Package.objects.exclude(inContainer=True)
+    packages_exsist =Package.objects.filter(container=container_id) 
+    print(packages_doesnt_contain)
+    return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist})
+
+def assoc_package(request,container_id,package_id):
+  container=Container.objects.get(id=container_id)
+  package=Package.objects.get(id=package_id)
+  package.container=container
+  package.inContainer=True
+  package.save()
+  return redirect('container_detail',container_id=container_id)
+
+def unassoc_package(request,container_id,package_id):
+  container=Container.objects.get(id=container_id)
+  package=Package.objects.get(id=package_id)
+  package.inContainer=False
+  package.container=None
+  package.save()
+  return redirect('container_detail',container_id=container_id)
+
+
 class ContainerList(LoginRequiredMixin, ListView):
     model = Container
     
