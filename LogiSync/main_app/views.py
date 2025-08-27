@@ -1,14 +1,17 @@
 
 
 from django.shortcuts import render,redirect
-from .models import Package,Transport,Destination,Source, TransportType, Container
+from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import ProfileForm, CreationForm
+
 
 
 listOfPackags = [
@@ -63,9 +66,11 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+#Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
     fields = [ 'tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
+
     
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -74,7 +79,9 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
     fields = ['tracking_location', 'description', 'weight_capacity','currnt_weight_capacity']
+
     
+
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
@@ -89,46 +96,42 @@ def ContainerDetail(request,container_id):
 
 @login_required
 def assoc_package(request,container_id,package_id):
-  container=Container.objects.get(id=container_id)
-  package=Package.objects.get(id=package_id)
-  last_weight=container.weight_capacity
-  new_weight=container.currnt_weight_capacity + package.weight
-  print(new_weight)
-  if new_weight>last_weight:
-    packages_doesnt_contain = Package.objects.exclude(inContainer=True)
-    packages_exsist =Package.objects.filter(container=container_id) 
-    return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist,'msg':'package weigth exceeds limit container weigth!!!'})
-  container.currnt_weight_capacity=new_weight
-  container.save() 
-  package.container=container
-  package.inContainer=True
-  package.save()
-  return redirect('container_detail',container_id=container_id)
+    container=Container.objects.get(id=container_id)
+    package=Package.objects.get(id=package_id)
+    last_weight=container.weight_capacity
+    new_weight=container.currnt_weight_capacity + package.weight
+    print(new_weight)
+    if new_weight>last_weight:
+        packages_doesnt_contain = Package.objects.exclude(inContainer=True)
+        packages_exsist =Package.objects.filter(container=container_id) 
+        return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist,'msg':'package weigth exceeds limit container weigth!!!'})
+    container.currnt_weight_capacity=new_weight
+    container.save() 
+    package.container=container
+    package.inContainer=True
+    package.save()
+    return redirect('container_detail',container_id=container_id)
 
 @login_required
 def unassoc_package(request,container_id,package_id):
-  container=Container.objects.get(id=container_id)
-  package=Package.objects.get(id=package_id)
-  container.currnt_weight_capacity-=package.weight
-  package.inContainer=False
-  package.container=None
-  package.save()
-  container.save()
-  return redirect('container_detail',container_id=container_id)
+    container=Container.objects.get(id=container_id)
+    package=Package.objects.get(id=package_id)
+    container.currnt_weight_capacity-=package.weight
+    package.inContainer=False
+    package.container=None
+    package.save()
+    container.save()
+    return redirect('container_detail',container_id=container_id)
 
 class ContainerList(LoginRequiredMixin, ListView):
     model = Container
-    
     def get_queryset(self):
         return Container.objects.filter(user=self.request.user)
 
-def about(request):
-    return render(request, 'about.html')
 
 # package
 class PackageList(LoginRequiredMixin, ListView):
     model=Package
-    
     def get_queryset(self):
         return Package.objects.filter(user=self.request.user)
 
@@ -145,10 +148,10 @@ def package_create(request):
                 description=package['description'],
                 price=package['price'],
                 weight=package['weight'],
-                receivedDate=package['receivedDate']
+                receivedDate=package['receivedDate'],
+                user=request.user
             )
         newPackage.save()
-
     return redirect('home')
 
 class PackageUpdate(LoginRequiredMixin, UpdateView):
@@ -158,40 +161,46 @@ class PackageUpdate(LoginRequiredMixin, UpdateView):
 class PackageDelete(LoginRequiredMixin, DeleteView):
     model =Package
     success_url='/'
- 
+
+
 ################## TRANSPORT TYPE ######################
-
-class TransportList(LoginRequiredMixin,ListView):
-    model = Transport
-    
-    def get_queryset(self):
-        return Transport.objects.filter(user=self.request.user)
-
-class TransportDetails(LoginRequiredMixin,DetailView):
-    model = Transport
+class TransportTypeList(LoginRequiredMixin, ListView):
+    models = TransportType
     fields = '__all__'
-    
-class TransportTypeCreate(LoginRequiredMixin, CreateView):
+
+class TransportTypeCreate(CreateView):
     model = TransportType
     fields = '__all__'
+    template_name = 'main_app/type_form.html'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('transport_type_create') 
 
 class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
     model = TransportType
-    fields = 'code'
+    fields = ['code']
 
 class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     model = TransportType
     succes_url = '/transports/'
-    
+
 #################### TRANSPORT  ###########################
+
+class TransportList(LoginRequiredMixin,ListView):
+    model = Transport
+    def get_queryset(self):
+        return Transport.objects.all()
+    
+
+class TransportDetails(LoginRequiredMixin,DetailView):
+    model = Transport
 
 class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
-    fields = ['name','capacity','image','description','destination','source']
+    # fields = ['name','type','capacity','image','description','destination','source']
+    fields = '__all__'
 
-    def form_valid(self,form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
     
 class TransportUpdate(LoginRequiredMixin,UpdateView):
     model = Transport
@@ -201,6 +210,41 @@ class TransportUpdate(LoginRequiredMixin,UpdateView):
 class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
+
+####################  SOURCE  ###########################
+
+class SourceList(LoginRequiredMixin, ListView):
+    model = Source
+
+class SourceCreate(LoginRequiredMixin, CreateView):
+    model = Source
+    fields = '__all__'
+
+class SourceUpdate(LoginRequiredMixin, UpdateView):
+    model = Source
+    fields = '__all__'
+
+class SourceDelete(LoginRequiredMixin, DeleteView):
+    model = Source
+    succes_url = '/transports/'
+
+
+####################  DESTINATION  ###########################
+
+class DestinationList(LoginRequiredMixin, ListView):
+    model = Destination
+
+class DestinationCreate(LoginRequiredMixin, CreateView):
+    model = Destination
+    fields = '__all__'
+
+class DestinationUpdate(LoginRequiredMixin, UpdateView):
+    model = Destination
+    fields = '__all__'
+
+class DestinationDelete(LoginRequiredMixin, DeleteView):
+    model = Destination
+    succes_url = '/transports/'
 
 
 # @login_required
@@ -220,18 +264,36 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
-        form = UserCreationForm(request.POST)
+
+        form = CreationForm(request.POST)
         if form.is_valid():
-        # This will add the user to the database
             user = form.save()
-            # This is how we log a user in via code
+            role = form.cleaned_data['role']
+            Profile.objects.create(user=user, role=role)
+            
             login(request, user)
-            return redirect('index')
+            return redirect('/')
         else:
             error_message = 'Invalid sign up - try again'
-    # A bad POST or a GET request, so render signup.html with an empty form
-    form = UserCreationForm()
+    form = CreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+@login_required
+def profile_detail(request):
+    profile = request.user.profile
+    return render(request, 'profile_detail.html', {'profile': profile})
+
+    
+
+@login_required
+def edit_profile(request):
+    profile, created =Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_detail')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile_edit.html' , {'form': form})

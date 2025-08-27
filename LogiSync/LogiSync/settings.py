@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os 
+import os
 from dotenv import load_dotenv
 load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -78,10 +79,11 @@ WSGI_APPLICATION = 'LogiSync.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASENAME'), 
+        'NAME': os.getenv('DATABASENAME'),
         'USER': os.getenv('DATABASEUSER'),
-        'PASSWORD': os.getenv('DTABASEPASSWORD'),
+        'PASSWORD': os.getenv('DATABASEPASSWORD'),
         'PORT': os.getenv('DATABASEPORT')
+
 
     }
 }
@@ -123,7 +125,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_REDIRECT_URL = '/containers/'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
