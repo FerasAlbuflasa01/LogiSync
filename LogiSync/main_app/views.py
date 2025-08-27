@@ -65,7 +65,7 @@ def about(request):
 
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = ['container_id', 'tracking_location', 'description', 'weight' ]
+    fields = [ 'tracking_location', 'description', 'weight' ]
     
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -73,7 +73,7 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight',]
+    fields = ['tracking_location', 'description', 'weight',]
     
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
