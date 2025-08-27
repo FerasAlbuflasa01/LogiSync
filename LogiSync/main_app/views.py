@@ -6,7 +6,6 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -169,17 +168,17 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     success_url = '/transports/'
 
 
-# @login_required
-# def transports_index(request):
-#     transports = Transport.objects.get() # I think we need to filter by sorce and destination
-#     return render(request, 'transports/index.html', {'transports':transports})
+@login_required
+def transports_index(request):
+    transports = Transport.objects.get() # I think we need to filter by sorce and destination
+    return render(request, 'transports/index.html', {'transports':transports})
 
-# @login_required
-# def transports_detail(request, transport_id):
-#     transport = Transport.objects.get(id=transport_id)
-#     return render(request, 'transports/details.html', {
-#         'transport':transport,
-#     })
+@login_required
+def transports_detail(request, transport_id):
+    transport = Transport.objects.get(id=transport_id)
+    return render(request, 'transports/details.html', {
+        'transport':transport,
+    })
 
 
 
