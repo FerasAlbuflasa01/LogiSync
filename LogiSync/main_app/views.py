@@ -139,11 +139,14 @@ class TransportTypeList(LoginRequiredMixin, ListView):
     models = TransportType
     fields = '__all__'
 
-class TransportTypeCreate(LoginRequiredMixin, CreateView):
+class TransportTypeCreate(CreateView):
     model = TransportType
     fields = '__all__'
     template_name = 'main_app/type_form.html'
-    success_url = '/transporttype/' 
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('transport_type_create') 
 
 class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
     model = TransportType
@@ -206,7 +209,7 @@ class DestinationList(LoginRequiredMixin, ListView):
     model = Destination
 
 class DestinationCreate(LoginRequiredMixin, CreateView):
-    model = Source
+    model = Destination
     fields = '__all__'
 
 class DestinationUpdate(LoginRequiredMixin, UpdateView):
@@ -216,7 +219,6 @@ class DestinationUpdate(LoginRequiredMixin, UpdateView):
 class DestinationDelete(LoginRequiredMixin, DeleteView):
     model = Destination
     succes_url = '/transports/'
-
 
 
 @login_required
