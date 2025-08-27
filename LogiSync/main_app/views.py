@@ -54,11 +54,6 @@ listOfPackags = [
     }
 ]
 
-
-    
-
-
-
 # Create your views here.
 
 # home / about 
@@ -67,10 +62,6 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
-
-
-
-
 
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container

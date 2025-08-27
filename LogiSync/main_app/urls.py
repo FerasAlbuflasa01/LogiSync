@@ -2,12 +2,6 @@
 from django.urls import path, include
 from . import views
 
-
-
-    
-    
-    
-
 urlpatterns = [
 
     # home / about 
@@ -32,9 +26,9 @@ urlpatterns = [
 
 
     #package
-    path('packages/',views.ListView.as_view(),name='packages_index'),
+    path('packages/',views.PackageList.as_view(),name='packages_index'),
 
-    path('packages/<int:pk>',views.DetailView.as_view(),name='packages_detail'),
+    path('packages/<int:pk>',views.PackageDetails.as_view(),name='packages_detail'),
 
     path('packages/create',views.package_create,name='packages_create'),
 
