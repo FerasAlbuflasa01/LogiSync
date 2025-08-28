@@ -42,5 +42,10 @@ urlpatterns = [
 # -------------------------------------------------------------- auth --------------------------------------------------------------
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/', views.profile_detail, name='profile_detail'),
-    path('profile/edit/', views.edit_profile, name='edit_profile')
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+# -------------------------------------------------------------- locations(testing) --------------------------------------------------------------
+    path('location/', views.map, name='map'),
+
+    path('location/save',views.location_save,name='location_save'),
+    # path('location/load',views.location_load,name='location_load'),
 ]

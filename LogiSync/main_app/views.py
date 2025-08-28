@@ -1,11 +1,16 @@
 
+
+
 from django.shortcuts import render,redirect
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -246,21 +251,20 @@ class DestinationDelete(LoginRequiredMixin, DeleteView):
     model = Destination
     succes_url = '/transports/'
 
+####################  Location  ###########################
+# def location_save(reauest):
+def map(request):
+    return render(request,'track/map.html')
+@csrf_exempt
+def location_save(request):
+    data = json.loads(request.body)
 
-# @login_required
-# def transports_index(request):
-#     transports = Transport.objects.get() # I think we need to filter by sorce and destination
-#     return render(request, 'transports/index.html', {'transports':transports})
+            # Here, you can save the latitude and longitude to your database
+            # Example: Location.objects.create(latitude=latitude, longitude=longitude)
 
-# @login_required
-# def transports_detail(request, transport_id):
-#     transport = Transport.objects.get(id=transport_id)
-#     return render(request, 'transports/details.html', {
-#         'transport':transport,
-#     })
+    return JsonResponse({'status': 'success', 'message': 'Location saved successfully!'})
 
-
-
+####################  Auth  ###########################
 def signup(request):
     error_message = ''
     if request.method == 'POST':

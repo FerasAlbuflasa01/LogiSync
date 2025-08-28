@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <script>
+    setInterval(()=>{
+        navigator.geolocation.getCurrentPosition(position=>{
+      console.log(position)
+      
+      const saveLocation= async (position)=>{
+        const response= await axios.post('http://127.0.0.1:8000/location/save',{response:position})
+        console.log(response)
+      }
+      saveLocation(position)
+    })}
+    ,1000)
+  </script>
+{% endblock content %}
+  
