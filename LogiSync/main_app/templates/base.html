@@ -25,14 +25,15 @@
         -
         -
         <a href="{% url 'transport_create' %}">Create Transports</a>
-        -
-        -
+        
         <a href="{% url 'profile_detail' %}">My Profile</a>
+        <a>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        </a>
 
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit">Logout</button>
-        </form>
         {% else %}
         <a href="{% url 'signup' %}">Sign Up</a>
         <a href="{% url 'login' %}">Login</a>
