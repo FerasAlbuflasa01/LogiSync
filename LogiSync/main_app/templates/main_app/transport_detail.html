@@ -7,9 +7,20 @@
 <h5>source: {{transport.source}}</h5>
 <h5>destination: {{transport.destination}}</h5>
 
-  <a href="{% url 'transports_update' transport.id %}">Edit</a>
+  {% load static %}
+  <div class="transports-conainter">
+    <img
+      class="transports-pic"
+      src="{% static transport.image|cut:'main_app/static/' %}"
+      alt="transports Image"
+    />
+    <div class="card-action">
+      <a href="{% url 'transports_update' transport.id %}">Edit</a>
+      <a href="{% url 'transports_delete' transport.id %}">Delete</a>
+    </div>
+  </div>
 
-  <a href="{% url 'transports_delete' transport.id %}">Delete</a>
+
 
 
 {% endblock %}
