@@ -1,5 +1,6 @@
 
 from django.shortcuts import render,redirect
+from django.urls import reverse_lazy
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
@@ -200,7 +201,7 @@ class TransportCreate(LoginRequiredMixin,CreateView):
     model = Transport
     # fields = ['name','type','capacity','image','description','destination','source']
     fields = '__all__'
-
+    # template_name = 'transport_form.html'
     
 class TransportUpdate(LoginRequiredMixin,UpdateView):
     model = Transport

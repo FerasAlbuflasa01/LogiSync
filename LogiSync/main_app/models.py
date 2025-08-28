@@ -46,7 +46,6 @@ class Package(models.Model):
 class TransportType(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='main_app/static/uploads/', default='')
 
     def __str__(self):
         return self.name
@@ -82,8 +81,8 @@ class Transport(models.Model):
     capacity = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
     description = models.TextField(max_length=250)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
 
     def __str__(self):
