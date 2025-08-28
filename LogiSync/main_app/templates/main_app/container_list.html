@@ -1,5 +1,14 @@
 {% extends 'base.html' %} {% block content %}
 
+<br>
+
+<form class="d-flex" method=POST action="{% url 'search_containers' %}">
+  {% csrf_token %}
+
+  <input class="form-control me-2" type="search" placeholder="Search Container" aria-label="Search" name="searched">
+  <button class="btn btn-outline-secondary" type="submit">Search</button>
+</form>
+
 <div class="page-header">
   <h2>Containers List</h2>
 </div>
@@ -8,6 +17,10 @@
   {% for container in container_list %}
   <div class="container-card">
     <div class="container-info">
+      <div class="field">
+        <label>Container Code</label>
+        <p>{{ container.code }}</p>
+      </div>
       <div class="field">
         <label>Tracking Location</label>
         <p>{{ container.tracking_location }}</p>

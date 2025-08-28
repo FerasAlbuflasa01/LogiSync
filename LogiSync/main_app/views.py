@@ -69,7 +69,7 @@ def about(request):
 #Containers
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
+    fields = [ 'code','tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
 
     
     def form_valid(self, form):
@@ -312,3 +312,16 @@ def search_transports(request):
         return render(request,
         'search_tools/search_transports.html',
         {})
+
+def search_containers(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        containers = Container.objects.filter(name__contains=searched)
+
+        return render(request, 'search_tools/search_containers.html', {'searched': searched, 'containers': containers})
+
+    else:
+        return render(request,
+        'search_tools/search_containers.html',
+        {})
+

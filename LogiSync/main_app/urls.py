@@ -46,5 +46,6 @@ urlpatterns = [
 
 # -------------------------------------------------------------- features --------------------------------------------------------------
     path('search_transports', views.search_transports, name='search_transports'),
+    path('search_containers', views.search_containers, name='search_containers'),
 
 ]
