@@ -22,6 +22,7 @@
   <p><strong>Current Weight Capacity:</strong> {{ search_result.currnt_weight_capacity }}</p>
   <p><strong>Description:</strong> {{ search_result.description }}</p>
 
+  <button><a href="{% url 'container_detail' search_result.id %}">Show Detail</a></button>
 
   {% else %}
   {% for container in containers %}
