@@ -20,12 +20,7 @@
       <br>
       <br>
 
-      <form class="d-flex" method=POST action="{% url 'search_containers' %}">
-        {% csrf_token %}
-      
-        <input class="form-control me-2" type="search" placeholder="Search Container" aria-label="Search" name="searched">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
+  
 
       <div class="container-list">
         <div class="page-header">

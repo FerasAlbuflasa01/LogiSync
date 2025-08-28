@@ -2,7 +2,7 @@
 
 <br>
 
-<form class="d-flex" method=POST action="{% url 'search_containers' %}">
+<form class="d-flex" method=POST action="{% url 'container_list' %}">
   {% csrf_token %}
 
   <input class="form-control me-2" type="search" placeholder="Search Container" aria-label="Search" name="searched">
@@ -14,7 +14,12 @@
 </div>
 
 <div class="container-list">
-  {% for container in container_list %}
+  {% if search_result %}
+
+  {{ search_result.code }}
+
+  {% else %}
+  {% for container in containers %}
   <div class="container-card">
     <div class="container-info">
       <div class="field">
@@ -41,6 +46,9 @@
   {% empty %}
   <p>No Containers Available</p>
   {% endfor %}
+
+  {% endif %}
+  
 </div>
 
 {% endblock %}

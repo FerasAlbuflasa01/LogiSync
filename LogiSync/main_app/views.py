@@ -124,10 +124,22 @@ def unassoc_package(request,container_id,package_id):
     container.save()
     return redirect('container_detail',container_id=container_id)
 
-class ContainerList(LoginRequiredMixin, ListView):
-    model = Container
-    def get_queryset(self):
-        return Container.objects.filter(user=self.request.user)
+def ContainerList(request):
+    container = Container.objects.all()
+
+    if request.method == "POST":
+        searched = request.POST['searched']
+        search_result = Container.objects.get(code=searched)
+
+        return render(request, 'main_app/container_list.html', {'search_result': search_result})
+    
+    return render(request,'main_app/container_list.html',{'containers': container})
+
+# class ContainerList(LoginRequiredMixin, ListView):
+    # model = Container
+    # def get_queryset(self):
+    #     return Container.objects.filter(user=self.request.user)
+    
 
 
 # package
@@ -313,15 +325,15 @@ def search_transports(request):
         'search_tools/search_transports.html',
         {})
 
-def search_containers(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-        containers = Container.objects.filter(name__contains=searched)
+# def search_containers(request):
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         containers = Container.objects.filter(code__contains=searched)
 
-        return render(request, 'search_tools/search_containers.html', {'searched': searched, 'containers': containers})
+#         return render(request, 'main_app/search_tools/search_containers.html', {'searched': searched, 'containers': containers})
 
-    else:
-        return render(request,
-        'search_tools/search_containers.html',
-        {})
+#     else:
+#         return render(request,
+#         'main_app/search_tools/search_containers.html',
+#         {})
 

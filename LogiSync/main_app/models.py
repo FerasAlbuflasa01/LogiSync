@@ -22,7 +22,7 @@ class Container(models.Model):
     weight_capacity = models.FloatField()
     currnt_weight_capacity = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     def get_absolute_url(self):
         return reverse('container_detail', kwargs={'container_id': self.id})
     

@@ -9,7 +9,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     
 # -------------------------------------------------------------- containers --------------------------------------------------------------
-    path('containers/', views.ContainerList.as_view(), name='container_list'),
+    path('containers/', views.ContainerList, name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
     path('containers/<int:container_id>/', views.ContainerDetail, name='container_detail' ),
     path('containers/<int:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
@@ -45,7 +45,6 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
 
 # -------------------------------------------------------------- features --------------------------------------------------------------
-    path('search_transports', views.search_transports, name='search_transports'),
-    path('search_containers', views.search_containers, name='search_containers'),
+    # path('search_transports', views.search_transports, name='search_transports'),
 
 ]
