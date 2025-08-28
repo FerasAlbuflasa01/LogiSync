@@ -301,3 +301,14 @@ def edit_profile(request):
 
 ####################    ADDITIONAL FEATURES  ###########################
 
+def search_transports(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        transports = Transport.objects.filter(name__contains=searched)
+
+        return render(request, 'search_tools/search_transports.html', {'searched': searched, 'transports': transports})
+
+    else:
+        return render(request,
+        'search_tools/search_transports.html',
+        {})

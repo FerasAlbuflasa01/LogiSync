@@ -1,6 +1,17 @@
 {% extends 'base.html' %} {% block content %}
 
+<br>
+<br>
+
+<form class="d-flex" method=POST action="{% url 'search_transports' %}">
+  {% csrf_token %}
+
+  <input class="form-control me-2" type="search" placeholder="Search Transport" aria-label="Search" name="searched">
+  <button class="btn btn-outline-secondary" type="submit">Search</button>
+</form>
+
 <h1>transport List</h1>
+
 
 {% for transport in transport_list %}
 <div class="card">
