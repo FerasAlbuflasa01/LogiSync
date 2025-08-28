@@ -66,11 +66,12 @@ def about(request):
     return render(request, 'about.html')
 
 #Containers
+
+
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
     fields = [ 'tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
 
-    
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -79,11 +80,13 @@ class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
     fields = ['tracking_location', 'description', 'weight_capacity','currnt_weight_capacity']
 
-    
-
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
+
+# def ContainerList(request,container_id):
+#     container = Container.objects.get(id=container_id)
+#     return render(request,'main_app/container_form.html',{'container':container})
 
 @login_required  
 def ContainerDetail(request,container_id):
