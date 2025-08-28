@@ -16,7 +16,12 @@
 <div class="container-list">
   {% if search_result %}
 
-  {{ search_result.code }}
+  <p><strong>Code:</strong> {{ search_result.code }}</p>
+  <p><strong>Container Location:</strong> {{ search_result.tracking_location }}</p>
+  <p><strong>Weight Capacity:</strong> {{ search_result.weight_capacity }}</p>
+  <p><strong>Current Weight Capacity:</strong> {{ search_result.currnt_weight_capacity }}</p>
+  <p><strong>Description:</strong> {{ search_result.description }}</p>
+
 
   {% else %}
   {% for container in containers %}

@@ -18,9 +18,9 @@ class Profile(models.Model):
 class Container(models.Model):
     code=models.CharField(max_length=20)
     tracking_location = models.CharField(max_length=255)
-    description = models.TextField(max_length=255)
-    weight_capacity = models.FloatField()
     currnt_weight_capacity = models.FloatField()
+    weight_capacity = models.FloatField()
+    description = models.TextField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
