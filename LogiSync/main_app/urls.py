@@ -19,7 +19,7 @@ urlpatterns = [
     path('containers/<int:container_id>/unassoc_package/<int:package_id>',views.unassoc_package,name='unassoc_package'),
     
 # -------------------------------------------------------------- Transport --------------------------------------------------------------
-    path('transports/',views.TransportList.as_view(), name='transport_list' ),
+    path('transports/',views.TransportList, name='transport_list' ),
     path('transports/create/', views.TransportCreate.as_view(), name='transport_create'),
     path('transports/<int:pk>/', views.TransportDetails.as_view(), name='transport_detail'),
     path('transports/<int:pk>/update/', views.TransportUpdate.as_view(), name='transports_update'),
