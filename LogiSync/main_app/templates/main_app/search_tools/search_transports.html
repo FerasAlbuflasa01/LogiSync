@@ -10,6 +10,7 @@
         {% load static %}
         <img src="{% static trans.image %}" alt="transport-image">
 
+        
         {% csrf_token %}
         {{ form.as_p }} 
       </ul>
