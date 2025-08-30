@@ -18,8 +18,8 @@ class Container(models.Model):
     latitude = models.FloatField(default=0)
     longitude= models.FloatField(default=0)
     description = models.TextField(max_length=255)
-    weight_capacity = models.FloatField()
-    currnt_weight_capacity = models.FloatField()
+    weight_capacity = models.FloatField(default=0)
+    currnt_weight_capacity = models.FloatField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_absolute_url(self):

@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponseForbidden
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
@@ -8,6 +9,7 @@ import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -58,6 +60,17 @@ listOfPackags = [
     }
 ]
 
+# Authorization
+
+class DenyCreate:
+    def dispatch(self, request, *args, **kwargs):
+        profile = getattr(request.user, 'profile', None)
+        if profile and profile.role == 'supervisor':
+            return HttpResponseForbidden('Supervisor cannot Create new records')
+        return super().dispatch(request, *args, **kwargs)
+    
+
+
 # Create your views here.
 
 # home / about 
@@ -68,11 +81,11 @@ def about(request):
     return render(request, 'about.html')
 
 #Containers
-class ContainerCreate(LoginRequiredMixin, CreateView):
+class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
+
     model = Container
     fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
 
-    
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -81,11 +94,13 @@ class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
     fields = ['description', 'weight_capacity','currnt_weight_capacity']
 
-    
-
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
+
+# def ContainerList(request,container_id):
+#     container = Container.objects.get(id=container_id)
+#     return render(request,'main_app/container_form.html',{'container':container})
 
 @login_required  
 def ContainerDetail(request,container_id):
@@ -141,7 +156,11 @@ class PackageDetails(LoginRequiredMixin, DetailView):
     model=Package
 
 @login_required
-def package_create(request):
+def package_create( request):
+    profile = getattr(request.user, 'profile', None)
+    if profile and profile.role == 'supervisor':
+        return HttpResponseForbidden('Supervisor cannot Create new records')
+        
     for package in listOfPackags:
         # if(not Package.objects.get(code=package['code'])):
         newPackage = Package(
@@ -170,7 +189,7 @@ class TransportTypeList(LoginRequiredMixin, ListView):
     models = TransportType
     fields = '__all__'
 
-class TransportTypeCreate(CreateView):
+class TransportTypeCreate(DenyCreate, CreateView):
     model = TransportType
     fields = '__all__'
     template_name = 'main_app/type_form.html'
@@ -198,7 +217,7 @@ class TransportList(LoginRequiredMixin,ListView):
 class TransportDetails(LoginRequiredMixin,DetailView):
     model = Transport
 
-class TransportCreate(LoginRequiredMixin,CreateView):
+class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
     # fields = ['name','type','capacity','image','description','destination','source']
     fields = '__all__'
@@ -218,7 +237,7 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
 class SourceList(LoginRequiredMixin, ListView):
     model = Source
 
-class SourceCreate(LoginRequiredMixin, CreateView):
+class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Source
     fields = '__all__'
 
@@ -236,7 +255,7 @@ class SourceDelete(LoginRequiredMixin, DeleteView):
 class DestinationList(LoginRequiredMixin, ListView):
     model = Destination
 
-class DestinationCreate(LoginRequiredMixin, CreateView):
+class DestinationCreate(LoginRequiredMixin,DenyCreate,  CreateView):
     model = Destination
     fields = '__all__'
 
