@@ -258,9 +258,7 @@ def map(request):
 @csrf_exempt
 def location_save(request):
     data = json.loads(request.body)
-
-            # Here, you can save the latitude and longitude to your database
-            # Example: Location.objects.create(latitude=latitude, longitude=longitude)
+    print(data)
 
     return JsonResponse({'status': 'success', 'message': 'Location saved successfully!'})
 

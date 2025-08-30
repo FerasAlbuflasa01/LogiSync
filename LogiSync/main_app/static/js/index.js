@@ -1,10 +1,9 @@
 // Initialize and add the map
 let map
 let userMarker
-async function initMap(position) {
+const initMap = async () => {
   const { Map } = await google.maps.importLibrary('maps')
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
-
   //init map
   map = new Map(document.getElementById('map'), {
     zoom: 17,
@@ -18,32 +17,34 @@ async function initMap(position) {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
       }
-      
-      if(pos.coords.accuracy>=200){
+      console.log(pos.coords)
+      if (pos.coords.accuracy === 149) {
+        sendUpdateLocation(position)
         map.setCenter(position)
 
-      // The marker, positioned at Uluru
-      if (!userMarker) {
-        userMarker = new google.maps.Marker({
-          position: position,
-          map: map,
-          title: 'You are here!'
-        })
-      } else {
-        // Move the existing marker to the new position
-        userMarker.setPosition(position)
+        // The marker, positioned at Uluru
+        if (!userMarker) {
+          userMarker = new AdvancedMarkerElement({
+            map: map,
+            position: position,
+            title: 'Uluru'
+          })
+        } else {
+          // Move the existing marker to the new position
+          userMarker.position=position
+        }
       }
-      }
-      
     })
   }, 5000)
 
   // The map, centered at Uluru
 }
-
+const sendUpdateLocation = async (pos) => {
+  let response = axios.post('http://127.0.0.1:8000/location/save', pos)
+}
 // const getUserLocation = () => {
 //   navigator.geolocation.watchPosition((pos) => {
-//     let position = {
+//     let position = {saveLocation
 //       lat: pos.coords.latitude,
 //       lng: pos.coords.longitude
 //     }
