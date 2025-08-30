@@ -12,6 +12,7 @@ urlpatterns = [
     path('containers/', views.ContainerList.as_view(), name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
     path('containers/<int:container_id>/', views.ContainerDetail, name='container_detail' ),
+    path('containers/<int:container_id>/location', views.ContainerLocation, name='container_location' ),
     path('containers/<int:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
     path('containers/<int:pk>/delete/', views.ContainerDelete.as_view(), name='container_delete' ),
 

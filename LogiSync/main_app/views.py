@@ -145,7 +145,8 @@ class ContainerList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Container.objects.filter(user=self.request.user)
 
-
+def ContainerLocation(request,container_id):
+    return render(request,'track/admin_map.html',{'container_id':container_id})
 # package
 class PackageList(LoginRequiredMixin, ListView):
     model=Package
@@ -286,6 +287,7 @@ def location_save(request):
 
 @csrf_exempt
 def location_load(request):
+    data = json.loads(request.body)
     constiner=Container.objects.get(id=2)
     if(constiner.longitude):
         return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude})

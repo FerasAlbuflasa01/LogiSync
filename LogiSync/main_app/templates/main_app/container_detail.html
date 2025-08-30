@@ -27,6 +27,7 @@
   <a href="{% url 'container_update' container.id %}">Edit</a>
 
   <a href="{% url 'container_delete' container.id %}">Delete</a>
+  <a href="{% url 'container_location' container.id %}">location</a>
 
   {% if msg %}
     <h2>{{msg}}</h2>
