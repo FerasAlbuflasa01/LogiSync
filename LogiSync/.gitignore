@@ -2,5 +2,5 @@
 __pycache__/
 migrations/
 package-lock.json
-
+node_modules
 
