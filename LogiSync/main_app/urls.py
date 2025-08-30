@@ -47,5 +47,6 @@ urlpatterns = [
     path('location/', views.map, name='map'),
 
     path('location/save',views.location_save,name='location_save'),
+    path('location/load',views.location_load,name='location_load'),
     # path('location/load',views.location_load,name='location_load'),
 ]

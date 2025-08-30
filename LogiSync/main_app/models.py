@@ -1,7 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-
 class Profile(models.Model):
     ROLE=[('supervisor', 'Supervisor'),('driver', 'Driver')]
     
@@ -16,14 +15,15 @@ class Profile(models.Model):
 # Create your models here.
 # -------------------------------------------------------------- Container --------------------------------------------------------------
 class Container(models.Model):
-    tracking_location = models.CharField(max_length=255)
+    latitude = models.FloatField(default=0)
+    longitude= models.FloatField(default=0)
     description = models.TextField(max_length=255)
     weight_capacity = models.FloatField()
     currnt_weight_capacity = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_absolute_url(self):
-        return reverse('container_detail', kwargs={'container_id': self.id})
+        return reverse('container_detail', kwargs={'pk': self.id})
     
     def __str__(self):
         return f"Container {self.id} - {self.tracking_location}"
