@@ -1,26 +1,17 @@
-{% extends 'base.html' %}
+<!-- {% extends 'base.html' %}
 
 {% block content %}
 
-  {% if searched %}
+{% for container in containers %}
 
-    {% for trans in transports %}
-      <div class="search">
-        <p class="searched-text">
-          <ul>
-          {% load static %}
-          <img src="{% static trans.image %}" alt="transport-image">
-
-          {% csrf_token %}
-          {{ form.as_p }} 
-          </ul>
-
-        </p>
-      </div>
-    {% endfor %}
+<a> {{container.code}} </a> 
+<form class="form-inline my-2 my-lg-0">
   
+  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" >
+  
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  
+</form>
+{% endfor %}
 
-  {% else %}
-  <h2>Hey! You Forgot To Search For A Venue...</h2>
-  {% endif %}
-{% endblock %}
+{% endblock %} -->

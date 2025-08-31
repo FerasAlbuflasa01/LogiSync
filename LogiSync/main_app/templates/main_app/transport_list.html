@@ -20,6 +20,20 @@
 <br />
 <br />
 
+<div class="container-list">
+  {% if search_result %}
+  
+  <p><strong>Code:</strong> {{ search_result.code }}</p>
+
+  <p><strong>Source:</strong> {{ search_result.source }}</p>
+  <p><strong>Destination:</strong> {{ search_result.destination }}</p>
+  <p><strong>Description:</strong> {{ search_result.description }}</p>
+
+  <button>
+    <a href="{% url 'container_detail' search_result.id %}">Show Detail</a>
+  </button>
+</div>
+
 {% for transport in transport_list %}
 <div class="card">
   <a href="{% url 'transport_detail' transport.id %}">

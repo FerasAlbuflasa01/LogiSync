@@ -150,6 +150,7 @@ def ContainerList(request):
     return render(request,'main_app/container_list.html',{'containers': container})
 
 
+
 # package
 class PackageList(LoginRequiredMixin, ListView):
     model=Package
@@ -174,7 +175,7 @@ def package_create( request):
                 price=package['price'],
                 weight=package['weight'],
                 receivedDate=package['receivedDate'],
-                user=request.user
+                
             )
         newPackage.save()
     return redirect('home')
@@ -242,11 +243,23 @@ def TransportList(request):
 
     if request.method == "POST":
         searched = request.POST['searched']
-        search_result = Transport.objects.get(code=searched)
+        search_result = Transport.objects.get(name=searched)
 
         return render(request, 'main_app/transport_list.html', {'search_result': search_result})
     
     return render(request,'main_app/transport_list.html',{'transports': transport})
+
+# def ContainerList(request):
+#     container = Container.objects.all()
+
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         search_result = Container.objects.get(code=searched)
+
+#         return render(request, 'main_app/container_list.html', {'search_result': search_result})
+    
+#     return render(request,'main_app/container_list.html',{'containers': container})
+
 
 ####################  SOURCE  ###########################
 
