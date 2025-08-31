@@ -63,7 +63,10 @@ listOfPackags = [
 
 # Create your views here.
 
+
 # Authorization
+# ----------------------------------------  Authorization  ----------------------------------------
+
 
 class DenyCreate:
     def dispatch(self, request, *args, **kwargs):
@@ -80,7 +83,8 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-#Containers
+# ----------------------------------------  Containers  ----------------------------------------
+
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
 
     model = Container
@@ -145,7 +149,6 @@ def ContainerList(request):
     if request.method == "POST":
         searched = request.POST['searched']
         search_result = Container.objects.get(code=searched)
-
         return render(request, 'main_app/container_list.html', {'search_result': search_result})
     
     return render(request,'main_app/container_list.html',{'containers': container})
@@ -153,7 +156,9 @@ def ContainerList(request):
 
 def ContainerLocation(request,container_id):
     return render(request,'track/admin_map.html',{'container_id':container_id})
-# package
+
+# ----------------------------------------  Package  ----------------------------------------
+
 class PackageList(LoginRequiredMixin, ListView):
     model=Package
     def get_queryset(self):
@@ -190,7 +195,7 @@ class PackageDelete(LoginRequiredMixin, DeleteView):
     success_url='/'
 
 
-################## TRANSPORT TYPE ######################
+# ----------------------------------------  TRANSPORT TYPE  ----------------------------------------
 class TransportTypeList(LoginRequiredMixin, ListView):
     models = TransportType
     fields = '__all__'
@@ -212,9 +217,47 @@ class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     model = TransportType
     succes_url = '/transports/'
 
-#################### TRANSPORT  ###########################
-class TransportDetails(LoginRequiredMixin,DetailView):
-    model = Transport
+    
+# ----------------------------------------  TRANSPORT  ----------------------------------------
+
+@login_required  
+def TransportDetails(request,transport_id):
+    transport = Transport.objects.get(id=transport_id)
+    container_doesnt_contain = Container.objects.exclude(inTrancport=True)
+    container_exsist =Container.objects.filter(transport=transport_id) 
+    print(container_doesnt_contain)
+    return render(request,'main_app/transport_detail.html',{'transport':transport,'container_doesnt_contain':container_doesnt_contain,'container_exsist':container_exsist})
+
+@login_required
+def assoc_container(request,transport_id,container_id):
+    transport=Transport.objects.get(id=transport_id)
+    container=Container.objects.get(id=container_id)
+    last_cap=transport.capacity
+    new_cap=transport.currnt_capacity + 1
+    print(new_cap)
+    if new_cap>last_cap:
+        container_doesnt_contain = Container.objects.exclude(inTrancport=True)
+        container_exsist =Container.objects.filter(container=transport_id) 
+        return render(request,'main_app/transport_detail.html',{'transport':transport,'container':container_doesnt_contain,'container_exsist':container_exsist,'msg':'containers caps exceeds limit transport cap !!!'})
+    transport.currnt_capacity=new_cap
+    transport.save() 
+    container.transport=transport
+    container.inTrancport=True
+    container.save()
+    return redirect('transport_detail',transport_id=transport_id)
+
+@login_required
+def unassoc_container(request,transport_id,container_id):
+    transport=Transport.objects.get(id=transport_id)
+    container=Container.objects.get(id=container_id)
+    new_cap=transport.currnt_capacity - 1
+    transport.currnt_capacity=round(new_cap, 3)
+    container.inTrancport=False
+    container.transport=None
+    container.save()
+    transport.save()
+    return redirect('transport_detail',transport_id=transport_id)
+  
 
 class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
@@ -230,6 +273,7 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
 
+# ----------------------------------------  SOURCE  ----------------------------------------
 
 def TransportList(request):
     transport = Transport.objects.all()
@@ -266,7 +310,8 @@ class SourceDelete(LoginRequiredMixin, DeleteView):
     succes_url = '/transports/'
 
 
-####################  DESTINATION  ###########################
+# ----------------------------------------  DESTINATION  ----------------------------------------
+
 
 class DestinationList(LoginRequiredMixin, ListView):
     model = Destination
@@ -286,7 +331,8 @@ class DestinationDelete(LoginRequiredMixin, DeleteView):
     model = Destination
     succes_url = '/transports/'
 
-####################  Location  ###########################
+    
+# ----------------------------------------  Location  ----------------------------------------
 
 def map(request):
     return render(request,'track/map.html')
@@ -312,7 +358,8 @@ def location_load(request):
         return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude})
     return JsonResponse({'status': 'faild'})
 
-####################  Auth  ###########################
+# ----------------------------------------  Auth  ----------------------------------------
+
 def signup(request):
     error_message = ''
     if request.method == 'POST':
