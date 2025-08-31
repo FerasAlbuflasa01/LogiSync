@@ -5,7 +5,6 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -170,8 +169,7 @@ def package_create( request):
                 description=package['description'],
                 price=package['price'],
                 weight=package['weight'],
-                receivedDate=package['receivedDate'],
-                user=request.user
+                receivedDate=package['receivedDate']
             )
         newPackage.save()
     return redirect('home')
@@ -288,7 +286,8 @@ def location_save(request):
 @csrf_exempt
 def location_load(request):
     data = json.loads(request.body)
-    constiner=Container.objects.get(id=2)
+    containerId=int(data['id'])
+    constiner=Container.objects.get(id=containerId)
     if(constiner.longitude):
         return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude})
     return JsonResponse({'status': 'faild'})

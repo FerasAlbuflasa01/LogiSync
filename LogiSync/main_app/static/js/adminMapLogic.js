@@ -3,7 +3,7 @@ let map
 let userMarker
 const url = new URL(window.location.href)
 const pathSegments = url.pathname.split('/')
-const containerId = pathSegments[3]
+const containerId = pathSegments[2]
 const initMap = async () => {
   const response = await getLocation()
   const { Map } = await google.maps.importLibrary('maps')
