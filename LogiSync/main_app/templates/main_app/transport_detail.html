@@ -12,8 +12,13 @@
     <img
       class="transports-pic"
       src="{% static transport.image|cut:'main_app/static/' %}"
+      width="100px"
+      height="100px"
       alt="transports Image"
     />
+
+
+
     <div class="card-action">
       <a href="{% url 'transports_update' transport.id %}">Edit</a>
       <a href="{% url 'transports_delete' transport.id %}">Delete</a>
@@ -21,6 +26,42 @@
   </div>
 
 
+    {% if msg %}
+    <h2>{{msg}}</h2>
+  {% endif %}
+</div class="continer-packages">
+<h2>packages that are in continer</h2>
+<h4> current continer weight {{container.currnt_capacity}}</h4>
+{% if container_exsist.count %}
+
+{% for container in container_exsist %}
+
+    <a href="{% url 'container_detail' container.id %} ">
+       <h2>{{contaier.description}}</h2>
+       <h2>container description: {{contaier.description}}</h2>
+    </a>
+            <form action="{% url 'unassoc_container' transport.id container.id %}" method="post">
+          {% csrf_token %}
+      <button type="submit"> remove</button>
+    </form>
+{% endfor %}
+{% endif %}
+</div>
+
+<div class="packages">
+<h2>packages that are not in continer</h2>
+  {% for container in container_doesnt_contain %}
+    <a href="{% url 'container_detail' container.id %} ">
+      <h2>{{container.description}}</h2>
+    </a>
+     <form action="{% url 'assoc_container' transport.id container.id %}" method="post">
+          {% csrf_token %}
+      <button type="submit"> add</button>
+    </form>
+
+  {% endfor %}
+    
+</div>
 
 
 {% endblock %}
