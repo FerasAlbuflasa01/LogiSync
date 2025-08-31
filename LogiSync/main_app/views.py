@@ -1,10 +1,14 @@
-
 from django.shortcuts import render,redirect
+from django.http import HttpResponseForbidden
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 from django.contrib.auth.decorators import login_required
@@ -56,6 +60,17 @@ listOfPackags = [
     }
 ]
 
+# Authorization
+
+class DenyCreate:
+    def dispatch(self, request, *args, **kwargs):
+        profile = getattr(request.user, 'profile', None)
+        if profile and profile.role == 'supervisor':
+            return HttpResponseForbidden('Supervisor cannot Create new records')
+        return super().dispatch(request, *args, **kwargs)
+    
+
+
 # Create your views here.
 
 # home / about 
@@ -66,11 +81,11 @@ def about(request):
     return render(request, 'about.html')
 
 #Containers
+class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
 
-
-class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight_capacity' ]
+
+    fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -78,7 +93,7 @@ class ContainerCreate(LoginRequiredMixin, CreateView):
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
     model = Container
-    fields = ['tracking_location', 'description', 'weight_capacity','currnt_weight_capacity']
+    fields = ['description', 'weight_capacity','currnt_weight_capacity']
 
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
@@ -142,7 +157,11 @@ class PackageDetails(LoginRequiredMixin, DetailView):
     model=Package
 
 @login_required
-def package_create(request):
+def package_create( request):
+    profile = getattr(request.user, 'profile', None)
+    if profile and profile.role == 'supervisor':
+        return HttpResponseForbidden('Supervisor cannot Create new records')
+        
     for package in listOfPackags:
         # if(not Package.objects.get(code=package['code'])):
         newPackage = Package(
@@ -171,7 +190,7 @@ class TransportTypeList(LoginRequiredMixin, ListView):
     models = TransportType
     fields = '__all__'
 
-class TransportTypeCreate(CreateView):
+class TransportTypeCreate(DenyCreate, CreateView):
     model = TransportType
     fields = '__all__'
     template_name = 'main_app/type_form.html'
@@ -199,7 +218,7 @@ class TransportList(LoginRequiredMixin,ListView):
 class TransportDetails(LoginRequiredMixin,DetailView):
     model = Transport
 
-class TransportCreate(LoginRequiredMixin,CreateView):
+class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
     # fields = ['name','type','capacity','image','description','destination','source']
     fields = '__all__'
@@ -219,7 +238,7 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
 class SourceList(LoginRequiredMixin, ListView):
     model = Source
 
-class SourceCreate(LoginRequiredMixin, CreateView):
+class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Source
     fields = '__all__'
 
@@ -237,7 +256,7 @@ class SourceDelete(LoginRequiredMixin, DeleteView):
 class DestinationList(LoginRequiredMixin, ListView):
     model = Destination
 
-class DestinationCreate(LoginRequiredMixin, CreateView):
+class DestinationCreate(LoginRequiredMixin,DenyCreate,  CreateView):
     model = Destination
     fields = '__all__'
 
@@ -249,21 +268,31 @@ class DestinationDelete(LoginRequiredMixin, DeleteView):
     model = Destination
     succes_url = '/transports/'
 
+####################  Location  ###########################
+# def location_save(reauest):
+def map(request):
+    return render(request,'track/map.html')
 
-# @login_required
-# def transports_index(request):
-#     transports = Transport.objects.get() # I think we need to filter by sorce and destination
-#     return render(request, 'transports/index.html', {'transports':transports})
+@csrf_exempt
+def location_save(request):
+    data = json.loads(request.body)
+    print(data)
+    constiner=Container.objects.get(id=2)
+    if not (constiner.latitude == float(data['lat']) and constiner.longitude == float(data['lng'])):
+        constiner.longitude=float(data['lng'])
+        constiner.latitude=float(data['lat'])
+        constiner.save()
+        return JsonResponse({'status': 'success', 'message': 'Location saved successfully!'})
+    return JsonResponse({'status': 'success', 'message': 'Location exsist'})
 
-# @login_required
-# def transports_detail(request, transport_id):
-#     transport = Transport.objects.get(id=transport_id)
-#     return render(request, 'transports/details.html', {
-#         'transport':transport,
-#     })
+@csrf_exempt
+def location_load(request):
+    constiner=Container.objects.get(id=2)
+    if(constiner.longitude):
+        return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude})
+    return JsonResponse({'status': 'faild'})
 
-
-
+####################  Auth  ###########################
 def signup(request):
     error_message = ''
     if request.method == 'POST':
