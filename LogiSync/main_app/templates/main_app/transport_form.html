@@ -10,11 +10,15 @@
     <h1>Add transport</h1>
     {% endif %}
       {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-    </table>
+      <table>
+        {{ form.as_table }}
+      </table>
+      <a href="{% url 'source_create' %}">add source</a>
+      <br>
+      <a href="{% url 'destination_create' %}">add destination</a>
       <input type="submit" value="Submit!" class="btn" />
-
+      
       {% endblock %}
-  </form>
+    </form>
+    
 </div>

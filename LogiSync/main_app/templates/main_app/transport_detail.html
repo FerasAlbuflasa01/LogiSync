@@ -1,14 +1,15 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
-<h1>transport Details</h1>
-<h5>transport name:{{transport.name}}</h5>
-<h5>transport Description: {{transport.description}}</h5>
-<h5>source: {{transport.source}}</h5>
-<h5>destination: {{transport.destination}}</h5>
+<div class="transports-conainter">
+  <div class="card-action">
+    <h1>transport Details</h1>
+    <h5>transport name:{{transport.name}}</h5>
+    <h5>transport Description: {{transport.description}}</h5>
+    <h5>source: {{transport.source}}</h5>
+    <h5>destination: {{transport.destination}}</h5>
 
-  {% load static %}
-  <div class="transports-conainter">
+    {% load static %}
+
     <img
       class="transports-pic"
       src="{% static transport.image|cut:'main_app/static/' %}"
@@ -16,9 +17,7 @@
       height="100px"
       alt="transports Image"
     />
-
-
-
+    
     <div class="card-action">
       <a href="{% url 'transports_update' transport.id %}">Edit</a>
       <a href="{% url 'transports_delete' transport.id %}">Delete</a>
@@ -63,6 +62,8 @@
     
 </div>
 
+    <a href="{% url 'transport_list' %}"><button>Back</button></a>
+  </div>
+</div>
 
 {% endblock %}
-

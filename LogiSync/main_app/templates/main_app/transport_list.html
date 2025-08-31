@@ -1,6 +1,8 @@
 {% extends 'base.html' %} {% block content %}
 
+<div class="page-header">
 <h1>Transport List</h1>
+</div>
 
 <br />
 
@@ -20,21 +22,34 @@
 <br />
 <br />
 
-<div class="container-list">
-  {% if search_result %}
-  
-  <p><strong>Code:</strong> {{ search_result.code }}</p>
+{% if search_result %}
 
-  <p><strong>Source:</strong> {{ search_result.source }}</p>
-  <p><strong>Destination:</strong> {{ search_result.destination }}</p>
-  <p><strong>Description:</strong> {{ search_result.description }}</p>
+<div class="card">
+  <div class="card-content">
+    
+    <h2>Result for "{{ search_result.name }}"</h2>
+    
+    <a href="{% url 'transport_detail' search_result.id %}">
 
-  <button>
-    <a href="{% url 'container_detail' search_result.id %}">Show Detail</a>
-  </button>
+      <p><strong>Code:</strong> {{ search_result.code }}</p>
+      
+      <p><strong>Source:</strong> {{ search_result.source }}</p>
+      <p><strong>Destination:</strong> {{ search_result.destination }}</p>
+      <p><strong>Description:</strong> {{ search_result.description }}</p>
+    
+    </a>
+    
+    <a href="{% url 'transport_list' %}"><button>Back</button></a>
+    
+  </div>  
 </div>
 
-{% for transport in transport_list %}
+{% elif message %}
+  <p style="color:red;">{{ message }}</p>
+  <a href="{% url 'transport_list' %}"><button>Back</button></a>
+
+  {% else %}
+  {% for transport in transports %}
 <div class="card">
   <a href="{% url 'transport_detail' transport.id %}">
   <div class="card-content">
@@ -44,4 +59,9 @@
   </div>
   </a>
 </div>
-{% endfor %} {% endblock %}
+{% endfor %} 
+{% endif %}
+  
+
+
+{% endblock %}
