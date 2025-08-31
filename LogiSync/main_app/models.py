@@ -1,9 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-
 class Profile(models.Model):
-    ROLE=[('supervisor', 'Supervisor'),('driver', 'Driver')]
+    # ROLE=[('supervisor', 'Supervisor'),('driver', 'Driver')]
+    ROLE=[('supervisor', 'driver')]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, choices=ROLE, blank=True)
@@ -16,13 +16,24 @@ class Profile(models.Model):
 # Create your models here.
 # -------------------------------------------------------------- Container --------------------------------------------------------------
 class Container(models.Model):
+<<<<<<< HEAD
     code=models.CharField(max_length=20)
     tracking_location = models.CharField(max_length=255)
     currnt_weight_capacity = models.FloatField()
     weight_capacity = models.FloatField()
+=======
+    latitude = models.FloatField(default=0)
+    longitude= models.FloatField(default=0)
+>>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
     description = models.TextField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+<<<<<<< HEAD
 
+=======
+    code = models.CharField(max_length=50)
+    
+    
+>>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
     def get_absolute_url(self):
         return reverse('container_detail', kwargs={'container_id': self.id})
     
@@ -78,6 +89,7 @@ class Source(models.Model):
 # -------------------------------------------------------------- Transport --------------------------------------------------------------
 class Transport(models.Model):
     name = models.CharField(max_length=100)
+    driver = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.ForeignKey(TransportType, on_delete=models.CASCADE)
     capacity = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
