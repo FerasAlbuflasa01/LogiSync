@@ -5,7 +5,6 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -171,7 +170,7 @@ def package_create( request):
                 price=package['price'],
                 weight=package['weight'],
                 receivedDate=package['receivedDate'],
-                user=request.user
+                # user=request.user
             )
         newPackage.save()
     return redirect('home')

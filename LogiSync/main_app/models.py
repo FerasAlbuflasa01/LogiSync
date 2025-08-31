@@ -22,9 +22,11 @@ class Container(models.Model):
     weight_capacity = models.FloatField(default=0)
     currnt_weight_capacity = models.FloatField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=50)
+    
     
     def get_absolute_url(self):
-        return reverse('container_detail', kwargs={'pk': self.id})
+        return reverse('container_detail', kwargs={'container_id': self.id})
     
     def __str__(self):
         return f"Container {self.id} - {self.tracking_location}"
