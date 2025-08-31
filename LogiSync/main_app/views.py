@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
@@ -60,6 +61,8 @@ listOfPackags = [
     }
 ]
 
+# Create your views here.
+
 # Authorization
 
 class DenyCreate:
@@ -69,9 +72,6 @@ class DenyCreate:
             return HttpResponseForbidden('Supervisor cannot Create new records')
         return super().dispatch(request, *args, **kwargs)
     
-
-
-# Create your views here.
 
 # home / about 
 def home(request):
@@ -100,10 +100,6 @@ class ContainerUpdate(LoginRequiredMixin, UpdateView):
 class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
-
-# def ContainerList(request,container_id):
-#     container = Container.objects.get(id=container_id)
-#     return render(request,'main_app/container_form.html',{'container':container})
 
 @login_required  
 def ContainerDetail(request,container_id):
@@ -217,19 +213,11 @@ class TransportTypeDelete(LoginRequiredMixin, DeleteView):
     succes_url = '/transports/'
 
 #################### TRANSPORT  ###########################
-
-# class TransportList(LoginRequiredMixin,ListView):
-#     model = Transport
-#     def get_queryset(self):
-#         return Transport.objects.all()
-    
-
 class TransportDetails(LoginRequiredMixin,DetailView):
     model = Transport
 
 class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
-    # fields = ['name','type','capacity','image','description','destination','source']
     fields = '__all__'
     # template_name = 'transport_form.html'
     
@@ -242,17 +230,6 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
 
-
-# def TransportList(request):
-#     transport = Transport.objects.all()
-
-#     if request.method == "POST":
-#         searched = request.POST['searched']
-#         search_result = Transport.objects.get(name=searched)
-
-#         return render(request, 'main_app/transport_list.html', {'search_result': search_result})
-
-#     return render(request,'main_app/transport_list.html',{'transports': transport})
 
 def TransportList(request):
     transport = Transport.objects.all()
@@ -277,6 +254,8 @@ class SourceList(LoginRequiredMixin, ListView):
 class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Source
     fields = '__all__'
+    template_name = 'main_app/source_form.html'
+    success_url = reverse_lazy('transport_create') 
 
 class SourceUpdate(LoginRequiredMixin, UpdateView):
     model = Source
@@ -295,6 +274,9 @@ class DestinationList(LoginRequiredMixin, ListView):
 class DestinationCreate(LoginRequiredMixin,DenyCreate,  CreateView):
     model = Destination
     fields = '__all__'
+    template_name = 'main_app/destination_form.html'
+    success_url = reverse_lazy('transport_create') 
+
 
 class DestinationUpdate(LoginRequiredMixin, UpdateView):
     model = Destination
@@ -305,7 +287,7 @@ class DestinationDelete(LoginRequiredMixin, DeleteView):
     succes_url = '/transports/'
 
 ####################  Location  ###########################
-# def location_save(reauest):
+
 def map(request):
     return render(request,'track/map.html')
 
@@ -370,8 +352,6 @@ def edit_profile(request):
 
 ####################    ADDITIONAL FEATURES  ###########################
 
-class source_dest_create(LoginRequiredMixin,CreateView):
-    model = Destination
-    model = Source
-    fields = '__all__'
+
+
 

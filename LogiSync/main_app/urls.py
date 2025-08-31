@@ -47,9 +47,18 @@ urlpatterns = [
 
 
 # -------------------------------------------------------------- features --------------------------------------------------------------
-    # path('search_transports', views.search_transports, name='search_transports'),
-    # Source & Destanation Create form
-    path('source/destination/create', views.source_dest_create.as_view(), name='source_dest_create'),
+    path('source/create/', views.SourceCreate.as_view(), name='source_create'),
+    path('destination/create/', views.DestinationCreate.as_view(), name='destination_create'),
+    
+    # path('source/create/', views.source_form, name='source_form'),
+    # path('source/create/', views.source_create, name='source_create'),
+
+    # path('destination/create/', views.destination_form, name='destination_form'),
+    # path('destination/create/', views.destination_create, name='destination_create'),
+
+    
+    
+
 
 # -------------------------------------------------------------- locations(testing) --------------------------------------------------------------
     path('location/', views.map, name='map'),
