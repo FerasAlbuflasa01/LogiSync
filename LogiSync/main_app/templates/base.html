@@ -10,39 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-<<<<<<< HEAD
-    <div class="sidebar">
-      <nav>
-        <a href="{% url 'home' %}">Home</a>
-        -
-        -
-        <a href="{% url 'about' %}">about</a>
-        -
-        -
-        {% if user.is_authenticated %}
-        -
-        <a href="{% url 'container_create' %}">Create Container</a>
-        -
-        -
-        <a href="{% url 'container_list' %}">Listing Container</a>
-        -
-        -
-        <a href="{% url 'transport_list' %}">Listing Transports</a>
-        -
-        -
-        <a href="{% url 'transport_create' %}">Create Transports</a>
-        -
-        -
-        <a href="{% url 'profile_detail' %}">My Profile</a>
-        -
-        -
-        <a>
-          <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-          </form>
-        </a>
-=======
+
     <header class="site-header">
       <h1 class="logo">
         <a href="{% url 'home' %}"><strong>LogiSync</strong></a>
@@ -55,7 +23,7 @@
             <li>
               <a href="{% url 'home' %}"><strong>Home</strong></a>
             </li>
->>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
+
 
             {% if user.is_authenticated %} 
               {% if user.profile.role != 'supervisor' %}

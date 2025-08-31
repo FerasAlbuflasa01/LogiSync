@@ -43,17 +43,17 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
-<<<<<<< HEAD
+
 
 # -------------------------------------------------------------- features --------------------------------------------------------------
     # path('search_transports', views.search_transports, name='search_transports'),
 
-=======
+
 # -------------------------------------------------------------- locations(testing) --------------------------------------------------------------
     path('location/', views.map, name='map'),
 
     path('location/save',views.location_save,name='location_save'),
     path('location/load',views.location_load,name='location_load'),
     # path('location/load',views.location_load,name='location_load'),
->>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
+
 ]

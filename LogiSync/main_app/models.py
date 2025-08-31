@@ -16,24 +16,14 @@ class Profile(models.Model):
 # Create your models here.
 # -------------------------------------------------------------- Container --------------------------------------------------------------
 class Container(models.Model):
-<<<<<<< HEAD
-    code=models.CharField(max_length=20)
-    tracking_location = models.CharField(max_length=255)
-    currnt_weight_capacity = models.FloatField()
-    weight_capacity = models.FloatField()
-=======
     latitude = models.FloatField(default=0)
     longitude= models.FloatField(default=0)
->>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
+    currnt_weight_capacity = models.FloatField()
+    weight_capacity = models.FloatField()
     description = models.TextField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-<<<<<<< HEAD
-
-=======
     code = models.CharField(max_length=50)
-    
-    
->>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
+
     def get_absolute_url(self):
         return reverse('container_detail', kwargs={'container_id': self.id})
     

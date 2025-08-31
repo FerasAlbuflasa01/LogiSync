@@ -83,12 +83,10 @@ def about(request):
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
 
     model = Container
-<<<<<<< HEAD
-    fields = [ 'code','tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
-=======
+
 
     fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
->>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
+
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -181,11 +179,6 @@ def package_create( request):
                 price=package['price'],
                 weight=package['weight'],
                 receivedDate=package['receivedDate'],
-<<<<<<< HEAD
-                
-=======
-                # user=request.user
->>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
             )
         newPackage.save()
     return redirect('home')
