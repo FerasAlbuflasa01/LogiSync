@@ -83,8 +83,12 @@ def about(request):
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
 
     model = Container
+<<<<<<< HEAD
+    fields = [ 'code','tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
+=======
 
     fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
+>>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -140,10 +144,17 @@ def unassoc_package(request,container_id,package_id):
     container.save()
     return redirect('container_detail',container_id=container_id)
 
-class ContainerList(LoginRequiredMixin, ListView):
-    model = Container
-    def get_queryset(self):
-        return Container.objects.filter(user=self.request.user)
+def ContainerList(request):
+    container = Container.objects.all()
+
+    if request.method == "POST":
+        searched = request.POST['searched']
+        search_result = Container.objects.get(code=searched)
+
+        return render(request, 'main_app/container_list.html', {'search_result': search_result})
+    
+    return render(request,'main_app/container_list.html',{'containers': container})
+
 
 
 # package
@@ -170,7 +181,11 @@ def package_create( request):
                 price=package['price'],
                 weight=package['weight'],
                 receivedDate=package['receivedDate'],
+<<<<<<< HEAD
+                
+=======
                 # user=request.user
+>>>>>>> b885487703a13db2cd6dc2afe8570fcfc0894a58
             )
         newPackage.save()
     return redirect('home')
@@ -208,10 +223,10 @@ class TransportTypeDelete(LoginRequiredMixin, DeleteView):
 
 #################### TRANSPORT  ###########################
 
-class TransportList(LoginRequiredMixin,ListView):
-    model = Transport
-    def get_queryset(self):
-        return Transport.objects.all()
+# class TransportList(LoginRequiredMixin,ListView):
+#     model = Transport
+#     def get_queryset(self):
+#         return Transport.objects.all()
     
 
 class TransportDetails(LoginRequiredMixin,DetailView):
@@ -221,7 +236,7 @@ class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
     # fields = ['name','type','capacity','image','description','destination','source']
     fields = '__all__'
-
+    # template_name = 'transport_form.html'
     
 class TransportUpdate(LoginRequiredMixin,UpdateView):
     model = Transport
@@ -231,6 +246,30 @@ class TransportUpdate(LoginRequiredMixin,UpdateView):
 class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
+
+
+def TransportList(request):
+    transport = Transport.objects.all()
+
+    if request.method == "POST":
+        searched = request.POST['searched']
+        search_result = Transport.objects.get(name=searched)
+
+        return render(request, 'main_app/transport_list.html', {'search_result': search_result})
+    
+    return render(request,'main_app/transport_list.html',{'transports': transport})
+
+# def ContainerList(request):
+#     container = Container.objects.all()
+
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         search_result = Container.objects.get(code=searched)
+
+#         return render(request, 'main_app/container_list.html', {'search_result': search_result})
+    
+#     return render(request,'main_app/container_list.html',{'containers': container})
+
 
 ####################  SOURCE  ###########################
 
@@ -328,3 +367,30 @@ def edit_profile(request):
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'profile_edit.html' , {'form': form})
+
+####################    ADDITIONAL FEATURES  ###########################
+
+# def search_transports(request):
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         transports = Transport.objects.filter(name__contains=searched)
+
+#         return render(request, 'search_tools/search_transports.html', {'searched': searched, 'transports': transports})
+
+#     else:
+#         return render(request,
+#         'search_tools/search_transports.html',
+#         {})
+
+# def search_containers(request):
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         containers = Container.objects.filter(code__contains=searched)
+
+#         return render(request, 'main_app/search_tools/search_containers.html', {'searched': searched, 'containers': containers})
+
+#     else:
+#         return render(request,
+#         'main_app/search_tools/search_containers.html',
+#         {})
+
