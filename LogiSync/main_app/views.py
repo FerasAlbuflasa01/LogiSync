@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
@@ -7,11 +7,8 @@ from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse, HttpResponse
-
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileForm, CreationForm, AssignDriverForm
@@ -277,7 +274,6 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
 def TransportList(request):
     transports = Transport.objects.all()
 
-    # Is current user a supervisor?
     is_supervisor = False
     try:
         is_supervisor = (
@@ -286,17 +282,14 @@ def TransportList(request):
     except Profile.DoesNotExist:
         is_supervisor = False
 
-    # --- A) Handle driver assignment (POST with action=assign_driver) ---
     if request.method == "POST" and request.POST.get("action") == "assign_driver":
         form = AssignDriverForm(request.POST)
-        # Only supervisors can assign
         if form.is_valid() and is_supervisor:
             t = get_object_or_404(Transport, id=form.cleaned_data["transport_id"])
             t.driver = form.cleaned_data["driver"]
             t.save()
             return redirect("transport_list")
 
-    # --- B) Handle your existing search (POST with action=search) ---
     if request.method == "POST" and request.POST.get("action") == "search":
         searched = request.POST.get('searched', '').strip()
         if searched:
@@ -310,7 +303,6 @@ def TransportList(request):
                     {'message': "Transport is not found, please try again!", 'searched': searched}
                 )
 
-    # Build one small form per transport (preselect current driver)
     transport_forms = []
     for t in transports:
         form = AssignDriverForm(initial={"transport_id": t.id, "driver": t.driver_id})
