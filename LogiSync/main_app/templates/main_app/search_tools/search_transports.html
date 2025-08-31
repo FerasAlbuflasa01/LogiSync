@@ -4,18 +4,21 @@
   {% if searched %}
 
     {% for trans in transports %}
-    <div class="search">
-      <p class="searched-text">
-        <ul>
-        {% load static %}
-        <img src="{% static trans.image %}" alt="transport-image">
-
-        
-        {% csrf_token %}
-        {{ form.as_p }} 
-      </ul>
-
-      </p>
+    <div class="card">
+      <div class="card-content">
+        <a href="{% url 'transport_detail' transport.id %}"></a>
+        <p class="searched-text">
+          <ul>
+            {% load static %}
+            <img src="{% static trans.image %}" alt="transport-image">
+            
+            
+            {% csrf_token %}
+            {{ form.as_p }} 
+          </ul>
+          
+        </p>
+      </div>
     </div>
     {% endfor %}
   
