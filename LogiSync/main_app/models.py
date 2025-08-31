@@ -14,11 +14,37 @@ class Profile(models.Model):
 
 
 # Create your models here.
+
+# -------------------------------------------------------------- Container --------------------------------------------------------------
+class Container(models.Model):
+    latitude = models.FloatField(default=0)
+    longitude= models.FloatField(default=0)
+    currnt_weight_capacity = models.FloatField()
+    weight_capacity = models.FloatField()
+    description = models.TextField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=50)
+
+    def get_absolute_url(self):
+        return reverse('container_detail', kwargs={'container_id': self.id})
+    
+    def __str__(self):
+        return f"Container {self.id} - {self.tracking_location}"
+
+class Package(models.Model):
+    code=models.CharField(max_length=20)
+    owner=models.CharField(max_length=50)
+    description=models.TextField(max_length=250)
+    price=models.IntegerField()
+    weight=models.FloatField()
+    receivedDate=models.DateField()
+    container = models.ForeignKey(Container, on_delete=models.SET_NULL, null=True, blank=True)
+    inContainer=models.BooleanField(default=False)
+    
 # -------------------------------------------------------------- TransportType --------------------------------------------------------------
 class TransportType(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='main_app/static/uploads/', default='')
 
     def __str__(self):
         return self.name
@@ -56,8 +82,8 @@ class Transport(models.Model):
     currnt_capacity = models.IntegerField(default=0)
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
     description = models.TextField(max_length=250)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
     
 

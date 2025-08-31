@@ -6,7 +6,12 @@
   <h2>Container Details</h2>
 </div>
 
+
 <div class="container-detail">
+  <div class="detail-section">
+    <label>Code: </label>
+    <p>{{ container.code}}</p>
+  </div>
   <div class="detail-section">
     <label>Tracking location</label>
     <p>{{ container.tracking_location}}</p>
@@ -26,6 +31,7 @@
 
   <a href="{% url 'container_update' container.id %}">Edit</a>
   <a href="{% url 'container_delete' container.id %}">Delete</a>
+  <a href="{% url 'container_location' container.id %}">location</a>
 
   {% if msg %}
     <h2>{{msg}}</h2>

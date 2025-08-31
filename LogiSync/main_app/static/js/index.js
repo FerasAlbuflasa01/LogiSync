@@ -2,7 +2,7 @@
 let map
 let userMarker
 const initMap = async () => {
-  const response = await axios.get('http://127.0.0.1:8000/location/load')
+  const response = await axios.post('http://127.0.0.1:8000/location/load',{id:2})
   const { Map } = await google.maps.importLibrary('maps')
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
   //init map
@@ -33,7 +33,7 @@ const initMap = async () => {
         lng: pos.coords.longitude
       }
       console.log(pos.coords)
-      if (pos.coords.accuracy >= 149) {
+      if (pos.coords.accuracy >= 200) {
         sendUpdateLocation(position)
         map.setCenter(position)
 
@@ -59,4 +59,3 @@ const sendUpdateLocation = async (pos) => {
 }
 
 initMap()
-
