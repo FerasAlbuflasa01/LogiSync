@@ -14,7 +14,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ProfileForm, CreationForm
+from .forms import ProfileForm, CreationForm, AssignDriverForm
 
 
 
@@ -259,6 +259,7 @@ def unassoc_container(request,transport_id,container_id):
     return redirect('transport_detail',transport_id=transport_id)
   
 
+
 class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
     fields = '__all__'
@@ -273,24 +274,55 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
 
-# ----------------------------------------  SOURCE  ----------------------------------------
-
 def TransportList(request):
-    transport = Transport.objects.all()
+    transports = Transport.objects.all()
 
-    if request.method == "POST":
-        searched = request.POST['searched']
-        try:
-            search_result = Transport.objects.get(name=searched)
-            return render(request, 'main_app/transport_list.html', {'search_result': search_result})
-        except Transport.DoesNotExist:
-            return render(request, 'main_app/transport_list.html', {
-                'message': "Transport is not found, please try again!",
-                'searched': searched
-            })
-    return render(request,'main_app/transport_list.html',{'transports': transport})
+    # Is current user a supervisor?
+    is_supervisor = False
+    try:
+        is_supervisor = (
+        request.user.is_superuser or
+        (hasattr(request.user, "profile") and request.user.profile.role == "supervisor"))
+    except Profile.DoesNotExist:
+        is_supervisor = False
 
-####################  SOURCE  ###########################
+    # --- A) Handle driver assignment (POST with action=assign_driver) ---
+    if request.method == "POST" and request.POST.get("action") == "assign_driver":
+        form = AssignDriverForm(request.POST)
+        # Only supervisors can assign
+        if form.is_valid() and is_supervisor:
+            t = get_object_or_404(Transport, id=form.cleaned_data["transport_id"])
+            t.driver = form.cleaned_data["driver"]
+            t.save()
+            return redirect("transport_list")
+
+    # --- B) Handle your existing search (POST with action=search) ---
+    if request.method == "POST" and request.POST.get("action") == "search":
+        searched = request.POST.get('searched', '').strip()
+        if searched:
+            try:
+                search_result = Transport.objects.get(name=searched)
+                return render(request, 'main_app/transport_list.html', {'search_result': search_result})
+            except Transport.DoesNotExist:
+                return render(
+                    request,
+                    'main_app/transport_list.html',
+                    {'message': "Transport is not found, please try again!", 'searched': searched}
+                )
+
+    # Build one small form per transport (preselect current driver)
+    transport_forms = []
+    for t in transports:
+        form = AssignDriverForm(initial={"transport_id": t.id, "driver": t.driver_id})
+        transport_forms.append((t, form))
+
+    return render(
+        request,
+        'main_app/transport_list.html',
+        {'transport_forms': transport_forms, 'is_supervisor': is_supervisor}
+    )
+
+# ----------------------------------------  SOURCE  ----------------------------------------
 
 class SourceList(LoginRequiredMixin, ListView):
     model = Source

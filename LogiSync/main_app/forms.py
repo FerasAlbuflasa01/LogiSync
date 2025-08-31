@@ -29,4 +29,12 @@ class CreationForm(UserCreationForm):
         self.fields['username'].help_text = None
         self.fields['password1'].help_text = None
         self.fields['password2'].help_text = None
-    
+
+class AssignDriverForm(forms.Form):
+    driver = forms.ModelChoiceField(
+        queryset=User.objects.filter(profile__role="driver"),
+        required=True,
+        empty_label="-- Select Driver --",
+        widget=forms.Select(attrs={"class": "form-select form-select-sm"}),
+    )
+    transport_id = forms.IntegerField(widget=forms.HiddenInput())
