@@ -39,7 +39,8 @@
     <a href="{% url 'container_detail' search_result.id %}">Show Detail</a>
   </button>
 
-  {% else %} {% for container in containers %}
+  {% else %} 
+  {% for container in containers %}
   <div class="container-card">
     <div class="container-info">
       <div class="field">
@@ -65,7 +66,8 @@
   </div>
   {% empty %}
   <p>No Containers Available</p>
-  {% endfor %} {% endif %}
+  {% endfor %} 
+  {% endif %}
 </div>
 
 {% endblock %}
