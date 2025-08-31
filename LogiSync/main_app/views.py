@@ -70,7 +70,7 @@ def about(request):
 
 class ContainerCreate(LoginRequiredMixin, CreateView):
     model = Container
-    fields = [ 'tracking_location', 'description', 'weight_capacity','currnt_weight_capacity' ]
+    fields = [ 'tracking_location', 'description', 'weight_capacity' ]
 
     def form_valid(self, form):
         form.instance.user = self.request.user

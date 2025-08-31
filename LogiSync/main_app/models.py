@@ -3,7 +3,8 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    ROLE=[('supervisor', 'Supervisor'),('driver', 'Driver')]
+    # ROLE=[('supervisor', 'Supervisor'),('driver', 'Driver')]
+    ROLE=[('supervisor', 'driver')]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, choices=ROLE, blank=True)
@@ -78,6 +79,7 @@ class Source(models.Model):
 # -------------------------------------------------------------- Transport --------------------------------------------------------------
 class Transport(models.Model):
     name = models.CharField(max_length=100)
+    driver = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.ForeignKey(TransportType, on_delete=models.CASCADE)
     capacity = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
