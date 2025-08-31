@@ -5,7 +5,8 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -242,28 +243,31 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     success_url = '/transports/'
 
 
+# def TransportList(request):
+#     transport = Transport.objects.all()
+
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         search_result = Transport.objects.get(name=searched)
+
+#         return render(request, 'main_app/transport_list.html', {'search_result': search_result})
+
+#     return render(request,'main_app/transport_list.html',{'transports': transport})
+
 def TransportList(request):
     transport = Transport.objects.all()
 
     if request.method == "POST":
         searched = request.POST['searched']
-        search_result = Transport.objects.get(name=searched)
-
-        return render(request, 'main_app/transport_list.html', {'search_result': search_result})
-    
+        try:
+            search_result = Transport.objects.get(name=searched)
+            return render(request, 'main_app/transport_list.html', {'search_result': search_result})
+        except Transport.DoesNotExist:
+            return render(request, 'main_app/transport_list.html', {
+                'message': "Transport is not found, please try again!",
+                'searched': searched
+            })
     return render(request,'main_app/transport_list.html',{'transports': transport})
-
-# def ContainerList(request):
-#     container = Container.objects.all()
-
-#     if request.method == "POST":
-#         searched = request.POST['searched']
-#         search_result = Container.objects.get(code=searched)
-
-#         return render(request, 'main_app/container_list.html', {'search_result': search_result})
-    
-#     return render(request,'main_app/container_list.html',{'containers': container})
-
 
 ####################  SOURCE  ###########################
 
@@ -366,27 +370,8 @@ def edit_profile(request):
 
 ####################    ADDITIONAL FEATURES  ###########################
 
-# def search_transports(request):
-#     if request.method == "POST":
-#         searched = request.POST['searched']
-#         transports = Transport.objects.filter(name__contains=searched)
-
-#         return render(request, 'search_tools/search_transports.html', {'searched': searched, 'transports': transports})
-
-#     else:
-#         return render(request,
-#         'search_tools/search_transports.html',
-#         {})
-
-# def search_containers(request):
-#     if request.method == "POST":
-#         searched = request.POST['searched']
-#         containers = Container.objects.filter(code__contains=searched)
-
-#         return render(request, 'main_app/search_tools/search_containers.html', {'searched': searched, 'containers': containers})
-
-#     else:
-#         return render(request,
-#         'main_app/search_tools/search_containers.html',
-#         {})
+class source_dest_create(LoginRequiredMixin,CreateView):
+    model = Destination
+    model = Source
+    fields = '__all__'
 

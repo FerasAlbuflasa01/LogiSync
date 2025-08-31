@@ -48,7 +48,8 @@ urlpatterns = [
 
 # -------------------------------------------------------------- features --------------------------------------------------------------
     # path('search_transports', views.search_transports, name='search_transports'),
-
+    # Source & Destanation Create form
+    path('source/destination/create', views.source_dest_create.as_view(), name='source_dest_create'),
 
 # -------------------------------------------------------------- locations(testing) --------------------------------------------------------------
     path('location/', views.map, name='map'),

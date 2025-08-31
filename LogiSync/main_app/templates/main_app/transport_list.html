@@ -22,19 +22,32 @@
 <br />
 <br />
 
-<div class="container-list">
-  {% if search_result %}
-  
-  <p><strong>Code:</strong> {{ search_result.code }}</p>
+{% if search_result %}
 
-  <p><strong>Source:</strong> {{ search_result.source }}</p>
-  <p><strong>Destination:</strong> {{ search_result.destination }}</p>
-  <p><strong>Description:</strong> {{ search_result.description }}</p>
+<div class="card">
+  <div class="card-content">
+    
+    <h2>Result for "{{ search_result.name }}"</h2>
+    
+    <a href="{% url 'transport_detail' search_result.id %}">
 
-  <button>
-    <a href="{% url 'transport_detail' search_result.id %}">Show Detail</a>
-  </button>
+      <p><strong>Code:</strong> {{ search_result.code }}</p>
+      
+      <p><strong>Source:</strong> {{ search_result.source }}</p>
+      <p><strong>Destination:</strong> {{ search_result.destination }}</p>
+      <p><strong>Description:</strong> {{ search_result.description }}</p>
+    
+    </a>
+    
+    <a href="{% url 'transport_list' %}"><button>Back</button></a>
+    
+  </div>  
 </div>
+
+{% elif message %}
+  <p style="color:red;">{{ message }}</p>
+  <a href="{% url 'transport_list' %}"><button>Back</button></a>
+
   {% else %}
   {% for transport in transports %}
 <div class="card">
@@ -47,8 +60,8 @@
   </a>
 </div>
 {% endfor %} 
-
-{% endif %} 
+{% endif %}
+  
 
 
 {% endblock %}
