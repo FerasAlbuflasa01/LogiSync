@@ -84,6 +84,7 @@ def about(request):
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
 
     model = Container
+
     fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
 
     def form_valid(self, form):
