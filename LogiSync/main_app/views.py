@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
@@ -7,14 +7,12 @@ from django.views.generic import ListView,DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse, HttpResponse
-
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ProfileForm, CreationForm
+from .forms import ProfileForm, CreationForm, AssignDriverForm
+from .utils import generate_sequential_code
 
 
 
@@ -86,15 +84,16 @@ def about(request):
 # ----------------------------------------  Containers  ----------------------------------------
 
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
-
     model = Container
-
-
-    fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
-
+    fields = ['description', 'weight_capacity', 'currnt_weight_capacity']
+    template_name = 'main_app/container_form.html'  
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        obj = form.save(commit=False)
+        obj.user = self.request.user 
+        if not obj.code:
+            obj.code = generate_sequential_code("C", Container)
+        obj.save()
         return super().form_valid(form)
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
@@ -237,7 +236,7 @@ def assoc_container(request,transport_id,container_id):
     print(new_cap)
     if new_cap>last_cap:
         container_doesnt_contain = Container.objects.exclude(inTrancport=True)
-        container_exsist =Container.objects.filter(container=transport_id) 
+        container_exsist = Container.objects.filter(transport_id=transport_id)
         return render(request,'main_app/transport_detail.html',{'transport':transport,'container':container_doesnt_contain,'container_exsist':container_exsist,'msg':'containers caps exceeds limit transport cap !!!'})
     transport.currnt_capacity=new_cap
     transport.save() 
@@ -259,10 +258,19 @@ def unassoc_container(request,transport_id,container_id):
     return redirect('transport_detail',transport_id=transport_id)
   
 
+
 class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
-    fields = '__all__'
-    # template_name = 'transport_form.html'
+    fields = ['name','driver','type','capacity','currnt_capacity','image','description','source','destination']
+    template_name = 'main_app/transport_form.html'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        if not obj.code:
+            type_prefix = (obj.type.code.upper() if obj.type and obj.type.code else "T")
+            obj.code = generate_sequential_code(type_prefix, Transport)
+        obj.save()
+        return super().form_valid(form)
     
 class TransportUpdate(LoginRequiredMixin,UpdateView):
     model = Transport
@@ -273,33 +281,66 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     model = Transport
     success_url = '/transports/'
 
-# ----------------------------------------  SOURCE  ----------------------------------------
-
 def TransportList(request):
-    transport = Transport.objects.all()
+    transports = Transport.objects.all()
 
-    if request.method == "POST":
-        searched = request.POST['searched']
-        try:
-            search_result = Transport.objects.get(name=searched)
-            return render(request, 'main_app/transport_list.html', {'search_result': search_result})
-        except Transport.DoesNotExist:
-            return render(request, 'main_app/transport_list.html', {
-                'message': "Transport is not found, please try again!",
-                'searched': searched
-            })
-    return render(request,'main_app/transport_list.html',{'transports': transport})
+    is_supervisor = False
+    try:
+        is_supervisor = (
+        request.user.is_superuser or
+        (hasattr(request.user, "profile") and request.user.profile.role == "supervisor"))
+    except Profile.DoesNotExist:
+        is_supervisor = False
 
-####################  SOURCE  ###########################
+    if request.method == "POST" and request.POST.get("action") == "assign_driver":
+        form = AssignDriverForm(request.POST)
+        if form.is_valid() and is_supervisor:
+            t = get_object_or_404(Transport, id=form.cleaned_data["transport_id"])
+            t.driver = form.cleaned_data["driver"]
+            t.save()
+            return redirect("transport_list")
+
+    if request.method == "POST" and request.POST.get("action") == "search":
+        searched = request.POST.get('searched', '').strip()
+        if searched:
+            try:
+                search_result = Transport.objects.get(name=searched)
+                return render(request, 'main_app/transport_list.html', {'search_result': search_result})
+            except Transport.DoesNotExist:
+                return render(
+                    request,
+                    'main_app/transport_list.html',
+                    {'message': "Transport is not found, please try again!", 'searched': searched}
+                )
+
+    transport_forms = []
+    for transport in transports:
+        form = AssignDriverForm(initial={"transport_id": transport.id, "driver": transport.driver_id})
+        transport_forms.append((transport, form))
+
+    return render(
+        request,
+        'main_app/transport_list.html',
+        {'transport_forms': transport_forms, 'is_supervisor': is_supervisor}
+    )
+
+# ----------------------------------------  SOURCE  ----------------------------------------
 
 class SourceList(LoginRequiredMixin, ListView):
     model = Source
 
 class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Source
-    fields = '__all__'
+    fields = ['name', 'location']  
     template_name = 'main_app/source_form.html'
-    success_url = reverse_lazy('transport_create') 
+    success_url = reverse_lazy('transport_create')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        if not obj.code:
+            obj.code = generate_sequential_code("SRC", Source)
+        obj.save()
+        return super().form_valid(form)
 
 class SourceUpdate(LoginRequiredMixin, UpdateView):
     model = Source
@@ -318,9 +359,16 @@ class DestinationList(LoginRequiredMixin, ListView):
 
 class DestinationCreate(LoginRequiredMixin,DenyCreate,  CreateView):
     model = Destination
-    fields = '__all__'
+    fields = ['name', 'location'] 
     template_name = 'main_app/destination_form.html'
-    success_url = reverse_lazy('transport_create') 
+    success_url = reverse_lazy('transport_create')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        if not obj.code:
+            obj.code = generate_sequential_code("DST", Destination)
+        obj.save()
+        return super().form_valid(form)
 
 
 class DestinationUpdate(LoginRequiredMixin, UpdateView):
