@@ -17,9 +17,10 @@
       alt="transport Image"
     />
 
-    <h5>QR Code:</h5>
-    <img src="{% url 'qr_code' transport.id %}" alt="QR Code for {{ transport.name }}">
-    <br>
+    <div class="qr-code">
+      <h5>Scan the QR Code to see the tasks of containers:</h5>
+      <img src="{% url 'qr_code' transport.id %}" alt="QR Code for {{ transport.name }}" >
+    </div>
 
     <a href="{% url 'transports_update' transport.id %}">Edit</a>
     <a href="{% url 'transports_delete' transport.id %}">Delete</a>

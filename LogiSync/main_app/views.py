@@ -357,7 +357,7 @@ def edit_profile(request):
 def qr_code(request, pk):
     transport = Transport.objects.get(pk=pk)
 
-    url = f"http://127.0.0.1:8000/transports/<int:pk>/" 
+    url = f"https://trello.com/b/zo6OdEIF/logisync" 
 
     img = qrcode.make(url)
 
