@@ -22,9 +22,12 @@ urlpatterns = [
 # -------------------------------------------------------------- Transport --------------------------------------------------------------
     path('transports/',views.TransportList, name='transport_list' ),
     path('transports/create/', views.TransportCreate.as_view(), name='transport_create'),
-    path('transports/<int:pk>/', views.TransportDetails.as_view(), name='transport_detail'),
+    path('transports/<int:transport_id>/', views.TransportDetails, name='transport_detail'),
     path('transports/<int:pk>/update/', views.TransportUpdate.as_view(), name='transports_update'),
     path('transports/<int:pk>/delete/', views.TransportDelete.as_view(), name='transports_delete'),
+
+    path('transports/<int:transport_id>/assoc_container/<int:container_id>',views.assoc_container,name='assoc_container'),
+    path('transports/<int:transport_id>/unassoc_container/<int:container_id>',views.unassoc_container,name='unassoc_container'),
 
 # -------------------------------------------------------------- packages --------------------------------------------------------------
     path('packages/',views.PackageList.as_view(),name='packages_index'),
