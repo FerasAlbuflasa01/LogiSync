@@ -85,7 +85,7 @@ def about(request):
 
 # ----------------------------------------  Containers  ----------------------------------------
 
-class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
+class ContainerCreate(LoginRequiredMixin, CreateView):
 
     model = Container
 
@@ -257,9 +257,8 @@ def unassoc_container(request,transport_id,container_id):
     container.save()
     transport.save()
     return redirect('transport_detail',transport_id=transport_id)
-  
 
-class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
+class TransportCreate(LoginRequiredMixin,DenyCreate, CreateView):
     model = Transport
     fields = '__all__'
     # template_name = 'transport_form.html'
@@ -295,7 +294,7 @@ def TransportList(request):
 class SourceList(LoginRequiredMixin, ListView):
     model = Source
 
-class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
+class SourceCreate(LoginRequiredMixin, CreateView):
     model = Source
     fields = '__all__'
     template_name = 'main_app/source_form.html'
