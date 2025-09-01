@@ -1,69 +1,105 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 
 <div class="transports-conainter">
   <div class="card-action">
-    <h1>transport Details</h1>
-    <h5>transport name:{{transport.name}}</h5>
-    <h5>transport Description: {{transport.description}}</h5>
-    <h5>source: {{transport.source}}</h5>
-    <h5>destination: {{transport.destination}}</h5>
+    <h1>Transport Details</h1>
+
+    <h5>Transport Code: {{ transport.code }}</h5>
+    <h5>Transport Name: {{ transport.name }}</h5>
+    <h5>Transport Description: {{ transport.description }}</h5>
+
+    <h5>
+      Source:
+      {{ transport.source }}
+      {% if transport.source.code %} ({{ transport.source.code }}){% endif %}
+    </h5>
+
+    <h5>
+      Destination:
+      {{ transport.destination }}
+      {% if transport.destination.code %} ({{ transport.destination.code }}){% endif %}
+    </h5>
+
+    {% if transport.type %}
+      <h5>Type: {{ transport.type }}{% if transport.type.code %} ({{ transport.type.code }}){% endif %}</h5>
+    {% endif %}
+
+    {% if transport.driver %}
+      <h5>Driver: {{ transport.driver.username }}</h5>
+    {% endif %}
 
     {% load static %}
-
     <img
       class="transports-pic"
       src="{% static transport.image|cut:'main_app/static/' %}"
-      width="100px"
-      height="100px"
-      alt="transports Image"
+      width="100"
+      height="100"
+      alt="Transport Image"
     />
-    
-    <div class="card-action">
+
+    <div class="card-action" style="margin-top: 1rem;">
       <a href="{% url 'transports_update' transport.id %}">Edit</a>
       <a href="{% url 'transports_delete' transport.id %}">Delete</a>
     </div>
   </div>
 
-
-    {% if msg %}
-    <h2>{{msg}}</h2>
+  {% if msg %}
+    <h2>{{ msg }}</h2>
   {% endif %}
-</div class="continer-packages">
-<h2>packages that are in continer</h2>
-<h4> current continer weight {{container.currnt_capacity}}</h4>
-{% if container_exsist.count %}
-
-{% for container in container_exsist %}
-
-    <a href="{% url 'container_detail' container.id %} ">
-       <h2>{{contaier.description}}</h2>
-       <h2>container description: {{contaier.description}}</h2>
-    </a>
-            <form action="{% url 'unassoc_container' transport.id container.id %}" method="post">
-          {% csrf_token %}
-      <button type="submit"> remove</button>
-    </form>
-{% endfor %}
-{% endif %}
 </div>
 
-<div class="packages">
-<h2>packages that are not in continer</h2>
-  {% for container in container_doesnt_contain %}
-    <a href="{% url 'container_detail' container.id %} ">
-      <h2>{{container.description}}</h2>
-    </a>
-     <form action="{% url 'assoc_container' transport.id container.id %}" method="post">
-          {% csrf_token %}
-      <button type="submit"> add</button>
-    </form>
+<div class="transports-conainter" style="margin-top: 1rem;">
+  <h2>Containers in this Transport</h2>
+  <h4>Current container count: {{ container_exsist|length }}</h4>
 
-  {% endfor %}
-    
+  {% if container_exsist %}
+    {% for container in container_exsist %}
+      <div class="container-card" style="margin-bottom: .75rem;">
+        <a href="{% url 'container_detail' container.id %}">
+          <h3>Container {{ container.code }}</h3>
+          <p>Container Description: {{ container.description }}</p>
+          <p>Current Weight: {{ container.currnt_weight_capacity }}</p>
+          <p>Max Weight: {{ container.weight_capacity }}</p>
+        </a>
+
+        <form action="{% url 'unassoc_container' transport.id container.id %}" method="post" style="margin-top:.5rem;">
+          {% csrf_token %}
+          <button type="submit">Remove from Transport</button>
+        </form>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No containers currently assigned to this transport.</p>
+  {% endif %}
 </div>
 
-    <a href="{% url 'transport_list' %}"><button>Back</button></a>
-  </div>
+<div class="transports-conainter" style="margin-top: 1rem;">
+  <h2>Available Containers (not in any transport)</h2>
+
+  {% if container_doesnt_contain %}
+    {% for container in container_doesnt_contain %}
+      <div class="container-card" style="margin-bottom: .75rem;">
+        <a href="{% url 'container_detail' container.id %}">
+          <h3>Container {{ container.code }}</h3>
+          <p>Container Description: {{ container.description }}</p>
+          <p>Current Weight: {{ container.currnt_weight_capacity }}</p>
+          <p>Max Weight: {{ container.weight_capacity }}</p>
+        </a>
+
+        <form action="{% url 'assoc_container' transport.id container.id %}" method="post" style="margin-top:.5rem;">
+          {% csrf_token %}
+          <button type="submit">Add to Transport</button>
+        </form>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>All containers are currently assigned.</p>
+  {% endif %}
+</div>
+
+<div style="margin-top: 1rem;">
+  <a href="{% url 'transport_list' %}"><button>Back</button></a>
 </div>
 
 {% endblock %}

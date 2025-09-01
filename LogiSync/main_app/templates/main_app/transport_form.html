@@ -1,24 +1,26 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 
 <div class="create-container">
   <h2>Create transport</h2>
 
   <form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %} {% if object %}
-    <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
+    {% csrf_token %}
+    {% if object %}
+      <h1>Edit <span class="teal-text">{{ object.name }}</span></h1>
     {% else %}
-    <h1>Add transport</h1>
+      <h1>Add transport</h1>
     {% endif %}
-      {% csrf_token %}
-      <table>
-        {{ form.as_table }}
-      </table>
-      <a href="{% url 'source_create' %}">add source</a>
-      <br>
-      <a href="{% url 'destination_create' %}">add destination</a>
-      <input type="submit" value="Submit!" class="btn" />
-      
-      {% endblock %}
-    </form>
-    
+
+    <table>
+      {{ form.as_table }}
+    </table>
+
+    <a href="{% url 'source_create' %}">add source</a><br>
+    <a href="{% url 'destination_create' %}">add destination</a>
+
+    <input type="submit" value="Submit!" class="btn" />
+  </form>
 </div>
+
+{% endblock %}
