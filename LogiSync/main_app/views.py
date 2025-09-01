@@ -12,6 +12,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileForm, CreationForm, AssignDriverForm
+from .utils import generate_sequential_code
 
 
 
@@ -83,15 +84,16 @@ def about(request):
 # ----------------------------------------  Containers  ----------------------------------------
 
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
-
     model = Container
-
-
-    fields = [  'description', 'weight_capacity','currnt_weight_capacity' ]
-
+    fields = ['description', 'weight_capacity', 'currnt_weight_capacity']
+    template_name = 'main_app/container_form.html'  
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        obj = form.save(commit=False)
+        obj.user = self.request.user 
+        if not obj.code:
+            obj.code = generate_sequential_code("C", Container)
+        obj.save()
         return super().form_valid(form)
     
 class ContainerUpdate(LoginRequiredMixin, UpdateView):
@@ -259,8 +261,16 @@ def unassoc_container(request,transport_id,container_id):
 
 class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Transport
-    fields = '__all__'
-    # template_name = 'transport_form.html'
+    fields = ['name','driver','type','capacity','currnt_capacity','image','description','source','destination']
+    template_name = 'main_app/transport_form.html'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        if not obj.code:
+            type_prefix = (obj.type.code.upper() if obj.type and obj.type.code else "T")
+            obj.code = generate_sequential_code(type_prefix, Transport)
+        obj.save()
+        return super().form_valid(form)
     
 class TransportUpdate(LoginRequiredMixin,UpdateView):
     model = Transport
@@ -304,9 +314,9 @@ def TransportList(request):
                 )
 
     transport_forms = []
-    for t in transports:
-        form = AssignDriverForm(initial={"transport_id": t.id, "driver": t.driver_id})
-        transport_forms.append((t, form))
+    for transport in transports:
+        form = AssignDriverForm(initial={"transport_id": transport.id, "driver": transport.driver_id})
+        transport_forms.append((transport, form))
 
     return render(
         request,
@@ -321,9 +331,16 @@ class SourceList(LoginRequiredMixin, ListView):
 
 class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
     model = Source
-    fields = '__all__'
+    fields = ['name', 'location']  
     template_name = 'main_app/source_form.html'
-    success_url = reverse_lazy('transport_create') 
+    success_url = reverse_lazy('transport_create')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        if not obj.code:
+            obj.code = generate_sequential_code("SRC", Source)
+        obj.save()
+        return super().form_valid(form)
 
 class SourceUpdate(LoginRequiredMixin, UpdateView):
     model = Source
@@ -342,9 +359,16 @@ class DestinationList(LoginRequiredMixin, ListView):
 
 class DestinationCreate(LoginRequiredMixin,DenyCreate,  CreateView):
     model = Destination
-    fields = '__all__'
+    fields = ['name', 'location'] 
     template_name = 'main_app/destination_form.html'
-    success_url = reverse_lazy('transport_create') 
+    success_url = reverse_lazy('transport_create')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        if not obj.code:
+            obj.code = generate_sequential_code("DST", Destination)
+        obj.save()
+        return super().form_valid(form)
 
 
 class DestinationUpdate(LoginRequiredMixin, UpdateView):
