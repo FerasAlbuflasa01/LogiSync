@@ -113,11 +113,18 @@ def ContainerDetail(request,container_id):
     container = Container.objects.get(id=container_id)
     packages_doesnt_contain = Package.objects.exclude(inContainer=True)
     packages_exsist =Package.objects.filter(container=container_id) 
+    role = getattr(getattr(request.user, "profile", None), "role", "")
+    is_supervisor = request.user.is_superuser or (role == "supervisor")
+
     print(packages_doesnt_contain)
-    return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist})
+    return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist,'is_supervisor': is_supervisor,})
 
 @login_required
 def assoc_package(request,container_id,package_id):
+    role = getattr(getattr(request.user, "profile", None), "role", "")
+    if not (request.user.is_superuser or role == "supervisor"):
+        return HttpResponseForbidden("Only supervisors/admins may modify container packages")
+    
     container=Container.objects.get(id=container_id)
     package=Package.objects.get(id=package_id)
     last_weight=container.weight_capacity
@@ -136,6 +143,10 @@ def assoc_package(request,container_id,package_id):
 
 @login_required
 def unassoc_package(request,container_id,package_id):
+    role = getattr(getattr(request.user, "profile", None), "role", "")
+    if not (request.user.is_superuser or role == "supervisor"):
+        return HttpResponseForbidden("Only supervisors/admins may modify container packages")
+
     container=Container.objects.get(id=container_id)
     package=Package.objects.get(id=package_id)
     new_weight=container.currnt_weight_capacity - package.weight
