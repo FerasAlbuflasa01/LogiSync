@@ -236,7 +236,7 @@ def assoc_container(request,transport_id,container_id):
     print(new_cap)
     if new_cap>last_cap:
         container_doesnt_contain = Container.objects.exclude(inTrancport=True)
-        container_exsist =Container.objects.filter(container=transport_id) 
+        container_exsist = Container.objects.filter(transport_id=transport_id)
         return render(request,'main_app/transport_detail.html',{'transport':transport,'container':container_doesnt_contain,'container_exsist':container_exsist,'msg':'containers caps exceeds limit transport cap !!!'})
     transport.currnt_capacity=new_cap
     transport.save() 

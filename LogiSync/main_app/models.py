@@ -19,12 +19,15 @@ class Profile(models.Model):
 # -------------------------------------------------------------- Container --------------------------------------------------------------
 class Container(models.Model):
     latitude = models.FloatField(default=0)
-    longitude= models.FloatField(default=0)
-    currnt_weight_capacity = models.FloatField()
-    weight_capacity = models.FloatField()
+    longitude = models.FloatField(default=0)
     description = models.TextField(max_length=255)
+    weight_capacity = models.FloatField(default=0)
+    currnt_weight_capacity = models.FloatField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    code = models.CharField(max_length=50, unique=True, db_index=True, blank=True)
+    code = models.CharField(max_length=50)  
+
+    transport = models.ForeignKey('Transport', on_delete=models.SET_NULL, null=True, blank=True)
+    inTrancport = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('container_detail', kwargs={'container_id': self.id})
