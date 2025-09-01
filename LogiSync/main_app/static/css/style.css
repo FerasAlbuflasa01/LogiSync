@@ -339,10 +339,16 @@ p {
 
 .type_detail img,
 .transports-pic {
-  max-width: 100%;
-  height: auto;
   border-radius: 6px;
-  margin-bottom: 0.8rem;
+  /* margin-bottom: 0.8rem; */
+  width: auto;
+    height: 300px;
+}
+
+.qr-code {
+  position: relative;
+  top: -430px;
+  left: 650px;
 }
 
 a {
