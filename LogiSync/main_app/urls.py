@@ -50,12 +50,8 @@ urlpatterns = [
     path('source/create/', views.SourceCreate.as_view(), name='source_create'),
     path('destination/create/', views.DestinationCreate.as_view(), name='destination_create'),
     
-    # path('source/create/', views.source_form, name='source_form'),
-    # path('source/create/', views.source_create, name='source_create'),
-
-    # path('destination/create/', views.destination_form, name='destination_form'),
-    # path('destination/create/', views.destination_create, name='destination_create'),
-
+    # path('containers/active/', views.containers_active, name='containers_active'),
+    path('qr_code/<int:pk>/', views.qr_code, name='qr_code'),
     
     
 

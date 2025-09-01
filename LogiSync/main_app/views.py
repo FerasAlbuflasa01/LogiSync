@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse_lazy
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from .models import Package,Transport,Destination,Source, TransportType, Container, Profile
 from django.views.generic.edit import CreateView,UpdateView,DeleteView 
 from django.views.generic import ListView,DetailView
@@ -16,7 +16,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileForm, CreationForm
 
-
+#################### QR code  ###########################
+import qrcode
+from io import BytesIO
 
 listOfPackags = [
     {
@@ -352,6 +354,14 @@ def edit_profile(request):
 
 ####################    ADDITIONAL FEATURES  ###########################
 
+def qr_code(request, pk):
+    transport = Transport.objects.get(pk=pk)
 
+    url = f"http://127.0.0.1:8000/transports/<int:pk>/" 
 
+    img = qrcode.make(url)
+
+    buffer = BytesIO()
+    img.save(buffer, format='PNG')
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
 
