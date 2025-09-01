@@ -1,12 +1,15 @@
 // Initialize and add the map
 let map
 let userMarker
+const url = new URL(window.location.href)
+const pathSegments = url.pathname.split('/')
+const transportId = pathSegments[2]
 const error = (err) => {
   console.error(`ERROR(${err.code}): ${err.message}`)
 }
 const initMap = async () => {
   const response = await axios.post('http://127.0.0.1:8000/location/load', {
-    id: 2
+    id: transportId
   })
   const { Map } = await google.maps.importLibrary('maps')
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')

@@ -297,7 +297,10 @@ class TransportDelete(LoginRequiredMixin,DeleteView):
     success_url = '/transports/'
 
 def TransportList(request):
-    transports = Transport.objects.all()
+    if(request.user.profile.role=='driver'):
+        transports=Transport.objects.filter(driver_id=request.user.id)
+    else:
+        transports = Transport.objects.all()
 
     is_supervisor = False
     try:
@@ -415,11 +418,14 @@ def location_save(request):
 @csrf_exempt
 def location_load(request):
     data = json.loads(request.body)
-    containerId=int(data['id'])
-    constiner=Container.objects.get(id=containerId)
+    transportId=int(data['id'])
+    transport=Transport.objects.get(id=transportId)
+    constiner=Container.objects.get(trasnport_id=transportId)
+    origin=Source.objects.get(id=transport.source_id)
+    destination=Destination.objects.get(id=transport.destination_id)
     if(constiner.longitude):
-        return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude})
-    return JsonResponse({'status': 'faild'})
+        return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude,'origin':origin,'destination':destination})
+    return JsonResponse({'status': 'faild','origin':origin,'destination':destination})
 
 # ----------------------------------------  Auth  ----------------------------------------
 

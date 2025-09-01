@@ -4,12 +4,7 @@
 <div class="transports-conainter">
   <div class="card-action">
     <h1>Transport Details</h1>
-<<<<<<< HEAD
-    <h5>Transport name: {{ transport.name }}</h5>
-    <h5>Transport Description: {{ transport.description }}</h5>
-    <h5>Source: {{ transport.source }}</h5>
-    <h5>Destination: {{ transport.destination }}</h5>
-=======
+
 
     <h5>Transport Code: {{ transport.code }}</h5>
     <h5>Transport Name: {{ transport.name }}</h5>
@@ -34,25 +29,12 @@
     {% if transport.driver %}
       <h5>Driver: {{ transport.driver.username }}</h5>
     {% endif %}
->>>>>>> main
 
     {% load static %}
     <img
       class="transports-pic"
       src="{% static transport.image|cut:'main_app/static/' %}"
-<<<<<<< HEAD
-      alt="transport Image"
-    />
-
-    <div class="qr-code">
-      <h5>Scan the QR Code to see the tasks of containers:</h5>
-      <img src="{% url 'qr_code' transport.id %}" alt="QR Code for {{ transport.name }}" >
-    </div>
-
-    <a href="{% url 'transports_update' transport.id %}">Edit</a>
-    <a href="{% url 'transports_delete' transport.id %}">Delete</a>
-    <a href="{% url 'transport_list' %}"><button>Back</button></a>
-=======
+<
       width="100"
       height="100"
       alt="Transport Image"
@@ -61,8 +43,9 @@
     <div class="card-action" style="margin-top: 1rem;">
       <a href="{% url 'transports_update' transport.id %}">Edit</a>
       <a href="{% url 'transports_delete' transport.id %}">Delete</a>
+      <a href="{% url 'container_location' transport.id %}">Location</a>
     </div>
->>>>>>> main
+
   </div>
 
   {% if msg %}
