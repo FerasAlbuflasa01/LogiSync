@@ -169,6 +169,7 @@ def ContainerList(request):
     containers = Container.objects.all().order_by('code')
     q = request.GET.get('searched', '').strip()
     status = request.GET.get('status')
+    
 
     if q:
         try:
@@ -193,13 +194,26 @@ def ContainerLocation(request,transport_id):
 
 @login_required
 def containers_checklist(request, transport_id):
-    container = Container.objects.filter(transport_id=transport_id)
-    return render(request, 'checklist.html', {'containers': container})
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+    containers = Container.objects.filter(transport_id=transport_id, delivered=False)
 
+    if containers.exists():
+        return redirect('checklist.html', {'containers': containers})  
+
+    return render(request, 'checklist.html', {'msg': 'All containers have been delivered.'})
+@login_required
 def containers_recieved(request):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     if request.method == "POST":
         selected_ids = request.POST.getlist("containers")
-        print(selected_ids) 
+        for continerId in selected_ids:
+            print(continerId)
+            continer=Container.objects.get(id=continerId )
+            continer.delivered=True
+            continer.save()
+     
         return redirect("container_list")   
     return HttpResponse("No containers submitted.") 
 
@@ -274,6 +288,7 @@ def TransportDetails(request, transport_id):
     transport = Transport.objects.get(id=transport_id)
     container_doesnt_contain = Container.objects.exclude(inTrancport=True)
     container_exsist = Container.objects.filter(transport=transport_id)
+    print(container_exsist)
 
     role = getattr(getattr(request.user, "profile", None), "role", "")
     is_supervisor = request.user.is_superuser or (role == "supervisor")
@@ -320,7 +335,7 @@ def assoc_container(request, transport_id, container_id):
     print('here')
     return redirect('transport_detail',transport_id=transport_id)
 
-@login_required
+
 @login_required
 def unassoc_container(request, transport_id, container_id):
     if(request.user.profile.role=='driver'):
@@ -519,13 +534,17 @@ def signup(request):
 
 @login_required
 def profile_detail(request):
+    role = getattr(getattr(request.user, "profile", None), "role", "")
+    is_supervisor = request.user.is_superuser or (role == "supervisor")
     profile = request.user.profile
-    return render(request, 'profile_detail.html', {'profile': profile})
+    return render(request, 'profile_detail.html', {'profile': profile,'is_supervisor':is_supervisor})
 
     
 
 @login_required
 def edit_profile(request):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     profile, created =Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
@@ -541,7 +560,7 @@ def edit_profile(request):
 def qr_code(request, pk):
     transport = Transport.objects.get(pk=pk)
 
-    url = f"https://trello.com/b/zo6OdEIF/logisync" 
+    url = f"http://127.0.0.1:8000/transports/{pk}/checklist" 
 
     img = qrcode.make(url)
 

@@ -795,3 +795,12 @@ button:hover,
   margin: 0 0 1rem 0;
   font-weight: 500;
 }
+.delivered-indicator {
+    display: inline-block;
+    width: 10px; 
+    height: 10px; /* Adjust size as needed */
+    background-color: green; /* Green color */
+    border-radius: 50%; /* Makes it a circle */
+    margin-left: 5px; /* Space between the code and the circle */
+    vertical-align: middle; /* Aligns with text */
+}
