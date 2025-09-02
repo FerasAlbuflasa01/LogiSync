@@ -21,7 +21,6 @@ const initMap = async () => {
     position = {
       lat: response.data.lat,
       lng: response.data.lng,
-      id: transportId
     }
   } else {
     position = { lat: -34.397, lng: 150.644 }
@@ -77,7 +76,8 @@ const initMap = async () => {
       (pos) => {
         let position = {
           lat: pos.coords.latitude,
-          lng: pos.coords.longitude
+          lng: pos.coords.longitude,
+            id: transportId
         }
         console.log(pos.coords)
         if (pos.coords.accuracy > 80) {
