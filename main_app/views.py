@@ -497,8 +497,9 @@ def location_load(request):
 # ----------------------------------------  Auth  ----------------------------------------
 
 def signup(request):
-    if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+    if request.user.is_authenticated:
+        if getattr(request.user, 'profile', None) and request.user.profile.role == 'driver':
+            return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     error_message = ''
     if request.method == 'POST':
 
