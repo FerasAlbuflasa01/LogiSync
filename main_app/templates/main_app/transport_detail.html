@@ -1,33 +1,40 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% block content %}
 
-<div class="transports-conainter">
-  <div class="card-action">
-    <h1>Transport Details</h1>
+<div class="transports-container">
+    <div class="card-action">
+        <h1>Transport Details</h1>
 
-    <h5>Transport Code: {{ transport.code }}</h5>
-    <h5>Transport Name: {{ transport.name }}</h5>
-    <h5>Transport Description: {{ transport.description }}</h5>
+        <h5>Transport Code: {{ transport.code }}</h5>
+        <h5>Transport Name: {{ transport.name }}</h5>
+        <h5>Transport Description: {{ transport.description }}</h5>
 
-    <h5>
-      Source: {{ transport.source }}
-      {% if transport.source.code %} ({{ transport.source.code }}){% endif %}
-    </h5>
+        <h5>
+            Source: {{ transport.source }} 
+            {% if transport.source.code %} 
+                ({{ transport.source.code }}) 
+            {% endif %}
+        </h5>
 
-    <h5>
-      Destination: {{ transport.destination }}
-      {% if transport.destination.code %} ({{ transport.destination.code }}){% endif %}
-    </h5>
+        <h5>
+            Destination: {{ transport.destination }} 
+            {% if transport.destination.code %} 
+                ({{ transport.destination.code }}) 
+            {% endif %}
+        </h5>
 
-    {% if transport.type %}
-      <h5>Type: {{ transport.type }}{% if transport.type.code %} ({{ transport.type.code }}){% endif %}</h5>
-    {% endif %}
+        {% if transport.type %}
+            <h5>
+                Type: {{ transport.type }}
+                {% if transport.type.code %}
+                    ({{ transport.type.code }})
+                {% endif %}
+            </h5>
+        {% endif %}
 
-    {% if transport.driver %}
-      {% if is_supervisor %}
-        <h5>Driver: {{ transport.driver.username }}</h5>
-      {% endif %}
-    {% endif %}
+        {% if transport.driver and is_supervisor %}
+            <h5>Driver: {{ transport.driver.username }}</h5>
+        {% endif %}
 
     {% load static %}
     <img
@@ -44,65 +51,78 @@
     <a href="{% url 'transports_update' transport.id %}">Edit</a>
     <a href="{% url 'transports_delete' transport.id %}">Delete</a>
     <a href="{% url 'transport_list' %}"><button>Back</button></a>
+    {% if is_supervisor %}
+    <a href="{% url 'trasnport_location' transport.id%}">Track Location</a>
+    {% else %}
+    <a href="{% url 'map' transport.id%}">Location</a>
+    {% endif %}
 
   </div>
 
-  {% if msg %}
-    <h2>{{ msg }}</h2>
-  {% endif %}
+    {% if msg %}
+        <h2>{{ msg }}</h2>
+    {% endif %}
 </div>
 
-<div class="transports-conainter" style="margin-top: 1rem;">
-  <h2>Containers in this Transport</h2>
-  <h4>Current container count: {{ container_exsist|length }}</h4>
+<div class="transports-container" style="margin-top: 1rem">
+    <h2>Containers in this Transport</h2>
+    <h4>Current container count: {{ container_exist|length }}</h4>
 
-  {% if container_exsist %}
-    {% for container in container_exsist %}
-      <div class="container-card" style="margin-bottom: .75rem;">
-        <a href="{% url 'container_detail' container.id %}">
-          <h3>Container {{ container.code }}</h3>
-          <p>Container Description: {{ container.description }}</p>
-          <p>Current Weight: {{ container.currnt_weight_capacity }}</p>
-          <p>Max Weight: {{ container.weight_capacity }}</p>
-        </a>
+    {% if container_exist %}
+        {% for container in container_exist %}
+            <div class="container-card" style="margin-bottom: 0.75rem">
+                <a href="{% url 'container_detail' container.id %}">
+                    <h3>Container {{ container.code }}</h3>
+                    <p>Container Description: {{ container.description }}</p>
+                    <p>Current Weight: {{ container.current_weight_capacity }}</p>
+                    <p>Max Weight: {{ container.weight_capacity }}</p>
+                </a>
 
-        {% if is_supervisor %}
-        <form action="{% url 'unassoc_container' transport.id container.id %}" method="post" style="margin-top:.5rem;">
-          {% csrf_token %}
-          <button type="submit">Remove from Transport</button>
-        </form>
-        {% endif %}
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>No containers currently assigned to this transport.</p>
-  {% endif %}
+                {% if is_supervisor %}
+                <form
+                    action="{% url 'unassoc_container' transport.id container.id %}"
+                    method="post"
+                    style="margin-top: 0.5rem"
+                >
+                    {% csrf_token %}
+                    <button type="submit">Remove from Transport</button>
+                </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No containers currently assigned to this transport.</p>
+    {% endif %}
 </div>
 
-<div class="transports-conainter" style="margin-top: 1rem;">
-  <h2>Available Containers (not in any transport)</h2>
+<div class="transports-container" style="margin-top: 1rem">
+    <h2>Available Containers (not in any transport)</h2>
 
-  {% if container_doesnt_contain %}
-    {% for container in container_doesnt_contain %}
-      <div class="container-card" style="margin-bottom: .75rem;">
-        <a href="{% url 'container_detail' container.id %}">
-          <h3>Container {{ container.code }}</h3>
-          <p>Container Description: {{ container.description }}</p>
-          <p>Current Weight: {{ container.currnt_weight_capacity }}</p>
-          <p>Max Weight: {{ container.weight_capacity }}</p>
-        </a>
+    {% if container_doesnt_contain %}
+        {% for container in container_doesnt_contain %}
+            <div class="container-card" style="margin-bottom: 0.75rem">
+                <a href="{% url 'container_detail' container.id %}">
+                    <h3>Container {{ container.code }}</h3>
+                    <p>Container Description: {{ container.description }}</p>
+                    <p>Current Weight: {{ container.current_weight_capacity }}</p>
+                    <p>Max Weight: {{ container.weight_capacity }}</p>
+                </a>
 
-        {% if is_supervisor %}
-        <form action="{% url 'assoc_container' transport.id container.id %}" method="post" style="margin-top:.5rem;">
-          {% csrf_token %}
-          <button type="submit">Add to Transport</button>
-        </form>
-        {% endif %}
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>All containers are currently assigned.</p>
-  {% endif %}
+                {% if is_supervisor %}
+                <form
+                    action="{% url 'assoc_container' transport.id container.id %}"
+                    method="post"
+                    style="margin-top: 0.5rem"
+                >
+                    {% csrf_token %}
+                    <button type="submit">Add to Transport</button>
+                </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>All containers are currently assigned.</p>
+    {% endif %}
 </div>
 
 {% endblock %}

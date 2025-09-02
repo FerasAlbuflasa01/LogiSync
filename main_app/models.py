@@ -18,8 +18,6 @@ class Profile(models.Model):
 
 # -------------------------------------------------------------- Container --------------------------------------------------------------
 class Container(models.Model):
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
     description = models.TextField(max_length=255)
     weight_capacity = models.FloatField(default=0)
     currnt_weight_capacity = models.FloatField(default=0)
@@ -90,6 +88,8 @@ class Transport(models.Model):
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     code = models.CharField(max_length=50, unique=True, db_index=True, blank=True)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
 
     def __str__(self):
         return self.name

@@ -188,8 +188,8 @@ def ContainerList(request):
 
 
 
-def ContainerLocation(request,container_id):
-    return render(request,'track/admin_map.html',{'container_id':container_id})
+def ContainerLocation(request,transport_id):
+    return render(request,'track/admin_map.html',{'transport_id':transport_id})
 
 # ----------------------------------------  Package  ----------------------------------------
 
@@ -351,7 +351,10 @@ class TransportDelete(LoginRequiredMixin,DenyCreate,DeleteView):
     success_url = '/transports/'
 
 def TransportList(request):
-    transports = Transport.objects.all()
+    if(request.user.profile.role=='driver'):
+        transports=Transport.objects.filter(driver_id=request.user.id)
+    else:
+        transports = Transport.objects.all()
 
     is_supervisor = False
     try:
@@ -450,29 +453,33 @@ class DestinationDelete(LoginRequiredMixin,DenyCreate, DeleteView):
     
 # ----------------------------------------  Location  ----------------------------------------
 
-def map(request):
-    return render(request,'track/map.html')
+def map(request,transport_id):
+    return render(request,'track/map.html',{'transport_id':transport_id})
 
 @csrf_exempt
 def location_save(request):
     data = json.loads(request.body)
     print(data)
-    constiner=Container.objects.get(id=2)
-    if not (constiner.latitude == float(data['lat']) and constiner.longitude == float(data['lng'])):
-        constiner.longitude=float(data['lng'])
-        constiner.latitude=float(data['lat'])
-        constiner.save()
+    transportId=int(data['id'])
+    transport=Transport.objects.get(id=transportId)
+    if not (transport.latitude == float(data['lat']) and transport.longitude == float(data['lng'])):
+        transport.longitude=float(data['lng'])
+        transport.latitude=float(data['lat'])
+        transport.save()
         return JsonResponse({'status': 'success', 'message': 'Location saved successfully!'})
     return JsonResponse({'status': 'success', 'message': 'Location exsist'})
 
 @csrf_exempt
 def location_load(request):
     data = json.loads(request.body)
-    containerId=int(data['id'])
-    constiner=Container.objects.get(id=containerId)
-    if(constiner.longitude):
-        return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude})
-    return JsonResponse({'status': 'faild'})
+    transportId=int(data['id'])
+    transport=Transport.objects.get(id=transportId)
+    origin=Source.objects.get(id=transport.source_id)
+    print(transport.source_id)
+    destination=Destination.objects.get(id=transport.destination_id)
+    if(transport.longitude):
+        return JsonResponse({'status': 'success','lng':transport.longitude,'lat':transport.latitude,'origin':origin.location,'destination':destination.location})
+    return JsonResponse({'status': 'faild','origin':origin.location,'destination':destination.location})
 
 # ----------------------------------------  Auth  ----------------------------------------
 

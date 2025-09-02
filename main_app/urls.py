@@ -12,7 +12,7 @@ urlpatterns = [
     path('containers/', views.ContainerList, name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
     path('containers/<int:container_id>/', views.ContainerDetail, name='container_detail' ),
-    path('containers/<int:container_id>/location', views.ContainerLocation, name='container_location' ),
+    path('transports/<int:transport_id>/getlocation', views.ContainerLocation, name='trasnport_location' ),
     path('containers/<int:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
     path('containers/<int:pk>/delete/', views.ContainerDelete.as_view(), name='container_delete' ),
 
@@ -60,7 +60,7 @@ urlpatterns = [
 
 
 # -------------------------------------------------------------- locations(testing) --------------------------------------------------------------
-    path('location/', views.map, name='map'),
+    path('trasnports/<int:transport_id>/location', views.map, name='map'),
 
     path('location/save',views.location_save,name='location_save'),
     path('location/load',views.location_load,name='location_load'),
