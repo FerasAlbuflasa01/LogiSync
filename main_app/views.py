@@ -191,12 +191,18 @@ def ContainerList(request):
 def ContainerLocation(request,container_id):
     return render(request,'track/admin_map.html',{'container_id':container_id})
 
+@login_required
 def containers_checklist(request, transport_id):
     container = Container.objects.filter(transport_id=transport_id)
-    return render(request, 'main_app/checklist_container.html', {'container': container})
+    return render(request, 'checklist.html', {'containers': container})
 
 def containers_recieved(request):
-    print(request.form)
+    if request.method == "POST":
+        selected_ids = request.POST.getlist("containers")
+        print(selected_ids) 
+        return redirect("container_list")   
+    return HttpResponse("No containers submitted.") 
+
 
 # ----------------------------------------  Package  ----------------------------------------
 
