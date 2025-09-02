@@ -55,8 +55,10 @@ urlpatterns = [
     
     # path('containers/active/', views.containers_active, name='containers_active'),
     path('qr_code/<int:pk>/', views.qr_code, name='qr_code'),
-    
-    
+
+    path('containers/<int:transport_id>/checklist', views.containers_checklist, name='containers_checklist'),
+
+
 
 
 # -------------------------------------------------------------- locations(testing) --------------------------------------------------------------

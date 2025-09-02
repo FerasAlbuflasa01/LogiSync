@@ -191,6 +191,11 @@ def ContainerList(request):
 def ContainerLocation(request,container_id):
     return render(request,'track/admin_map.html',{'container_id':container_id})
 
+def containers_checklist(request, transport_id):
+    container = Container.objects.filter(transport_id=transport_id)
+    return render(request, 'main_app/checklist_container.html', {'container': container})
+
+
 # ----------------------------------------  Package  ----------------------------------------
 
 class PackageList(LoginRequiredMixin, ListView):
