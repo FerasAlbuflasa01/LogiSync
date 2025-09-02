@@ -1,32 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <div class="page-header">
   <h1>Container List</h1>
 </div>
 
 <br />
 
-<form class="d-flex" method="POST" action="{% url 'container_list' %}">
-  {% csrf_token %}
-  <input type="hidden" name="action" value="search" />
+<div class="search-filter-bar">
+  <form class="d-flex" method="POST" action="{% url 'container_list' %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="search" />
 
-  <input
-    class="form-control me-2"
-    type="search"
-    placeholder="Search by code (e.g., C-2025-0012)"
-    aria-label="Search"
-    name="searched"
-    value="{{ request.GET.searched }}"
-  />
-  <button class="btn btn-outline-secondary" type="submit">Search</button>
-</form>
+    <input
+      class="form-control me-2"
+      type="search"
+      placeholder="Search by code (e.g., C-2025-0012)"
+      aria-label="Search"
+      name="searched"
+      value="{{ request.GET.searched }}"
+    />
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </form>
 
-<div style="margin: 10px 0;">
-  <a class="btn" href="{% url 'container_list' %}">All</a>
-  <a class="btn" href="{% url 'container_list' %}?status=assigned">Assigned</a>
-  <a class="btn" href="{% url 'container_list' %}?status=unassigned">Unassigned</a>
+  <div class="filter-buttons">
+    <a class="btn" href="{% url 'container_list' %}">All</a>
+    <a class="btn" href="{% url 'container_list' %}?status=assigned">Assigned</a>
+    <a class="btn" href="{% url 'container_list' %}?status=unassigned">Unassigned</a>
+  </div>
 </div>
+
 
 {% if search_result %}
 <div class="card">

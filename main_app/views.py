@@ -191,6 +191,19 @@ def ContainerList(request):
 def ContainerLocation(request,transport_id):
     return render(request,'track/admin_map.html',{'transport_id':transport_id})
 
+@login_required
+def containers_checklist(request, transport_id):
+    container = Container.objects.filter(transport_id=transport_id)
+    return render(request, 'checklist.html', {'containers': container})
+
+def containers_recieved(request):
+    if request.method == "POST":
+        selected_ids = request.POST.getlist("containers")
+        print(selected_ids) 
+        return redirect("container_list")   
+    return HttpResponse("No containers submitted.") 
+
+
 # ----------------------------------------  Package  ----------------------------------------
 
 class PackageList(LoginRequiredMixin, ListView):
@@ -484,8 +497,9 @@ def location_load(request):
 # ----------------------------------------  Auth  ----------------------------------------
 
 def signup(request):
-    if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+    if request.user.is_authenticated:
+        if getattr(request.user, 'profile', None) and request.user.profile.role == 'driver':
+            return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     error_message = ''
     if request.method == 'POST':
 
