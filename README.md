@@ -1,121 +1,131 @@
-## Handyman full stack Application
+# 🚛 LogiSync
+
 
 ### 📚Table of contents
 
 - [Overview](#-overview)
 - [Members](#-Members)
-- [Description](#-Description)
-- [Technologies used](#-Technologies-used)
+- [Project Description](#-Project-Description)
+- [Key Objectives](#-Key-Objectives)
+- [User Roles & Features](#-user-roles--features)
+- [Languages Used](#-Languages-used)
+- [Technologies Used](#️-technologies-used) 
 - [Project Review](#-Project-review)
-- [Wireframes](#Wireframes)
-- [trello board](#trello-board)
-- [Features](#Features)
-- [User Stories](#-User-Stories)
-- [Provider Stories](#-Provider-Stories)
-- [Website Screenshots](#-Website-Screenshots)
+- [Provider Stories](#-future-enhancements)
+- [Screenshots & Diagrams](#-screenshots--diagrams)
 
 ## 🔭 Overview
-
-The Handyman Application enables users to:
-
-- 🛠 Access for service provider's dashboard
-- ✉️ Add requests for multiple services
-- 📝 Make a reviews in the requests
-- 🔐 Use user authentication for security
-
-The Handyman Application enables providers to:
-
-- 👤 Apply a profile dashboard for my carrer
-- 📋 Show the categories list page
-- ✉️ Review all requests that exported from the users
-- 📝 See all the reviews of the users in each category
-- 🔐 Use provider authentication for security
-
-## 👤 Members
-
-Created by: Alya Alaali - Mohamed Rashad - Abdulaziz Alabdulla
-
-## 📜 Description
-
-Our website is a dynamic online services marketplace that seamlessly connects users with experienced service providers. Whether you want to get work done or offer your professional expertise, the site provides an easy-to-use, secure, and interactive environment.
-
-Users can easily create verified accounts, choose from a variety of services, and request location access and contact information. Once a request is submitted, they can be offered services and responded to according to their chosen categories. Users can also rate and review the services provided, ensuring a clear and reliable experience.
-
-Service providers can register and create detailed dashboards displaying their categories, skills, experience, and accomplishments. They also have access to a dedicated requests page that displays all tasks submitted by users related to their field. Each request can be reviewed in detail, and service providers can accept tasks by clicking the "Apply" button.
-
-The platform also features an attractive homepage where users can view the most important services, along with their descriptions and photos. With a strong focus on communication, accountability, and ease of use, this site enables users to receive reliable assistance, while enabling service providers to grow their businesses and reputations through high-quality service.
-
-## 🔖 Technologies used
-
-- **Front-end:** React, HTML, CSS
-- **Back-end:** JavaScript
-- **Templating:** React.jsx
-- **Database:** MongoDB
-
-## 📊 Project Review
-
-- **CHD** ![Image 1](https://i.imgur.com/JKwvCiT.png)
-
-- **ERD** ![Image 2](https://i.imgur.com/9JKG9kD.png)
-
-## Wireframes
-
-[Click here](https://www.figma.com/design/K3EkViLOZxOcrU9VUDjuq9/Handyman?node-id=0-1&p=f&t=VXM9YghfTG9pi44E-0)
-
-## Trello Board
-
-[Project plan](https://trello.com/b/R97Ba7Lh/handyman-project)
-
-## Features
-
-- **Provider:** He is the person who provides his services for the users on the website.
-
-- **User:** He is the person who submits a request on the website to request a specific service he needs, and then the provider is the one who accepts this task.
-
-- **Dashboard:** This list is specific to the provider, and includes all categories related to him, practical experience, skills he possesses during his professional career, and for example, awards or achievements he has obtained.
-
-- **Requests:** This is the key to communication between the user and the provider, which is related to requests for services as is known.
-
-- **Reviews:** This serves the provider in particular because he receives people's opinions and comments about him.
-
-### 👤 User Stories
-
-#### 🔐 authentication:
-
-- As a user I want to create a username and password account.
-- As a user I want an authentication based account.
-- As a user I want multiple choices of the categories.
-- As a user I need to put my location and contact number.
+Welcome to **LogiSync**, a robust and scalable logistics management platform designed to streamline package tracking, container management, and transportation operations. This project demonstrates **Full-Stack Development** with clean architecture, role-based access, and an intuitive interface for logistics companies.
 
 ---
 
-#### 🌍 website uses:
+## 🔗 Members
 
-- As a user I want to send a request to the provider.
-- As a user, I want to review the provider's requests, which is a form that includes a rating and description.
-- As a user I want to show some images and description in the home page.
+- 👤 **Name:** Fawaz Aljar  
+  - 💼 [LinkedIn](https://www.linkedin.com/in/aljar/)  
+  - 🐙 [GitHub](https://github.com/10Fawaz)  
 
-### 🕵🏻‍♂️ Provider Stories
+- 👤 **Name:** Feras Albuflasa  
+  - 💼 [LinkedIn](https://www.linkedin.com/in/ferasalbuflasa/)  
+  - 🐙 [GitHub](https://github.com/FerasAlbuflasa01)  
 
-#### 🔐 authentication:
+- 👤 **Name:** Ali Alqassass
+  - 💼 [LinkedIn](https://www.linkedin.com/in/ali-alqassas-52805b287/)  
+  - 🐙 [GitHub](https://github.com/alqaassass)  
 
-- As a provider I want to create a username and password account.
-- As a provider I want an authentication based account.
-- As a provider I want multiple choices of the categories.
+- 👤 **Name:** AbdulAziz Alabdulla
+  - 💼 [LinkedIn](https://www.linkedin.com/in/abdulaziz-khalid-774066285/)  
+  - 🐙 [GitHub](https://github.com/abdkhalid24)  
+
 
 ---
 
-#### 🌍 website uses:
+## 📜 Project Description
 
-- As a provider I want to recive the requests of the users in a page of requests.
-- As a provider I want a page of the categories that I selected.
-- As a provider I want to see all requests that the user export for each category.
-- As a provider when I click on the one of the requests, I want to click on Apply button to accept the request.
-- As a provider, I want to see a list of requests made by users.
+**LogiSync** is a robust and scalable logistics management platform built to streamline package tracking, container management, and transportation operations for logistics companies. Designed with a clean full-stack architecture, it combines Django and PostgreSQL on the backend with a responsive frontend powered by HTML, CSS, and JavaScript. 
 
-## 🖼️ Website Screenshots
+Deployed on **Heroku**, LogiSync provides a modern and intuitive interface while maintaining enterprise-level scalability. Future enhancements include AI-powered route optimization, API integration with shipping providers, and a mobile application for on-the-go logistics management.
 
-![image](https://i.imgur.com/SRIaZij.png)
-![image](https://i.imgur.com/izhNzNf.png)
-![image](https://i.imgur.com/7r18Tu5.png)
-![image](https://i.imgur.com/ZPQSR59.png)
+### ✅ Key Objectives:
+- Centralize logistics data into a single system.
+- Enable **Admins, Supervisors and Users** to perform different roles securely.
+- Provide **tracking and reporting** for every container and package.
+- Optimize transportation with **capacity and route management**.
+
+---
+
+## 🧑‍💼 User Roles & Features
+
+### **Admin**
+- Create and manage Supervisor accounts.
+- Oversee entire logistics operations.
+- Access system-wide reports and analytics.
+
+### **Supervisor**
+- Add/Remove **Containers**.
+- Manage **Packages** inside containers.
+- Assign and monitor **Transport operations**.
+- Manage **Source & Destination** locations.
+
+### **Driver**
+- Responsible for delivering containers via transport.
+- Performs tasks assigned by the supervisor related to delivery.
+- Does not have permission to create or modify containers.
+
+---
+## 📝 Languages Used
+
+| Languages         | Purpose                     |
+| ----------------- | --------------------------- |
+| **Python**        | Backend            |
+| **JavaScript**    | Functionality on traking location       |
+| **HTML**          | Templating language for  the website                |
+| **CSS**           | Styling & Designing the website   |
+
+
+
+## 🛠️ Technologies Used
+
+| Technology        | Purpose                     |
+| ----------------- | --------------------------- |
+| **Django**        | Backend framework           |
+| **PostgreSQL**    | Relational database         |
+| **JWT**           | Authentication & Security   |
+| **QR code**       | Driver tasks for containers
+| **Tracking location** | Tracks transport location
+| **Trello**        | Scannig the QR code move you to trello dashboard |
+
+---
+
+## 🚀 Getting Started
+
+### 🔗 Live Site:
+👉 [Deployed Project Link](https://logisync-eadf6892bb3a.herokuapp.com/) 
+
+### 🧩 QR code Board:
+📌 [Trello Board](https://trello.com/b/zo6OdEIF/logisync) 
+
+---
+
+## 🔮 Future Enhancements
+
+- **AI-based route optimization** for transport.
+- **Integration with external shipping APIs**.
+- **Mobile App** for on-the-go logistics management.
+
+---
+
+## 🖼 Screenshots & Diagrams
+
+### **ERD**
+[ERD](https://lucid.app/lucidchart/e98a4b0d-ac3e-4917-8101-274dcbd51809/edit?invitationId=inv_b8e44cb8-98f8-4105-bcb7-4b6bde1282c7&referringApp=slack&page=0_0#)  
+
+### **Wireframes**
+[Wireframes](https://www.canva.com/design/DAGvYY53A_A/Ys5SFNqTUrPE1dNtHWTxYQ/edit) 
+
+---
+
+## 🙌 Credits
+
+
+---
