@@ -8,7 +8,7 @@ const error = (err) => {
   console.error(`ERROR(${err.code}): ${err.message}`)
 }
 const initMap = async () => {
-  const response = await axios.post('http://127.0.0.1:8000/location/load', {
+  const response = await axios.post('https://logisync-eadf6892bb3a.herokuapp.com/location/load', {
     id: transportId
   })
   console.log(response)
@@ -73,7 +73,7 @@ const initMap = async () => {
   })
 
   setInterval(async () => {
-    const response = await axios.post('http://127.0.0.1:8000/location/load', {
+    const response = await axios.post('https://logisync-eadf6892bb3a.herokuapp.com//location/load', {
       id: transportId
     })
       let position = {
@@ -101,7 +101,7 @@ const initMap = async () => {
   // The map, centered at Uluru
 }
 const sendUpdateLocation = async (pos) => {
-  let response = axios.post('http://127.0.0.1:8000/location/save', pos)
+  let response = axios.post('https://logisync-eadf6892bb3a.herokuapp.com/location/save', pos)
 }
 
 const getRoute = async (origin, destination) => {
