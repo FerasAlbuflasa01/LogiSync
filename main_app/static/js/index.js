@@ -11,6 +11,7 @@ const initMap = async () => {
   const response = await axios.post('http://127.0.0.1:8000/location/load', {
     id: transportId
   })
+  console.log(response)
   const { Map } = await google.maps.importLibrary('maps')
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
 
@@ -19,7 +20,8 @@ const initMap = async () => {
   if (response.data.status !== 'faild') {
     position = {
       lat: response.data.lat,
-      lng: response.data.lng
+      lng: response.data.lng,
+      id: transportId
     }
   } else {
     position = { lat: -34.397, lng: 150.644 }
@@ -33,7 +35,10 @@ const initMap = async () => {
 
   //get route
 
-  const encodedPoline = await getRoute()
+  const encodedPoline = await getRoute(
+    response.data.origin,
+    response.data.destination
+  )
   let path = google.maps.geometry.encoding.decodePath(
     encodedPoline.data.routes[0].polyline.encodedPolyline
   )
@@ -103,25 +108,15 @@ const sendUpdateLocation = async (pos) => {
   let response = axios.post('http://127.0.0.1:8000/location/save', pos)
 }
 
-const getRoute = async () => {
+const getRoute = async (origin, destination) => {
   return await axios.post(
     'https://routes.googleapis.com/directions/v2:computeRoutes',
     {
       origin: {
-        location: {
-          latLng: {
-            latitude: 26.2426875,
-            longitude: 50.61806250000001
-          }
-        }
+        address: origin
       },
       destination: {
-        location: {
-          latLng: {
-            latitude: 26.2493125,
-            longitude: 50.6111719
-          }
-        }
+        address: destination
       },
       travelMode: 'DRIVE'
     },

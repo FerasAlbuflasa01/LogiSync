@@ -168,8 +168,8 @@ def ContainerList(request):
     return render(request,'main_app/container_list.html',{'containers': container})
 
 
-def ContainerLocation(request,container_id):
-    return render(request,'track/admin_map.html',{'container_id':container_id})
+def ContainerLocation(request,transport_id):
+    return render(request,'track/admin_map.html',{'transport_id':transport_id})
 
 # ----------------------------------------  Package  ----------------------------------------
 
@@ -400,18 +400,19 @@ class DestinationDelete(LoginRequiredMixin, DeleteView):
     
 # ----------------------------------------  Location  ----------------------------------------
 
-def map(request):
-    return render(request,'track/map.html')
+def map(request,transport_id):
+    return render(request,'track/map.html',{'transport_id':transport_id})
 
 @csrf_exempt
 def location_save(request):
     data = json.loads(request.body)
     print(data)
-    constiner=Container.objects.get(id=2)
-    if not (constiner.latitude == float(data['lat']) and constiner.longitude == float(data['lng'])):
-        constiner.longitude=float(data['lng'])
-        constiner.latitude=float(data['lat'])
-        constiner.save()
+    transportId=int(data['id'])
+    transport=Transport.objects.get(id=transportId)
+    if not (transport.latitude == float(data['lat']) and transport.longitude == float(data['lng'])):
+        transport.longitude=float(data['lng'])
+        transport.latitude=float(data['lat'])
+        transport.save()
         return JsonResponse({'status': 'success', 'message': 'Location saved successfully!'})
     return JsonResponse({'status': 'success', 'message': 'Location exsist'})
 
@@ -420,12 +421,12 @@ def location_load(request):
     data = json.loads(request.body)
     transportId=int(data['id'])
     transport=Transport.objects.get(id=transportId)
-    constiner=Container.objects.get(trasnport_id=transportId)
     origin=Source.objects.get(id=transport.source_id)
+    print(transport.source_id)
     destination=Destination.objects.get(id=transport.destination_id)
-    if(constiner.longitude):
-        return JsonResponse({'status': 'success','lng':constiner.longitude,'lat':constiner.latitude,'origin':origin,'destination':destination})
-    return JsonResponse({'status': 'faild','origin':origin,'destination':destination})
+    if(transport.longitude):
+        return JsonResponse({'status': 'success','lng':transport.longitude,'lat':transport.latitude,'origin':origin.location,'destination':destination.location})
+    return JsonResponse({'status': 'faild','origin':origin.location,'destination':destination.location})
 
 # ----------------------------------------  Auth  ----------------------------------------
 
