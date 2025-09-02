@@ -26,6 +26,7 @@ class Container(models.Model):
 
     transport = models.ForeignKey('Transport', on_delete=models.SET_NULL, null=True, blank=True)
     inTrancport = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('container_detail', kwargs={'container_id': self.id})

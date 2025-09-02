@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if msg %}
+  {{msg}}
+{% else %}
 <form action="{% url 'containers_recieved' %}" method="post">
   {% csrf_token %}
   {% for container in containers %}
@@ -18,6 +21,8 @@
   {% endfor %}
   <button type="submit">submit</button>
 </form>
+{% endif %}
+
 
 
 
