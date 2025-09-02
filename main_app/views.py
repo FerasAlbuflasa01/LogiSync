@@ -195,6 +195,8 @@ def containers_checklist(request, transport_id):
     container = Container.objects.filter(transport_id=transport_id)
     return render(request, 'main_app/checklist_container.html', {'container': container})
 
+def containers_recieved(request):
+    print(request.form)
 
 # ----------------------------------------  Package  ----------------------------------------
 

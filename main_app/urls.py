@@ -57,7 +57,7 @@ urlpatterns = [
     path('qr_code/<int:pk>/', views.qr_code, name='qr_code'),
 
     path('containers/<int:transport_id>/checklist', views.containers_checklist, name='containers_checklist'),
-
+    path('containers/<int:transport_id>/recieved', views.containers_recieved, name='containers_recieved'),
 
 
 
