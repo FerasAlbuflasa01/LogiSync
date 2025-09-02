@@ -26,9 +26,13 @@
     <p>{{ container.description }}</p>
   </div>
 
-  <a href="{% url 'container_update' container.id %}">Edit</a>
-  <a href="{% url 'container_delete' container.id %}">Delete</a>
-  <a href="{% url 'container_location' container.id %}">Location</a>
+
+  {% if is_supervisor %}
+    <a href="{% url 'container_update' container.id %}">Edit</a>
+    <a href="{% url 'container_delete' container.id %}">Delete</a>
+  {% endif %}
+ 
+
 
   {% if msg %}
     <h2>{{ msg }}</h2>
@@ -55,9 +59,12 @@
         {% endif %}
       </div>
     {% endfor %}
-  {% else %}
-    <p>No packages currently in this container.</p>
-  {% endif %}
+{% else %}
+  <div class="empty-state">
+    <p><strong>No packages</strong> currently in this container.</p>
+  </div>
+{% endif %}
+
 </div>
 
 <div class="packages" style="margin-top: 1rem;">
@@ -79,9 +86,12 @@
         {% endif %}
       </div>
     {% endfor %}
-  {% else %}
-    <p>All packages are already assigned.</p>
-  {% endif %}
+{% else %}
+  <div class="empty-state">
+    <p><strong>All packages</strong> are already assigned.</p>
+  </div>
+{% endif %}
+
 </div>
 
 {% endblock %}

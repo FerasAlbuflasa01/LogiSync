@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{% url 'containers_recieved' %}" method="post">
+  {% csrf_token %}
+  {% for container in containers %}
+  <div class="card">
+    <div class="card-content">
+      <a href="{% url 'container_detail' container.id %}">
+        <span class="card-title">{{ container.code }}</span>
+      </a>
+      <p><strong>Description:</strong> {{ container.description }}</p>
+      <p><strong>Capacity:</strong> {{ container.weight_capacity }}</p>
+      <p><strong>Current:</strong> {{ container.currnt_weight_capacity }}</p>
+      <input type="checkbox" name="containers" value="{{ container.id }}">
+    </div>
+  </div>
+  {% endfor %}
+  <button type="submit">submit</button>
+</form>
+
+
+
+{% endblock %}
