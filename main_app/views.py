@@ -274,7 +274,7 @@ def unassoc_container(request,transport_id,container_id):
 
 
 
-class TransportCreate(LoginRequiredMixin, DenyCreate, CreateView):
+class TransportCreate(LoginRequiredMixin, CreateView):
     model = Transport
     fields = ['name','driver','type','capacity','currnt_capacity','image','description','source','destination']
     template_name = 'main_app/transport_form.html'

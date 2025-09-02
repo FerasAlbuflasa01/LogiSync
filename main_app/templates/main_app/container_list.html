@@ -7,7 +7,9 @@
 
 <br />
 
-<form class="d-flex" method="GET" action="{% url 'container_list' %}">
+<form class="d-flex" method="POST" action="{% url 'container_list' %}">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="search" />
   <input
     class="form-control me-2"
     type="search"
@@ -21,42 +23,47 @@
 <br /><br />
 
 {% if search_result %}
-  <div class="container-card">
-    <div class="container-info">
-      <h2>Result for "{{ search_result.code }}"</h2>
-      <a href="{% url 'container_detail' search_result.id %}">
-        <p><label>Code:</label> {{ search_result.code }}</p>
-        <p><label>Description:</label> {{ search_result.description }}</p>
-        <p><label>Capacity:</label> {{ search_result.weight_capacity }}</p>
-        <p><label>Current Weight:</label> {{ search_result.currnt_weight_capacity }}</p>
-      </a>
-      <a href="{% url 'container_list' %}">
-        <button class="btn">Back</button>
-      </a>
-    </div>
+<div class="card">
+  <div class="card-content">
+    <h2>Result for "{{ search_result.code }}"</h2>
+    <a href="{% url 'container_detail' search_result.id %}">
+      <p><strong>Code:</strong> {{ search_result.code }}</p>
+      <p><strong>Description:</strong> {{ search_result.description }}</p>
+      <p><strong>Capacity:</strong> {{ search_result.weight_capacity }}</p>
+      <p><strong>Current:</strong> {{ search_result.currnt_weight_capacity }}</p>
+    </a>
+    <a href="{% url 'container_list' %}"><button>Back</button></a>
   </div>
+</div>
 
 {% elif message %}
-  <p style="color:red;">{{ message }}</p>
-  <a href="{% url 'container_list' %}"><button class="btn">Back</button></a>
+<p style="color: red">{{ message }}</p>
+<a href="{% url 'container_list' %}"><button>Back</button></a>
 
 {% else %}
-  <div class="container-list">
-    {% for container in containers %}
-    <div class="container-card">
+  {% for container in containers %}
+  <div class="card">
+    <div class="card-content">
       <a href="{% url 'container_detail' container.id %}">
-        <div class="container-info">
-          <span class="card-title">{{ container.code }}</span>
-          <p><label>Description:</label> {{ container.description }}</p>
-          <p><label>Capacity:</label> {{ container.weight_capacity }}</p>
-          <p><label>Current:</label> {{ container.currnt_weight_capacity }}</p>
-        </div>
+        <span class="card-title">{{ container.code }}</span>
       </a>
+      <p><strong>Description:</strong> {{ container.description }}</p>
+      <p><strong>Capacity:</strong> {{ container.weight_capacity }}</p>
+      <p><strong>Current:</strong> {{ container.currnt_weight_capacity }}</p>
+
+      {% if is_supervisor %}
+      <form method="post" class="d-flex gap-2 align-items-center mt-2">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="assign_container" />
+        {{ form.container_id }} {{ form.assignee }}
+        <button type="submit" class="btn btn-primary btn-sm">Assign</button>
+      </form>
+      {% endif %}
     </div>
-    {% empty %}
-      <p>No containers found.</p>
-    {% endfor %}
   </div>
+  {% empty %}
+  <p>No containers found.</p>
+  {% endfor %}
 {% endif %}
 
 {% endblock %}
