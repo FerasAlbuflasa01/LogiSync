@@ -224,11 +224,16 @@ body {
   background-color: #00a0d1;
 }
 
-.page-header h2,
-h1 {
+.page-header h2{
   color: #ecf0f1;
   margin-bottom: 1.5rem;
 }
+
+.page-header h1 {
+  color: #1419a1;
+  margin-bottom: 1.5rem;
+}
+
 
 .container-list,
 .transport-list {
