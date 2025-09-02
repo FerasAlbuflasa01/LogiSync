@@ -1,10 +1,25 @@
 # 🚛 LogiSync
 
+
+### 📚Table of contents
+
+- [Overview](#-overview)
+- [Members](#-Members)
+- [Project Description](#-Project-Description)
+- [Key Objectives](#-Key-Objectives)
+- [User Roles & Features](#-user-roles--features)
+- [Languages Used](#-Languages-used)
+- [Technologies Used](#️-technologies-used) 
+- [Project Review](#-Project-review)
+- [Provider Stories](#-future-enhancements)
+- [Screenshots & Diagrams](#-screenshots--diagrams)
+
+## 🔭 Overview
 Welcome to **LogiSync**, a robust and scalable logistics management platform designed to streamline package tracking, container management, and transportation operations. This project demonstrates **Full-Stack Development** with clean architecture, role-based access, and an intuitive interface for logistics companies.
 
 ---
 
-## 🔗 Connect With Us
+## 🔗 Members
 
 - 👤 **Name:** Fawaz Aljar  
   - 💼 [LinkedIn](https://www.linkedin.com/in/aljar/)  
@@ -18,7 +33,7 @@ Welcome to **LogiSync**, a robust and scalable logistics management platform des
   - 💼 [LinkedIn](https://www.linkedin.com/in/ali-alqassas-52805b287/)  
   - 🐙 [GitHub](https://github.com/alqaassass)  
 
-- 👤 **Name:** AbdulAziz
+- 👤 **Name:** AbdulAziz Alabdulla
   - 💼 [LinkedIn](https://www.linkedin.com/in/abdulaziz-khalid-774066285/)  
   - 🐙 [GitHub](https://github.com/abdkhalid24)  
 
@@ -27,7 +42,9 @@ Welcome to **LogiSync**, a robust and scalable logistics management platform des
 
 ## 📜 Project Description
 
-**LogiSync** is a comprehensive logistics management system that enables businesses to efficiently handle **containers, packages, transport, and destinations**. It provides **real-time tracking**, **role-based dashboards**, and **data-driven management tools** to optimize logistics operations.
+**LogiSync** is a robust and scalable logistics management platform built to streamline package tracking, container management, and transportation operations for logistics companies. Designed with a clean full-stack architecture, it combines Django and PostgreSQL on the backend with a responsive frontend powered by HTML, CSS, and JavaScript. 
+
+Deployed on **Heroku**, LogiSync provides a modern and intuitive interface while maintaining enterprise-level scalability. Future enhancements include AI-powered route optimization, API integration with shipping providers, and a mobile application for on-the-go logistics management.
 
 ### ✅ Key Objectives:
 - Centralize logistics data into a single system.
@@ -50,12 +67,22 @@ Welcome to **LogiSync**, a robust and scalable logistics management platform des
 - Assign and monitor **Transport operations**.
 - Manage **Source & Destination** locations.
 
-### **User**
-- Track **Packages** by ID.
-- View **Container status** and transport details.
-- Get real-time updates for **destination and delivery**.
+### **Driver**
+- Responsible for delivering containers via transport.
+- Performs tasks assigned by the supervisor related to delivery.
+- Does not have permission to create or modify containers.
 
 ---
+## 📝 Languages Used
+
+| Languages         | Purpose                     |
+| ----------------- | --------------------------- |
+| **Python**        | Backend            |
+| **JavaScript**    | Functionality on traking location       |
+| **HTML**          | Templating language for  the website                |
+| **CSS**           | Styling & Designing the website   |
+
+
 
 ## 🛠️ Technologies Used
 
@@ -63,19 +90,20 @@ Welcome to **LogiSync**, a robust and scalable logistics management platform des
 | ----------------- | --------------------------- |
 | **Django**        | Backend framework           |
 | **PostgreSQL**    | Relational database         |
-| **Bootstrap**     | UI Framework                |
 | **JWT**           | Authentication & Security   |
-| **Trello**        | Task & Project Management   |
+| **QR code**       | Driver tasks for containers
+| **Tracking location** | Tracks transport location
+| **Trello**        | Scannig the QR code move you to trello dashboard |
 
 ---
 
 ## 🚀 Getting Started
 
 ### 🔗 Live Site:
-👉 [Deployed Project Link]( ) 
+👉 [Deployed Project Link](https://logisync-eadf6892bb3a.herokuapp.com/) 
 
-### 🧩 Project Board:
-📌 [Trello Board]( ) 
+### 🧩 QR code Board:
+📌 [Trello Board](https://trello.com/b/zo6OdEIF/logisync) 
 
 ---
 
@@ -90,12 +118,10 @@ Welcome to **LogiSync**, a robust and scalable logistics management platform des
 ## 🖼 Screenshots & Diagrams
 
 ### **ERD**
-[ERD]( )  
+[ERD](https://lucid.app/lucidchart/e98a4b0d-ac3e-4917-8101-274dcbd51809/edit?invitationId=inv_b8e44cb8-98f8-4105-bcb7-4b6bde1282c7&referringApp=slack&page=0_0#)  
 
-### **Hierarchy Diagram**
-[Hierarchy]( ) 
-
-[Wireframes]( ) 
+### **Wireframes**
+[Wireframes](https://www.canva.com/design/DAGvYY53A_A/Ys5SFNqTUrPE1dNtHWTxYQ/edit) 
 
 ---
 

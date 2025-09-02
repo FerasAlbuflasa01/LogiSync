@@ -26,9 +26,13 @@
     <p>{{ container.description }}</p>
   </div>
 
-  <a href="{% url 'container_update' container.id %}">Edit</a>
-  <a href="{% url 'container_delete' container.id %}">Delete</a>
-  <a href="{% url 'container_location' container.id %}">Location</a>
+
+  {% if is_supervisor %}
+    <a href="{% url 'container_update' container.id %}">Edit</a>
+    <a href="{% url 'container_delete' container.id %}">Delete</a>
+  {% endif %}
+ 
+
 
   {% if msg %}
     <h2>{{ msg }}</h2>
