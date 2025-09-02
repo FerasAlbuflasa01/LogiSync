@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+  <h2>Container Details</h2>
+</div>
+
+<div class="container-detail">
+  <div class="detail-section">
+    <label>Code:</label>
+    <p>{{ container.code }}</p>
+  </div>
+
+  <div class="detail-section">
+    <label>Weight Capacity:</label>
+    <p>{{ container.weight_capacity }}</p>
+  </div>
+
+  <div class="detail-section">
+    <label>Current Weight Capacity:</label>
+    <p>{{ container.currnt_weight_capacity }}</p>
+  </div>
+
+  <div class="detail-section">
+    <label>Description:</label>
+    <p>{{ container.description }}</p>
+  </div>
+
+  <a href="{% url 'container_update' container.id %}">Edit</a>
+  <a href="{% url 'container_delete' container.id %}">Delete</a>
+  <a href="{% url 'container_location' container.id %}">Location</a>
+
+  {% if msg %}
+    <h2>{{ msg }}</h2>
+  {% endif %}
+</div>
+
+<div class="container-packages" style="margin-top: 1rem;">
+  <h2>Packages in this Container</h2>
+  <h4>Current container weight: {{ container.currnt_weight_capacity }}</h4>
+
+  {% if packages_exsist %}
+    {% for package in packages_exsist %}
+      <div class="container-card" style="margin-bottom:.75rem;">
+        <a href="{% url 'packages_detail' package.id %}">
+          <h3>{{ package.code }}</h3>
+          <p>Package weight: {{ package.weight }}</p>
+        </a>
+
+        {% if is_supervisor %}
+        <form action="{% url 'unassoc_package' container.id package.id %}" method="post" style="margin-top:.5rem;">
+          {% csrf_token %}
+          <button type="submit">Remove</button>
+        </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No packages currently in this container.</p>
+  {% endif %}
+</div>
+
+<div class="packages" style="margin-top: 1rem;">
+  <h2>Packages not in any Container</h2>
+
+  {% if packages %}
+    {% for package in packages %}
+      <div class="container-card" style="margin-bottom:.75rem;">
+        <a href="{% url 'packages_detail' package.id %}">
+          <h3>{{ package.code }}</h3>
+          <p>Package weight: {{ package.weight }}</p>
+        </a>
+
+        {% if is_supervisor %}
+        <form action="{% url 'assoc_package' container.id package.id %}" method="post" style="margin-top:.5rem;">
+          {% csrf_token %}
+          <button type="submit">Add</button>
+        </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>All packages are already assigned.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
