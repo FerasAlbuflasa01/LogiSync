@@ -33,16 +33,18 @@
     <img
       class="transports-pic"
       src="{% static transport.image|cut:'main_app/static/' %}"
-      width="100" height="100" alt="Transport Image"
+      alt="transport Image"
     />
 
-    <div class="card-action" style="margin-top: 1rem;">
-      {% if is_supervisor %}
-        <a href="{% url 'transports_update' transport.id %}">Edit</a>
-        <a href="{% url 'transports_delete' transport.id %}">Delete</a>
-      {% endif %}
-      <a href="{% url 'transport_list' %}"><button>Back</button></a>
+    <div class="qr-code">
+      <h5>Scan the QR Code to see the tasks of containers:</h5>
+      <img src="{% url 'qr_code' transport.id %}" alt="QR Code for {{ transport.name }}" >
     </div>
+
+    <a href="{% url 'transports_update' transport.id %}">Edit</a>
+    <a href="{% url 'transports_delete' transport.id %}">Delete</a>
+    <a href="{% url 'transport_list' %}"><button>Back</button></a>
+
   </div>
 
   {% if msg %}
