@@ -12,7 +12,7 @@ urlpatterns = [
     path('containers/', views.ContainerList, name='container_list'),
     path('containers/create/', views.ContainerCreate.as_view(), name='container_create' ),
     path('containers/<int:container_id>/', views.ContainerDetail, name='container_detail' ),
-    path('transports/<int:transport_id>/getlocation', views.ContainerLocation, name='container_location' ),
+    path('transports/<int:transport_id>/getlocation', views.ContainerLocation, name='trasnport_location' ),
     path('containers/<int:pk>/update/', views.ContainerUpdate.as_view(), name='container_update' ),
     path('containers/<int:pk>/delete/', views.ContainerDelete.as_view(), name='container_delete' ),
 

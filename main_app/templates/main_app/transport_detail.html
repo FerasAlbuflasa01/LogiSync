@@ -51,6 +51,11 @@
     <a href="{% url 'transports_update' transport.id %}">Edit</a>
     <a href="{% url 'transports_delete' transport.id %}">Delete</a>
     <a href="{% url 'transport_list' %}"><button>Back</button></a>
+    {% if is_supervisor %}
+    <a href="{% url 'trasnport_location' transport.id%}">Track Location</a>
+    {% else %}
+    <a href="{% url 'map' transport.id%}">Location</a>
+    {% endif %}
 
   </div>
 
