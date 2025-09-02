@@ -10,17 +10,23 @@
 <form class="d-flex" method="POST" action="{% url 'container_list' %}">
   {% csrf_token %}
   <input type="hidden" name="action" value="search" />
+
   <input
     class="form-control me-2"
     type="search"
-    placeholder="Search Container"
+    placeholder="Search by code (e.g., C-2025-0012)"
     aria-label="Search"
     name="searched"
+    value="{{ request.GET.searched }}"
   />
   <button class="btn btn-outline-secondary" type="submit">Search</button>
 </form>
 
-<br /><br />
+<div style="margin: 10px 0;">
+  <a class="btn" href="{% url 'container_list' %}">All</a>
+  <a class="btn" href="{% url 'container_list' %}?status=assigned">Assigned</a>
+  <a class="btn" href="{% url 'container_list' %}?status=unassigned">Unassigned</a>
+</div>
 
 {% if search_result %}
 <div class="card">
@@ -33,6 +39,7 @@
       <p><strong>Current:</strong> {{ search_result.currnt_weight_capacity }}</p>
     </a>
     <a href="{% url 'container_list' %}"><button>Back</button></a>
+
   </div>
 </div>
 
@@ -60,6 +67,7 @@
       </form>
       {% endif %}
     </div>
+
   </div>
   {% empty %}
   <p>No containers found.</p>
