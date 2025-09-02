@@ -55,6 +55,9 @@
     <div class="card-content">
       <a href="{% url 'container_detail' container.id %}">
         <span class="card-title">{{ container.code }}</span>
+         {% if container.delivered %}
+      <span class="delivered-indicator"></span>
+      {% endif %}
       </a>
       <p><strong>Description:</strong> {{ container.description }}</p>
       <p><strong>Capacity:</strong> {{ container.weight_capacity }}</p>

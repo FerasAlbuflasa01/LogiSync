@@ -48,15 +48,15 @@
       <img src="{% url 'qr_code' transport.id %}" alt="QR Code for {{ transport.name }}" >
     </div>
 
+  
+    {% if is_supervisor %}
     <a href="{% url 'transports_update' transport.id %}">Edit</a>
     <a href="{% url 'transports_delete' transport.id %}">Delete</a>
-    <a href="{% url 'transport_list' %}"><button>Back</button></a>
-    {% if is_supervisor %}
     <a href="{% url 'trasnport_location' transport.id%}">Track Location</a>
     {% else %}
     <a href="{% url 'map' transport.id%}">Location</a>
     {% endif %}
-
+    <a href="{% url 'transport_list' %}"><button>Back</button></a>
   </div>
 
     {% if msg %}
@@ -66,10 +66,10 @@
 
 <div class="transports-container" style="margin-top: 1rem">
     <h2>Containers in this Transport</h2>
-    <h4>Current container count: {{ container_exist|length }}</h4>
+    <h4>Current container count: {{ container_exsist|length }}</h4>
 
-    {% if container_exist %}
-        {% for container in container_exist %}
+    {% if container_exsist %}
+        {% for container in container_exsist %}
             <div class="container-card" style="margin-bottom: 0.75rem">
                 <a href="{% url 'container_detail' container.id %}">
                     <h3>Container {{ container.code }}</h3>
