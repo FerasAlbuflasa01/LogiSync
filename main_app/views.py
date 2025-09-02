@@ -281,6 +281,7 @@ def assoc_container(request, transport_id, container_id):
     new_cap=transport.currnt_capacity + 1
     print(new_cap)
     if new_cap>last_cap:
+        print('here')
         container_doesnt_contain = Container.objects.exclude(inTrancport=True)
         container_exsist = Container.objects.filter(transport_id=transport_id)
         return render(request,'main_app/transport_detail.html',{
@@ -294,6 +295,7 @@ def assoc_container(request, transport_id, container_id):
     container.transport=transport
     container.inTrancport=True
     container.save()
+    print('here')
     return redirect('transport_detail',transport_id=transport_id)
 
 @login_required
