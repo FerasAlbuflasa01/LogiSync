@@ -36,28 +36,23 @@
             <h5>Driver: {{ transport.driver.username }}</h5>
         {% endif %}
 
-        {% load static %}
-        <img
-            class="transports-pic"
-            src="{% static transport.image %}"
-            width="100"
-            height="100"
-            alt="Transport Image"
-        />
+    {% load static %}
+    <img
+      class="transports-pic"
+      src="{% static transport.image|cut:'main_app/static/' %}"
+      alt="transport Image"
+    />
 
-        <div class="card-action" style="margin-top: 1rem">
-            <a href="{% url 'transports_update' transport.id %}">Edit</a>
-            <a href="{% url 'transports_delete' transport.id %}">Delete</a>
-            {% if user.profile.role=='supervisor' %}
-              <a href="{% url'container_location' transport.id %}">location</a>
-              {% else %}
-               <a href="{% url'container_location' transport.id %}">location</a>
-            {% endif %}
-
-                Location
-            </a>
-        </div>
+    <div class="qr-code">
+      <h5>Scan the QR Code to see the tasks of containers:</h5>
+      <img src="{% url 'qr_code' transport.id %}" alt="QR Code for {{ transport.name }}" >
     </div>
+
+    <a href="{% url 'transports_update' transport.id %}">Edit</a>
+    <a href="{% url 'transports_delete' transport.id %}">Delete</a>
+    <a href="{% url 'transport_list' %}"><button>Back</button></a>
+
+  </div>
 
     {% if msg %}
         <h2>{{ msg }}</h2>
