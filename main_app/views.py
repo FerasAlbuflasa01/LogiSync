@@ -72,7 +72,7 @@ class DenyCreate:
     def dispatch(self, request, *args, **kwargs):
         role = getattr(getattr(request.user, "profile", None), "role", "")
         if not (request.user.is_superuser or role == "supervisor"):
-            return HttpResponseForbidden("Only supervisors/admins can create new records")
+            return redirect('https://www.youtube.com/watch?v=xvFZjo5PgG0')
         return super().dispatch(request, *args, **kwargs)
 
 # home / about 
@@ -85,6 +85,7 @@ def about(request):
 # ----------------------------------------  Containers  ----------------------------------------
 
 class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView): 
+    allowed_roles=''
     model = Container
     fields = ['description', 'weight_capacity', 'currnt_weight_capacity']
     template_name = 'main_app/container_form.html'
@@ -96,11 +97,11 @@ class ContainerCreate(LoginRequiredMixin, DenyCreate, CreateView):
         obj.save()
         return super().form_valid(form)
     
-class ContainerUpdate(LoginRequiredMixin, UpdateView):
+class ContainerUpdate(LoginRequiredMixin, DenyCreate,UpdateView):
     model = Container
     fields = ['description', 'weight_capacity','currnt_weight_capacity']
 
-class ContainerDelete(LoginRequiredMixin, DeleteView):
+class ContainerDelete(LoginRequiredMixin,DenyCreate, DeleteView):
     model = Container
     success_url = '/'
 
@@ -123,6 +124,8 @@ def ContainerDetail(request, container_id):
 
 @login_required
 def assoc_package(request,container_id,package_id):
+    if(request.user.profile.role=='driver'):
+        return render(request,'errorDriver.html')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify container packages")
@@ -145,6 +148,8 @@ def assoc_package(request,container_id,package_id):
 
 @login_required
 def unassoc_package(request,container_id,package_id):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify container packages")
@@ -198,6 +203,8 @@ class PackageDetails(LoginRequiredMixin, DetailView):
 
 @login_required
 def package_create( request):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     profile = getattr(request.user, 'profile', None)
     if profile and profile.role == 'supervisor':
         return HttpResponseForbidden('Supervisor cannot Create new records')
@@ -215,11 +222,11 @@ def package_create( request):
         newPackage.save()
     return redirect('home')
 
-class PackageUpdate(LoginRequiredMixin, UpdateView):
+class PackageUpdate(LoginRequiredMixin,DenyCreate, UpdateView):
     model=Package
     fields = ['description','price','weight']
 
-class PackageDelete(LoginRequiredMixin, DeleteView):
+class PackageDelete(LoginRequiredMixin,DenyCreate, DeleteView):
     model =Package
     success_url='/'
 
@@ -229,7 +236,7 @@ class TransportTypeList(LoginRequiredMixin, ListView):
     models = TransportType
     fields = '__all__'
 
-class TransportTypeCreate(DenyCreate, CreateView):
+class TransportTypeCreate(LoginRequiredMixin,DenyCreate, CreateView):
     model = TransportType
     fields = '__all__'
     template_name = 'main_app/type_form.html'
@@ -238,11 +245,11 @@ class TransportTypeCreate(DenyCreate, CreateView):
         self.object = form.save()
         return redirect('transport_type_create') 
 
-class TransportTypeUpdate(LoginRequiredMixin, UpdateView):
+class TransportTypeUpdate(LoginRequiredMixin,DenyCreate, UpdateView):
     model = TransportType
     fields = ['code']
 
-class TransportTypeDelete(LoginRequiredMixin, DeleteView):
+class TransportTypeDelete(LoginRequiredMixin,DenyCreate, DeleteView):
     model = TransportType
     succes_url = '/transports/'
 
@@ -271,6 +278,8 @@ def TransportDetails(request, transport_id):
 
 @login_required
 def assoc_container(request, transport_id, container_id):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify transports")
@@ -301,6 +310,8 @@ def assoc_container(request, transport_id, container_id):
 @login_required
 @login_required
 def unassoc_container(request, transport_id, container_id):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify transports")
@@ -317,7 +328,7 @@ def unassoc_container(request, transport_id, container_id):
 
 
 
-class TransportCreate(LoginRequiredMixin, CreateView):
+class TransportCreate(LoginRequiredMixin,DenyCreate, CreateView):
     model = Transport
     fields = ['name','driver','type','capacity','currnt_capacity','image','description','source','destination']
     template_name = 'main_app/transport_form.html'
@@ -330,12 +341,12 @@ class TransportCreate(LoginRequiredMixin, CreateView):
         obj.save()
         return super().form_valid(form)
     
-class TransportUpdate(LoginRequiredMixin,UpdateView):
+class TransportUpdate(LoginRequiredMixin,DenyCreate,UpdateView):
     model = Transport
     fields = ['capacity','description','destination','source']
 
 
-class TransportDelete(LoginRequiredMixin,DeleteView):
+class TransportDelete(LoginRequiredMixin,DenyCreate,DeleteView):
     model = Transport
     success_url = '/transports/'
 
@@ -399,11 +410,11 @@ class SourceCreate(LoginRequiredMixin, DenyCreate, CreateView):
         obj.save()
         return super().form_valid(form)
 
-class SourceUpdate(LoginRequiredMixin, UpdateView):
+class SourceUpdate(LoginRequiredMixin,DenyCreate, UpdateView):
     model = Source
     fields = '__all__'
 
-class SourceDelete(LoginRequiredMixin, DeleteView):
+class SourceDelete(LoginRequiredMixin,DenyCreate, DeleteView):
     model = Source
     succes_url = '/transports/'
 
@@ -428,11 +439,11 @@ class DestinationCreate(LoginRequiredMixin,DenyCreate,  CreateView):
         return super().form_valid(form)
 
 
-class DestinationUpdate(LoginRequiredMixin, UpdateView):
+class DestinationUpdate(LoginRequiredMixin,DenyCreate, UpdateView):
     model = Destination
     fields = '__all__'
 
-class DestinationDelete(LoginRequiredMixin, DeleteView):
+class DestinationDelete(LoginRequiredMixin,DenyCreate, DeleteView):
     model = Destination
     succes_url = '/transports/'
 
@@ -466,6 +477,8 @@ def location_load(request):
 # ----------------------------------------  Auth  ----------------------------------------
 
 def signup(request):
+    if(request.user.profile.role=='driver'):
+        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
     error_message = ''
     if request.method == 'POST':
 
