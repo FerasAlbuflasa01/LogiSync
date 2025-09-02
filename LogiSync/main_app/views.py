@@ -104,16 +104,22 @@ class ContainerDelete(LoginRequiredMixin, DeleteView):
     model = Container
     success_url = '/'
 
-@login_required  
-def ContainerDetail(request,container_id):
+@login_required
+def ContainerDetail(request, container_id):
     container = Container.objects.get(id=container_id)
     packages_doesnt_contain = Package.objects.exclude(inContainer=True)
-    packages_exsist =Package.objects.filter(container=container_id) 
+    packages_exsist = Package.objects.filter(container=container_id)
+
     role = getattr(getattr(request.user, "profile", None), "role", "")
     is_supervisor = request.user.is_superuser or (role == "supervisor")
 
-    print(packages_doesnt_contain)
-    return render(request,'main_app/container_detail.html',{'container':container,'packages':packages_doesnt_contain,'packages_exsist':packages_exsist,'is_supervisor': is_supervisor,})
+    return render(request, 'main_app/container_detail.html', {
+        'container': container,
+        'packages': packages_doesnt_contain,
+        'packages_exsist': packages_exsist,
+        'is_supervisor': is_supervisor,
+    })
+
 
 @login_required
 def assoc_package(request,container_id,package_id):
@@ -153,15 +159,28 @@ def unassoc_package(request,container_id,package_id):
     container.save()
     return redirect('container_detail',container_id=container_id)
 
+@login_required
 def ContainerList(request):
-    container = Container.objects.all()
+    containers = Container.objects.all().order_by('code')
+    q = request.GET.get('searched', '').strip()
+    status = request.GET.get('status')
 
-    if request.method == "POST":
-        searched = request.POST['searched']
-        search_result = Container.objects.get(code=searched)
-        return render(request, 'main_app/container_list.html', {'search_result': search_result})
-    
-    return render(request,'main_app/container_list.html',{'containers': container})
+    if q:
+        try:
+            search_result = Container.objects.get(code=q)
+            return render(request, 'main_app/container_list.html', {'search_result': search_result})
+        except Container.DoesNotExist:
+            return render(request, 'main_app/container_list.html', {
+                'message': 'Container not found, please try again!',
+            })
+
+    if status == 'assigned':
+        containers = containers.filter(transport__isnull=False)
+    elif status == 'unassigned':
+        containers = containers.filter(transport__isnull=True)
+
+    return render(request, 'main_app/container_list.html', {'containers': containers})
+
 
 
 def ContainerLocation(request,container_id):
