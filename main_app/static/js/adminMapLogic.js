@@ -37,8 +37,7 @@ const initMap = async () => {
 
   const encodedPoline = await getRoute(
     response.data.origin,
-    response.data.destination,
-    response.data.apiKey
+    response.data.destination
   )
   let path = google.maps.geometry.encoding.decodePath(
     encodedPoline.data.routes[0].polyline.encodedPolyline
@@ -120,7 +119,7 @@ const getRoute = async (origin, destination,apiKey) => {
     {
       headers: {
         'Content-Type': 'application/json',
-        'X-Goog-Api-Key': apiKey,
+        'X-Goog-Api-Key': 'AIzaSyCaHQPAnFHmdGi19QlEmBuJ5iuaNkmPuwI',
         'X-Goog-FieldMask':
           'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
       }
