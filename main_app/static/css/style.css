@@ -350,11 +350,11 @@ p {
     height: 300px;
 }
 
-.qr-code {
+/* .qr-code {
   position: relative;
   top: -430px;
   left: 650px;
-}
+} */
 
 a {
   color: #00c6ff;
@@ -798,11 +798,11 @@ button:hover,
 .delivered-indicator {
     display: inline-block;
     width: 10px; 
-    height: 10px; /* Adjust size as needed */
-    background-color: green; /* Green color */
-    border-radius: 50%; /* Makes it a circle */
-    margin-left: 5px; /* Space between the code and the circle */
-    vertical-align: middle; /* Aligns with text */
+    height: 10px; 
+    background-color: green;
+    border-radius: 50%; 
+    margin-left: 5px; 
+    vertical-align: middle; 
 }
 
 body {
@@ -844,7 +844,7 @@ body {
 
 .qr-code {
   margin-top: 1rem;
-  text-align: center; /* Center the QR code section */
+  text-align: center; 
 }
 
 .container-card {
@@ -907,17 +907,70 @@ body {
   vertical-align: middle;
 }
 
-/* Responsive Design */
 @media (max-width: 720px) {
   .transports-container {
-    padding: 1rem; /* Adjust padding for smaller screens */
+    padding: 1rem; 
   }
 
   .container-card {
-    padding: 1rem; /* Adjust padding for smaller screens */
+    padding: 1rem; 
   }
 
   .qr-code {
-    margin-top: 1rem; /* Ensure QR code has some space */
+    margin-top: 1rem;
+  }
+}
+
+
+.qr-code {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 12px 14px;
+  background: #f8fafc;        
+  border: 1px solid #e2e8f0;     
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+
+  margin-top: 12px;             
+  max-width: 240px;         
+}
+
+.qr-code h5 {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-align: center;
+  color: #334155;           
+}
+
+.qr-code img {
+  width: 180px;              
+  height: 180px;
+  object-fit: contain;
+  image-rendering: pixelated;     
+}
+
+@media (min-width: 768px) {
+  .qr-code {
+    margin-left: 12px;
+  }
+  .transports-pic + .qr-code {
+    display: inline-flex;
+    vertical-align: top;
+  }
+}
+
+@media print {
+  .qr-code {
+    box-shadow: none;
+    border: 1px solid #000;
+    background: #fff;
+  }
+  .qr-code img {
+    width: 256px;
+    height: 256px;
   }
 }
