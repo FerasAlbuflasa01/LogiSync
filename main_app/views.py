@@ -14,6 +14,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileForm, CreationForm, AssignDriverForm
 from .utils import generate_sequential_code
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 #################### QR code  ###########################
 import qrcode
 from io import BytesIO
@@ -190,7 +194,8 @@ def ContainerList(request):
 
 
 def ContainerLocation(request,transport_id):
-    return render(request,'track/admin_map.html',{'transport_id':transport_id})
+    apiKey=os.getenv('API_KEY')
+    return render(request,'track/admin_map.html',{'transport_id':transport_id,'apiKey':apiKey})
 
 @login_required
 def containers_checklist(request, transport_id):
@@ -482,7 +487,8 @@ class DestinationDelete(LoginRequiredMixin,DenyCreate, DeleteView):
 # ----------------------------------------  Location  ----------------------------------------
 
 def map(request,transport_id):
-    return render(request,'track/map.html',{'transport_id':transport_id})
+    apiKey=os.getenv('API_KEY')
+    return render(request,'track/map.html',{'transport_id':transport_id,'apiKey':apiKey})
 
 @csrf_exempt
 def location_save(request):
@@ -499,6 +505,7 @@ def location_save(request):
 
 @csrf_exempt
 def location_load(request):
+    apiKey=os.getenv('API_KEY')
     data = json.loads(request.body)
     transportId=int(data['id'])
     transport=Transport.objects.get(id=transportId)
@@ -507,7 +514,7 @@ def location_load(request):
     destination=Destination.objects.get(id=transport.destination_id)
     if(transport.longitude):
         return JsonResponse({'status': 'success','lng':transport.longitude,'lat':transport.latitude,'origin':origin.location,'destination':destination.location})
-    return JsonResponse({'status': 'faild','origin':origin.location,'destination':destination.location})
+    return JsonResponse({'status': 'faild','origin':origin.location,'destination':destination.location, 'apiKey':apiKey})
 
 # ----------------------------------------  Auth  ----------------------------------------
 
