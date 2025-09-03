@@ -560,7 +560,7 @@ def edit_profile(request):
 def qr_code(request, pk):
     transport = Transport.objects.get(pk=pk)
 
-    url = f"http://127.0.0.1:8000/transports/{pk}/checklist" 
+    url = f"https://logisync-eadf6892bb3a.herokuapp.com/transports/{pk}/checklist" 
 
     img = qrcode.make(url)
 
