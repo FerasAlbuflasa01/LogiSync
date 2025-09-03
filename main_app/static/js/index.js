@@ -36,7 +36,8 @@ const initMap = async () => {
 
   const encodedPoline = await getRoute(
     response.data.origin,
-    response.data.destination
+    response.data.destination,
+    response.data.apiKey
   )
   let path = google.maps.geometry.encoding.decodePath(
     encodedPoline.data.routes[0].polyline.encodedPolyline
@@ -108,7 +109,7 @@ const sendUpdateLocation = async (pos) => {
   let response = axios.post('https://logisync-eadf6892bb3a.herokuapp.com/location/save', pos)
 }
 
-const getRoute = async (origin, destination) => {
+const getRoute = async (origin, destination,apiKey) => {
   return await axios.post(
     'https://routes.googleapis.com/directions/v2:computeRoutes',
     {
@@ -123,7 +124,7 @@ const getRoute = async (origin, destination) => {
     {
       headers: {
         'Content-Type': 'application/json',
-        'X-Goog-Api-Key': 'AIzaSyCaHQPAnFHmdGi19QlEmBuJ5iuaNkmPuwI',
+        'X-Goog-Api-Key': apiKey,
         'X-Goog-FieldMask':
           'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
       }
