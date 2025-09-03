@@ -104,7 +104,7 @@ const sendUpdateLocation = async (pos) => {
   let response = axios.post('https://logisync-eadf6892bb3a.herokuapp.com/location/save', pos)
 }
 
-const getRoute = async (origin, destination,apiKey) => {
+const getRoute = async (origin, destination) => {
   return await axios.post(
     'https://routes.googleapis.com/directions/v2:computeRoutes',
     {
