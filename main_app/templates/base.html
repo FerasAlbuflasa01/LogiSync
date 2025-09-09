@@ -37,6 +37,9 @@
                     ><strong>Create Transport</strong></a
                   >
                 </li>
+                <li>
+              <a href="{% url 'signup' %}"><strong>Create Account</strong></a>
+            </li>
             {% endif %}
 
             <li>
@@ -61,9 +64,6 @@
               </form>
             </li>
             {% else %}
-            <li>
-              <a href="{% url 'signup' %}"><strong>Sign Up</strong></a>
-            </li>
             <li>
               <a href="{% url 'login' %}"><strong>Log In</strong></a>
             </li>

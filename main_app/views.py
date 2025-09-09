@@ -153,7 +153,7 @@ def assoc_package(request,container_id,package_id):
 @login_required
 def unassoc_package(request,container_id,package_id):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify container packages")
@@ -200,17 +200,17 @@ def ContainerLocation(request,transport_id):
 @login_required
 def containers_checklist(request, transport_id):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     containers = Container.objects.filter(transport_id=transport_id, delivered=False)
 
     if containers.exists():
-        return redirect('checklist.html', {'containers': containers})  
+        return render(request,'checklist.html', {'containers': containers})  
 
     return render(request, 'checklist.html', {'msg': 'All containers have been delivered.'})
 @login_required
 def containers_recieved(request):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     if request.method == "POST":
         selected_ids = request.POST.getlist("containers")
         for continerId in selected_ids:
@@ -236,7 +236,7 @@ class PackageDetails(LoginRequiredMixin, DetailView):
 @login_required
 def package_create( request):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     profile = getattr(request.user, 'profile', None)
     if profile and profile.role == 'supervisor':
         return HttpResponseForbidden('Supervisor cannot Create new records')
@@ -312,7 +312,7 @@ def TransportDetails(request, transport_id):
 @login_required
 def assoc_container(request, transport_id, container_id):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify transports")
@@ -344,7 +344,7 @@ def assoc_container(request, transport_id, container_id):
 @login_required
 def unassoc_container(request, transport_id, container_id):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     role = getattr(getattr(request.user, "profile", None), "role", "")
     if not (request.user.is_superuser or role == "supervisor"):
         return HttpResponseForbidden("Only supervisors/admins may modify transports")
@@ -521,7 +521,7 @@ def location_load(request):
 def signup(request):
     if request.user.is_authenticated:
         if getattr(request.user, 'profile', None) and request.user.profile.role == 'driver':
-            return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+            return render(request,'errorDriver.html')
     error_message = ''
     if request.method == 'POST':
 
@@ -551,7 +551,7 @@ def profile_detail(request):
 @login_required
 def edit_profile(request):
     if(request.user.profile.role=='driver'):
-        return redirect('https://youtu.be/xvFZjo5PgG0?si=IuE07tywqKYoohhA')
+        return render(request,'errorDriver.html')
     profile, created =Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
