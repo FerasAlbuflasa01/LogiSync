@@ -1,6 +1,7 @@
 // Initialize and add the map
 let map
 let userMarker
+const baseUrl= 'https://logisync-eadf6892bb3a.herokuapp.com/'
 const url = new URL(window.location.href)
 const pathSegments = url.pathname.split('/')
 const transportId = pathSegments[2]
@@ -8,7 +9,7 @@ const error = (err) => {
   console.error(`ERROR(${err.code}): ${err.message}`)
 }
 const initMap = async () => {
-  const response = await axios.post('https://logisync-eadf6892bb3a.herokuapp.com/location/load', {
+  const response = await axios.post(`${baseUrl}location/load`, {
     id: transportId
   })
 
@@ -73,7 +74,7 @@ const initMap = async () => {
   })
 
   setInterval(async () => {
-    const response = await axios.post('https://logisync-eadf6892bb3a.herokuapp.com//location/load', {
+    const response = await axios.post(`${baseUrl}location/load`, {
       id: transportId
     })
       let position = {
@@ -99,9 +100,6 @@ const initMap = async () => {
   }, 5000)
 
   // The map, centered at Uluru
-}
-const sendUpdateLocation = async (pos) => {
-  let response = axios.post('https://logisync-eadf6892bb3a.herokuapp.com/location/save', pos)
 }
 
 const getRoute = async (origin, destination) => {
